@@ -38,21 +38,21 @@ trait flow {
 	public function FFW() {
 
 		if (connection_aborted()) {
-			$filter = $this->unbuild();
+			$step = $this->unbuild();
 		} else {
 
-			$filter = $this->getNext();
+			$step = $this->getNext();
 
-			if ($filter) {
-				$filter->build();
+			if ($step) {
+				$step->build();
 			}
 		}
 	}
 
 	public function RWD() {
-		$filter = $this->getPrev();
-		if ($filter) {
-			$filter->unbuild();
+		$step = $this->getPrev();
+		if ($step) {
+			$step->unbuild();
 		}
 	}
 

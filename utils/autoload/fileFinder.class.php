@@ -134,7 +134,7 @@ class fileFinder {
 				}
 				$namespaces[] = trim($namespace);
 				$i+=$j;
-				echo "Logging Nmaespace ".$namespace.".....\n";
+				echo "Logging NameSpace ".$namespace.".....\n";
 			}
 
 			if (strtolower($a[$i][1]) == 'class') {

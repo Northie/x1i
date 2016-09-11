@@ -10,7 +10,7 @@ class factory {
                     $type = 'apc'; //TODO get default;
                 }
             
-                $cls = "vendor/" . $type . "/adapter";
+                $cls = "\\services\\data\\cache\\vendor\\" . $type . "\\adapter";
 
 		$o = new $cls;
 

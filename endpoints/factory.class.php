@@ -3,9 +3,9 @@
 namespace endpoints;
 
 class factory {
-    public static function Build($context,$class,$request,$response,$filters) {
+    public static function Build($endpoint,$request,$response,$filters) {
         
-        $str = "\\endpoints\\".$context."\\".$class;
-        return new $str($request,$response,$filters);
+        
+        return new $endpoint($request,$response,$filters);
     }
 }

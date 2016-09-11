@@ -2,14 +2,14 @@
 
 namespace services\data\cache\vendor\couchbase;
 
-class adapter extends services\data\adapter {
+class adapter extends \services\data\adapter {
 
 	private $couchbase;
 	
 	
 	public function __construct() {
 		if(class_exists("\\Couchbase")) {
-			$this->couchbase = new \Couchbase();
+			$this->couchbase = new \Couchbase("localhost:8091","x1appcache","x1appcachepassword","x1appcache");
 		} else {
 			throw new \services\data\cacheException('Couchbase not enabled');
 		}
@@ -17,11 +17,11 @@ class adapter extends services\data\adapter {
 
 	public function create($key, $data) {
 		$data = json_encode($data);
-		return $this->couchbase->set($id, $data);
+		return $this->couchbase->set($key, $data);
 	}
 
 	public function read($key) {
-		$data = $this->couchbase->get($id);
+		$data = $this->couchbase->get($key);
 		return json_decode($data,1);
 	}
 

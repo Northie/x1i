@@ -13,10 +13,18 @@ class FrontController {
     public $response;
     protected $filterList;
 
-    public function __construct() {
+    public function __construct($settings) {
 
         \Plugins\Plugins::RegisterPlugins();
 
+        $this->setContextType($settings['contexts']['type']);
+        
+        $this->setContexts($settings['contexts']['names']);
+        
+        $this->setDefaultContext($settings['contexts']['default']);
+        
+        $this->basePath = $settings['contexts']['base'];
+        
         $this->request = new \flow\Request;
         $this->response = new \flow\Response;
     }
@@ -47,81 +55,49 @@ class FrontController {
         $this->contextType = $type;
     }
 
-    private function getActiveContext() {
-
-        /*
-         * do we want
-         * /[default-context]/endpoint
-         * /context/endpoint
-         * 
-         * and
-         * 
-         * /[default-context]/module/endpoint
-         * /context/module/endpoint
-         *  
-         * [context]/[module]/endpoint/ 
-         * [context]/[module]/endpoint/
-         * [context]/[module]/endpoint/id
-         * [context]/[module]/endpoint/id/linkedType
-         * 
-         * default context/default endpoint
-         * default context/specified endpoint
-         * default context/module/default endpoint
-         * default context/module/specfied endpoint
-         * 
-         * specified context/default endpoint
-         * specified context/specified endpoint
-         * specified context/module/default endpoint
-         * specified context/module/specified endpoint 
-         */
-
-
-        switch (true) {
-            case($this->activeContext):
-                break;
-            case($this->contextType == self::CONTEXT_TYPE_FOLDER):
-                $normalise = str_replace($this->request->DOCUMENT_ROOT, "", X1_WEB_PATH);
-
-                $req = trim(str_replace($normalise, "", $this->request->REQUEST_URI), "/");
-
-                list($context, $trash) = explode("/", $req);
-
-                if ($this->contexts[$context]) {
-                    $this->activeContext = $context;
-                } else {
-                    $this->activeContext = $this->defaultContext;
-                }
-                break;
-            default:
-                $this->activeContext = $this->defaultContext;
-        }
-
-        return $this->activeContext;
-    }
-
     public function setDefaultContext($context) {
         $this->defaultContext = $context;
     }
 
     //called by the app's html/index.php 
     public final function Init() {
-
-        $this->request->setActiveContext($this->getActiveContext());
-
-        $this->createEndpoint();
-
-        $this->request->setEndpoint($this->endpoint);
-
-        $this->filters = $this->request->getEndpoint()->getNamedFilterList();
-
+        
+        
+        
+        $aCmds = explode("/",str_replace($this->basePath,"",$this->request->REQUEST_URI));        
+        
+        $cmds = [];
+        
+        foreach($aCmds as $i => $cmd) {
+            if($cmd != '') {
+                $cmds[] = $cmd;
+            }
+        }
+        
+        $context = 'www';
+        
+        
+        
+        if($this->moduleExists($cmds[0])) {
+            $module = \modules\factory::Build(array_shift($cmds));
+            
+            if($module->hasContextEndPoint($context,$cmds[0])) {    
+                $this->createModuleEndpoint($module,$context,$cmds[0]);
+            }
+        } else {
+            $this->createEndpoint($context,$cmds[0]);
+        }
+        
+        $this->filters = $this->endpoint->getNamedFilterList();
         $this->filterList = \libs\DoublyLinkedList\factory::Build();
 
         foreach ($this->filters as $f) {
-            $_f = '\\flow\\filters\\' . $f . 'Filter';
-            $filter = new $_f($this->filterList, $this->request, $this->response);
-            $this->filterList->push($f, $filter);
-            $filter->init();
+                $_f = '\\flow\\filters\\' . $f . 'Filter';
+                $filter = new $_f($this->filterList, $this->request, $this->response);
+                $this->filterList->push($f, $filter);
+                $filter->init();
         }
+                
     }
 
     public function Execute() {
@@ -129,14 +105,42 @@ class FrontController {
         $start->in();
     }
 
-    public function createEndpoint() {
-        list($trash, $endpoint) = explode($this->request->context, $this->request->REQUEST_URI);
+    public function createEndpoint($context,$endpoint) {
 
         if ($endpoint == '') {
             $endpoint = 'index';
         }
 
-        $this->endpoint = \endpoints\factory::Build($this->request->context, $endpoint, $this->request, $this->response, $this->filters);
+        $endPointClass = "\\endpoints\\".$context."\\".$endpoint;
+        
+        $this->endpoint = \endpoints\factory::Build($endPointClass, $this->request, $this->response, $this->filters);
+        $this->request->setEndpoint($this->endpoint);
+        
+    }
+    
+    public function createModuleEndpoint($module,$context,$endpoint) {
+        $r = new \ReflectionObject($module);
+        $ns = $r->getNamespaceName();
+       
+
+        if ($endpoint == '') {
+            $endpoint = 'index';
+        }
+
+        $endPointClass = "\\".$ns."\\".$context."\\".$endpoint;
+        
+        $this->endpoint = \endpoints\factory::Build($endPointClass, $this->request, $this->response, $this->filters);
+        $this->request->setEndpoint($this->endpoint);
+        
+    }
+    
+    public function moduleExists($module) {        
+        
+        if(in_array($module, $this->request->getModules())) {
+            return true;
+        }
+        
+        return false;
     }
 
 }
