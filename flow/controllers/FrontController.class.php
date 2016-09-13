@@ -8,7 +8,7 @@ class FrontController {
     const CONTEXT_TYPE_DOMAIN = 2;
     const CONTEXT_TYPE_SUBDOMAIN = 4;
 
-    public $filters = ['test', 'action'];
+    public $filters = ['dispatch', 'action'];
     public $request;
     public $response;
     protected $filterList;
@@ -74,7 +74,11 @@ class FrontController {
             }
         }
         
-        $context = 'www';
+        if($this->contexts[$cmds[0]]) {
+            $context = array_shift($cmds);
+        } else {
+            $context = 'www';
+        }
         
         
         

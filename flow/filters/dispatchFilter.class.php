@@ -2,7 +2,7 @@
 
 namespace flow\filters;
 
-class testFilter {
+class dispatchFilter {
 	use filter;
 
 public function in() {

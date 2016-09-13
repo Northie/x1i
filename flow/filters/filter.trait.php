@@ -53,5 +53,13 @@ trait filter {
 			$filter->out();
 		}
 	}
+        
+        public function getRequest() {
+            return $this->request;
+        }
+        
+        public function getResponse() {
+            return $this->response;
+        }
 
 }

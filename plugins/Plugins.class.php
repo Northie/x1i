@@ -62,7 +62,6 @@ class Plugins {
 	}
 
 	public function DoPlugins($when, $obj, $options = false) {
-    
 		if (!self::$use_plugins) {
 			return true;
 		}

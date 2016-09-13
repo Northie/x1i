@@ -1,4 +1,19 @@
 <?php
+
+$requiredConstants = [
+     "X1_PATH"
+    ,"X1_APP_PATH"
+    ,"X1_WEB_PATH"
+    ,"X1_DAT_PATH"
+    ,"APP_CLASS_LIST"
+];
+
+foreach($requiredConstants as $requiredConstant) {
+    if(!defined($requiredConstant)) {
+        die('constant '.$requiredConstant.' is not defined');
+    }
+}
+
 include 'utils/traits/singleton.trait.php';
 include 'settings/settings.trait.php';
 include 'settings/filelist.settings.php';
