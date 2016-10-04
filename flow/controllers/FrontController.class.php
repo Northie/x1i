@@ -77,13 +77,15 @@ class FrontController {
         if($this->contexts[$cmds[0]]) {
             $context = array_shift($cmds);
         } else {
-            $context = 'www';
+            $context = 'www'; //get default
         }
-        
-        
-        
+
         if($this->moduleExists($cmds[0])) {
             $module = \modules\factory::Build(array_shift($cmds));
+            
+            if($cmds[0] == '') {
+                $cmds[0] = 'index';
+            }
             
             if($module->hasContextEndPoint($context,$cmds[0])) {    
                 $this->createModuleEndpoint($module,$context,$cmds[0]);
@@ -125,7 +127,6 @@ class FrontController {
     public function createModuleEndpoint($module,$context,$endpoint) {
         $r = new \ReflectionObject($module);
         $ns = $r->getNamespaceName();
-       
 
         if ($endpoint == '') {
             $endpoint = 'index';

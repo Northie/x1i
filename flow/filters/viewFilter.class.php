@@ -23,9 +23,15 @@ class viewFilter {
 			$renderer = strtoupper($this->request->ext);
 		}
 
-		var_dump($renderer);
-		var_dump($data);
+		//var_dump($renderer);
+		//var_dump($data);
+                
+                $view = \views\factory::Build();
 
+                $view->setData($data);
+                
+                $view->serve();
+                
 		$this->RWD();
 	}
 
