@@ -3,6 +3,8 @@
 namespace flow\controllers;
 
 class FrontController {
+    
+    use \Plugins\helper;
 
     const CONTEXT_TYPE_FOLDER = 1;
     const CONTEXT_TYPE_DOMAIN = 2;
@@ -31,6 +33,8 @@ class FrontController {
 
     public function setContexts($contexts = false, $default = false, $active = false) {
 
+        $this->before('FrontControllerSetContexts', $this);
+        
         $contexts = $contexts ? $contexts : ['default'];
 
         if (!$contexts) {
@@ -49,6 +53,7 @@ class FrontController {
         if ($active && $this->contexts[$active]) {
             $this->activeContext = $active;
         }
+        $this->after('FrontControllerSetContexts', $this);
     }
 
     public function setContextType($type) {
@@ -62,7 +67,7 @@ class FrontController {
     //called by the app's html/index.php 
     public final function Init() {
         
-        
+        $this->before('FrontControllerInit', $this);
         
         $aCmds = explode("/",str_replace($this->basePath,"",$this->request->REQUEST_URI));        
         
@@ -101,14 +106,20 @@ class FrontController {
                 $_f = '\\flow\\filters\\' . $f . 'Filter';
                 $filter = new $_f($this->filterList, $this->request, $this->response);
                 $this->filterList->push($f, $filter);
+                
                 $filter->init();
+                
         }
+        
+        $this->after('FrontControllerInit', $this);
                 
     }
 
     public function Execute() {
         $start = $this->filterList->getFirstNode(true);
+        $this->before('FilterListStart', $this);
         $start->in();
+        $this->after('FilterListStart', $this);
     }
 
     public function createEndpoint($context,$endpoint) {
@@ -116,15 +127,19 @@ class FrontController {
         if ($endpoint == '') {
             $endpoint = 'index';
         }
-
+        
         $endPointClass = "\\endpoints\\".$context."\\".$endpoint;
+        
+        $this->before('FrontControllerCreateEndpoint', $this,['context'=>$context,'endpoint'=>$endpoint]);
         
         $this->endpoint = \endpoints\factory::Build($endPointClass, $this->request, $this->response, $this->filters);
         $this->request->setEndpoint($this->endpoint);
         
+        $this->after('FrontControllerCreateEndpoint', $this);
+        
     }
     
-    public function createModuleEndpoint($module,$context,$endpoint) {
+    public function createModuleEndpoint($module, $context, $endpoint) {
         $r = new \ReflectionObject($module);
         $ns = $r->getNamespaceName();
 
@@ -134,8 +149,12 @@ class FrontController {
 
         $endPointClass = "\\".$ns."\\".$context."\\".$endpoint;
         
+        $this->before('FrontControllerCreateModuleEndpoint', $this, ['module'=>$module,'ns'=> $ns,'context'=>$context,'endpoint'=>$endpoint]);
+        
         $this->endpoint = \endpoints\factory::Build($endPointClass, $this->request, $this->response, $this->filters);
         $this->request->setEndpoint($this->endpoint);
+        
+        $this->after('FrontControllerCreateModuleEndpoint', $this);
         
     }
     

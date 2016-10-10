@@ -4,15 +4,11 @@ namespace services\data\cache;
 
 class factory {
 
-	public static function Build($type = false) {
+	public static function Build($settings) {
+                
+                $cls = "\\services\\data\\cache\\vendor\\" . $settings['type'] . "\\adapter";
 
-                if(!$type) {
-                    $type = 'apc'; //TODO get default;
-                }
-            
-                $cls = "\\services\\data\\cache\\vendor\\" . $type . "\\adapter";
-
-		$o = new $cls;
+		$o = new $cls($settings);
 
 		return $o;
 	}

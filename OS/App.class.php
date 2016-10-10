@@ -17,8 +17,14 @@ class App {
     }
     
     private function initCache() {
-        $cacheAdapter = \services\data\cache\vendor\couchbase\factory::Build();
-        \settings\registry::Load()->set('CACHE',$cacheAdapter);
+        
+        $cacheSettings = \settings\database::Load()->get('app_cache');
+        
+        $adapterString = "\\services\\data\\cache\\vendor\\".$cacheSettings['type']."\\factory";
+        
+        $cacheAdapter = $adapterString::Build($cacheSettings);
+        
+        \settings\registry::Load()->set('APP_CACHE',$cacheAdapter);
     }
 }
 

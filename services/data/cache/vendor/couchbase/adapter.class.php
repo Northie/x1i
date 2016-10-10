@@ -7,9 +7,17 @@ class adapter extends \services\data\adapter {
 	private $couchbase;
 	
 	
-	public function __construct() {
-		if(class_exists("\\Couchbase")) {
-			$this->couchbase = new \Couchbase("localhost:8091","x1appcache","x1appcachepassword","x1appcache");
+	public function __construct($settings) {
+		if(class_exists("\\Couchbase",false)) {
+                        
+                        $host       = $settings['host'];
+                        $port       = $settings['port'];
+                        $user       = $settings['user'];
+                        $password   = $settings['pass'];
+                        $bucket     = $settings['name'];
+                        
+                        $this->couchbase = new \Couchbase($host.":".$port,$user,$password,$bucket);
+                        
 		} else {
 			throw new \services\data\cacheException('Couchbase not enabled');
 		}

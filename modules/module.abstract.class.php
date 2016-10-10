@@ -12,12 +12,10 @@ abstract class module
         
         $class = get_called_class();
         $moduleFile = \settings\fileList::Load()->getFileForClass($class);
-        
-        
-        
+       
         $cacheKey = "context-module-endpoint--".str_replace('\\','-',$class);
-        
-        $cache = \services\data\cache\factory::Build('couchbase');
+
+        $cache = \settings\registry::Load()->get('APP_CACHE');
 
         $contexts = $cache->read($cacheKey);
 
@@ -34,13 +32,17 @@ abstract class module
 
                 if (is_dir($this->contextDir . DIRECTORY_SEPARATOR . $fsItem)) {
                     $this->contexts[$fsItem] = [];
-                    foreach (scandir(realpath($this->contextDir . DIRECTORY_SEPARATOR . $fsItem . DIRECTORY_SEPARATOR . 'endpoints')) as $endpoint) {
-                        if (strpos($fsItem, ".") === 0) {
-                            continue;
-                        }
-                        if (is_file($this->contextDir . DIRECTORY_SEPARATOR . $fsItem . DIRECTORY_SEPARATOR . 'endpoints' . DIRECTORY_SEPARATOR . $endpoint)) {
-                            $endpoint = str_replace(".class.php","",$endpoint);
-                            $this->contexts[$fsItem][$endpoint] = true;
+                    $path = realpath($this->contextDir . DIRECTORY_SEPARATOR . $fsItem . DIRECTORY_SEPARATOR . 'endpoints');
+                    if($path) {
+                        $files = scandir($path);
+                        foreach ($files as $endpoint) {
+                            if (strpos($fsItem, ".") === 0) {
+                                continue;
+                            }
+                            if (is_file($this->contextDir . DIRECTORY_SEPARATOR . $fsItem . DIRECTORY_SEPARATOR . 'endpoints' . DIRECTORY_SEPARATOR . $endpoint)) {
+                                $endpoint = str_replace(".class.php", "", $endpoint);
+                                $this->contexts[$fsItem][$endpoint] = true;
+                            }
                         }
                     }
                 }
