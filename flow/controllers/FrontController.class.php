@@ -82,23 +82,46 @@ class FrontController {
         if($this->contexts[$cmds[0]]) {
             $context = array_shift($cmds);
         } else {
-            $context = 'www'; //get default
+            $context = 'www';
         }
 
-        if($this->moduleExists($cmds[0])) {
-            $module = \modules\factory::Build(array_shift($cmds));
+        $this->request->normalise(['context' => $context]);
+
+        if ($this->moduleExists($cmds[0])) {
+
+            $this->request->normalise(['module' => array_shift($cmds)]);
+        }
+
+        if ($cmds[0] == '') {
+            $cmds[0] = 'index';
+        }
+
+        //$this->request->normalise(['endpoint' => $cmds[0]]);
+        $this->request->normalise(['endpoint' => array_shift($cmds)]);
+        
+        $this->request->normaliseQuery($cmds);
+        
+        $this->notify('requestNormalised');
+ 
+        $this->after('FrontControllerInit', $this);
+                
+    }
+
+    public function Execute() {
+        
+        $request = $this->request->getNormalisedRequest();
+        
+        if($this->moduleExists($request['module'])) {
             
-            if($cmds[0] == '') {
-                $cmds[0] = 'index';
-            }
+            $module = \modules\factory::Build($request['module']);
             
-            if($module->hasContextEndPoint($context,$cmds[0])) {    
-                $this->createModuleEndpoint($module,$context,$cmds[0]);
+            if($module->hasContextEndPoint($request['context'],$request['endpoint'])) {
+                $this->createModuleEndpoint($module,$request['context'],$request['endpoint']);
             }
         } else {
-            $this->createEndpoint($context,$cmds[0]);
+            $this->createEndpoint($request['context'],$request['endpoint']);
         }
-        
+                
         $this->filters = $this->endpoint->getNamedFilterList();
         $this->filterList = \libs\DoublyLinkedList\factory::Build();
 
@@ -110,12 +133,7 @@ class FrontController {
                 $filter->init();
                 
         }
-        
-        $this->after('FrontControllerInit', $this);
-                
-    }
-
-    public function Execute() {
+       
         $start = $this->filterList->getFirstNode(true);
         $this->before('FilterListStart', $this);
         $start->in();

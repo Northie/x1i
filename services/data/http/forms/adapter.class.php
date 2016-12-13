@@ -42,4 +42,17 @@ class adapter extends \services\data\adapter {
 	public function delete($key) {
 
 	}
+        
+        public function readRawData() {
+            $fp = fopen("php://input");
+            $c = false;
+            if($fp) {
+                $c = '';
+                while($line = fgets($fp)) {
+                    $c.=$line;
+                }
+                fclose($fp);
+            }
+            return $c;
+        }
 }

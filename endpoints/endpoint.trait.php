@@ -1,7 +1,7 @@
 <?php
 namespace endpoints;
 
-trait endpoint {
+trait endpointHelper {
 	protected $data = [];
 	protected $appliedFilters = [];
 	

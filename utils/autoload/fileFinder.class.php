@@ -3,16 +3,16 @@
 namespace utils\autoload;
 
 class fileFinder {
-	public static function CompileFiles() {
+	public static function CompileFiles($vendorPaths=[],$ignore=[]) {
 
-                $paths = [
+                $appPaths = [
                     \X1_PATH,
                     \X1_APP_PATH
                 ];
                 
+                $paths = array_merge($appPaths,$vendorPaths);
 
-            
-		$ignore = array('.htaccess', 'error_log', 'cgi-bin', 'php.ini', '.ftpquota', '.svn', 'swiftmailer');
+		$ignore = array_merge($ignore,['.htaccess', 'error_log', 'cgi-bin', 'php.ini', '.ftpquota', '.svn']);
                 
                 $all = [];
                 

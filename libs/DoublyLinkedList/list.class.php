@@ -398,9 +398,7 @@ class linkedList implements \Iterator { //which implements Traversable
 		$this->insertAfter($key, $this->temp['key'], $this->temp['value']);
 		$this->temp = [];
 	}
-        
-        
-        //??
+
         public function replace($oldKey,$newKey,$newValue,$label=false) {
             if($oldKey ==  $newKey) {
                 //get old key and replace node value

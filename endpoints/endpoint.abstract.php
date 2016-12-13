@@ -2,6 +2,6 @@
 namespace endpoints;
 
 abstract class endpoint {
-    use \endpoints\endpoint;
+    use \endpoints\endpointHelper;
     use \Plugins\helper;
 }

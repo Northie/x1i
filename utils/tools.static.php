@@ -241,4 +241,16 @@ class Tools {
 		
 		return str_replace("//","/",str_replace($find,$replace,$path));
 	}
+        
+        public static function looksLikeSerialized($str) {
+            $pattern = "/^[aOids]\:[0-9]/";
+            $subject = substr($str, 0, 10);
+            return preg_match($pattern, $subject);
+        }
+        
+        public static function looksLikeJson($str) {
+            $pattern = "/^(\[|\{|[0-9]|\")/";
+            $subject = substr($str, 0, 10);
+            return preg_match($pattern, $subject);
+        }
 }

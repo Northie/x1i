@@ -16,8 +16,8 @@ class adapter extends \services\data\adapter {
 
 	}
 
-	public function read() {
-
+	public function read($args) {
+            
 	}
 
 	public function update() {

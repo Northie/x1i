@@ -11,6 +11,14 @@ class Request {
 	private $dynamic = [];
 	private $endpoint = false;
         private $modules = [];
+        private $query = [];
+        
+        private $normalisedRequest = [
+            'context'=>false,
+            'endpoint'=>false,
+            'module'=>false,
+        ];
+        
 
 	public function __construct($server = false) {
 
@@ -116,5 +124,53 @@ class Request {
         
         public function getModules() {
             return $this->modules;
+        }
+        
+        public function getNormalisedRequest() {
+            return $this->normalisedRequest;
+        }
+        
+        public function normalise($array) {
+            
+            foreach($array as $key => $val) {
+                if(isset($this->normalisedRequest[$key])) {
+                    $this->normalisedRequest[$key] = $val;
+                }
+            }
+        }
+        
+        public function normaliseQuery($arr) {
+           
+            list($path,$query) = explode("?",array_pop($arr));
+            
+            parse_str($query, $get);
+            
+            $arr[] = $path;
+            $pQuery = [];
+            
+            for($i=0; $i<count($arr);$i+=2) {
+                $pQuery[$arr[$i]] = $arr[$i+1];
+            }
+            
+            $this->setQuery(['path'=>$pQuery,'queryString'=>$get]);
+            
+        }
+        
+        public function setQuery($query) {
+            $this->query = $query;
+        }
+        
+        public function getQuery() {
+            return $this->query;
+        }
+        
+        public function getCombinedQuery() {
+            return array_merge($this->query['queryString'],$this->query['path']);
+        }
+        
+        public function addPathQuery($newPathQuery) {
+            for($i=0;$i<count($newPathQuery);$i+=2) {
+                $this->query['path'][$newPathQuery[$i]] = $newPathQuery[$i+1];
+            }
         }
 }
