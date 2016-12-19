@@ -185,4 +185,12 @@ class FrontController {
         return false;
     }
 
+    public function getRequest() {
+        return $this->request;
+    }
+    
+    public function getResponse() {
+        return $this->response;
+    }
+    
 }

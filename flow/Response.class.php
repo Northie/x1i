@@ -44,5 +44,9 @@ class Response {
 
 		$this->after('ResponseSetResponseFormat', $this);
 	}
+        
+        public function respond() {
+            
+        }
 
 }

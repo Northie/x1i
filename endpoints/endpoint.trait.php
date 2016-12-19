@@ -13,7 +13,7 @@ trait endpointHelper {
 	public function getNamedFilterList() {
 		return $this->filters;
 	}
-	protected function filterInsertBefore($filter, $before) {
+	public function filterInsertBefore($filter, $before) {
 		$newList = [];
 		foreach ($this->filters as $i=> $filterName) {
 			$newList[] = $filterName;
@@ -23,7 +23,8 @@ trait endpointHelper {
 		}
 		$this->filters = $newList;
 	}
-	protected function filterInsertAfter($filter, $after) {
+        
+	public function filterInsertAfter($filter, $after) {
 		$newList = [];
 		foreach ($this->filters as $i=> $filterName) {
 			$newList[] = $filterName;
