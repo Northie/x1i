@@ -5,7 +5,7 @@ namespace services\data\relational;
 /**
  * manage single instances of XF_DMOs
  */
-class XF_DBA {
+class connections {
 
 	private static $instance;
 	private $settings;
@@ -32,13 +32,13 @@ class XF_DBA {
 		
 		if (!isset($this->connections[$dsn])) {
 
-			$c = new \services\data\relational\XF_PDO($this->settings);
+			$connection = new \services\data\relational\connector($this->settings);
 
-			$link = $c->Connect();
+			$link = $connection->Connect();
 
-			$dmo = new \services\data\relational\XF_DMO($link);
+			$dmo = new \services\data\relational\accessor($link);
 
-			$this->resources[$dsn] = $c;
+			$this->resources[$dsn] = $connection;
 
 			$this->connections[$dsn] = $dmo;
 		}

@@ -10,7 +10,7 @@ class factory {
 
 		$cls = "\\services\\data\\relational\\vendor\\" . $settings['type'] . "\adapter";
 
-		$o = new $cls(XF_DBA::Load($label));
+		$o = new $cls(connections::Load($label));
 
 		return $o;
 	}

@@ -12,7 +12,7 @@ namespace services\data\relational;
  * @package Libs
  * @see DB
  */
-class XF_DMO {
+class accessor {
 
 	public $conn;
 	private $SQL;

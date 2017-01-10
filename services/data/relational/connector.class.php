@@ -7,7 +7,7 @@ namespace services\data\relational;
  *
  * makes a pdo connection object
  */
-class XF_PDO {
+class connector {
 
 	private $db_type;
 	private $db_host;
