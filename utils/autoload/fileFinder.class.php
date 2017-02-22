@@ -12,7 +12,7 @@ class fileFinder {
                 
                 $paths = array_merge($appPaths,$vendorPaths);
 
-		$ignore = array_merge($ignore,['.htaccess', 'error_log', 'cgi-bin', 'php.ini', '.ftpquota', '.svn']);
+		$ignore = array_merge($ignore,['.htaccess', 'error_log', 'cgi-bin', 'php.ini', '.ftpquota', '.svn', '.git','.gitignore']);
                 
                 $all = [];
                 
@@ -110,7 +110,7 @@ class fileFinder {
 
 		$c = file_get_contents($path);
 
-		//echo "Scanning File ".$path."....\n";
+		echo "Scanning File ".$path."....\n";
 
 		$a = token_get_all($c);
 

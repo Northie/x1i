@@ -6,8 +6,10 @@ class viewFilter {
 	use filter;
 
 	public function in() {
-
-		$this->FFW();
+            
+            $this->normalisedRequest = $this->request->getNormalisedRequest();
+            
+            $this->FFW();
 	}
 
 	public function out() {
@@ -23,7 +25,7 @@ class viewFilter {
 			$renderer = strtoupper($this->request->ext);
 		}
 
-                $view = \views\factory::Build();
+                $view = \views\factory::Build($this->normalisedRequest);
 
                 $view->setData($data);
                 
