@@ -11,7 +11,7 @@ class connections {
 	private $settings;
 	private $connections = array();
 
-	private function __construct($db) {
+	private function __construct() {
 
 	}
 
@@ -21,7 +21,7 @@ class connections {
 	public static function Load($db = 'default') {
 		if (!isset(self::$instance)) {
 			$c = __CLASS__;
-			self::$instance = new $c($db);
+			self::$instance = new $c;
 		}
 		return self::$instance->getConnection($db);
 	}

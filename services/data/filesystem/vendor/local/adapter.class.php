@@ -5,7 +5,7 @@ namespace services\data\filesystem\vendor\local;
 class adapter extends services\data\adapter {
 
 	
-	public function __construct(string $namespace = '') {
+	public function __construct( $namespace = '') {
 		$this->path = '';
 		if($namespace) {
 			$namespace = \utils\Tools::filePathProtect($namespace);

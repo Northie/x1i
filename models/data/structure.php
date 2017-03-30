@@ -6,16 +6,18 @@ class structure {
 
     private static $instance;
 
-    private function __construct() {
+    private function __construct($label) {
 
-        $this->db = \libs\pdo\DB::Load();
+        //$this->db = \libs\pdo\DB::Load();
+        $this->db = \services\data\relational\connections::Load($label);
+        
         $this->generate();
     }
 
-    public static function Load() {
+    public static function Load($label = 'default') {
         if (!isset(self::$instance)) {
             $c = __CLASS__;
-            self::$instance = new $c;
+            self::$instance = new $c($label);
         }
         return self::$instance;
     }
@@ -59,7 +61,8 @@ class structure {
 
         $key = sha1(__CLASS__ . "-" . __METHOD__);
 
-        $data = \libs\misc\Tools::getCache($key);
+        //$data = \libs\misc\Tools::getCache($key);
+        $data = false;
 
         if ($retry || !$data) {
 
@@ -79,7 +82,7 @@ class structure {
                 }
             }
 
-            \libs\misc\Tools::setCache($key, $this->structure, (24 * 60 * 60));
+            // \libs\misc\Tools::setCache($key, $this->structure, (24 * 60 * 60));
         } else {
             $this->structure = $data;
         }

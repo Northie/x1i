@@ -17,8 +17,6 @@ class FrontController {
 
     public function __construct($settings) {
 
-        \Plugins\Plugins::RegisterPlugins();
-
         $this->setContextType($settings['contexts']['type']);
         
         $this->setContexts($settings['contexts']['names']);

@@ -26,7 +26,7 @@ class connector {
 	 * get settings, noramalise database credentials attempt to connect
 	 */
 	public function __construct($options) {
-
+            
 		$this->db_type = $options['type'];
 		$this->db_host = $options['host'];
 		$this->db_name = $options['name'];

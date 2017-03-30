@@ -3,7 +3,12 @@
 namespace OS;
 
 class App {
-    public function __construct() {
+    use \utils\traits\singleton;
+    use \Plugins\helper;
+    
+    private $modules = [];
+    
+    private function __construct() {
 
     }
     
@@ -14,6 +19,8 @@ class App {
                 $this->{$method->getName()}();
             }
         }
+        $this->after(__METHOD__, $this);
+        
     }
     
     private function initCache() {
@@ -25,6 +32,28 @@ class App {
         $cacheAdapter = $adapterString::Build($cacheSettings);
         
         \settings\registry::Load()->set('APP_CACHE',$cacheAdapter);
+    }
+    
+    private function initPlugins() {
+        \Plugins\Plugins::RegisterPlugins();
+    }
+    
+    public function addModule($module) {
+        
+        list($a,$b,$c) = explode("\\",get_class($module));
+        
+        $this->modules[$b] = $module;
+    }
+    
+    
+    public function getModule($moduleName) {
+        return isset($this->modules[$moduleName]) ? $this->modules[$moduleName] : null;
+    }
+    
+    public function preloadModules($modules) {
+        foreach ($modules as $module) {
+            //\modules\factory::Build($module);
+        }
     }
 }
 

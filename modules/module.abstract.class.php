@@ -61,4 +61,6 @@ abstract class module
         return isset($this->contexts[$context][$endPoint]);
     }
 
+    abstract public function init();
+
 }

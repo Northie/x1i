@@ -12,6 +12,7 @@ class adapter extends \services\data\adapter {
 	
 	public function __construct($settings) {
 	    $this->path = $settings['path'];
+            \services\data\filesystem\vendor\local\factory::Build($settings['name'])
 	}
 
 	public function create($key, $data,$lifetime=false) {
