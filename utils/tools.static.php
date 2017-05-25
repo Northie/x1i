@@ -253,4 +253,54 @@ class Tools {
             $subject = substr($str, 0, 10);
             return preg_match($pattern, $subject);
         }
+        
+        public static function lace(array $strings) {
+            foreach($strings as $i => $string) {
+                $length = strlen($string);
+                $lengths[$i] = $length;
+            }
+            $maxLength = max($lengths);
+            
+            foreach($strings as $i => $string) {
+                $length = strlen($string);
+                if($length < $maxLength) {
+                    //$strings[$i] = str_pad($string, $maxLength,"=");
+                    $strings[$i] = $string.self::generatePassword($maxLength-$length);
+                }
+            }
+            
+            $output = '';
+            
+            for($i = 0;$i<$maxLength;$i++) {
+                foreach($strings as $j => $string) {
+                    $output.=$string[$i];
+                }
+            }
+            
+            $prepend = base64_encode(count($strings).",".implode(",",$lengths));
+            
+            return strlen($prepend)."|".$prepend."|".$output;
+        }
+        
+        public static function unlace($string) {
+            list($a,$b,$c) = explode("|",$string);
+            
+            $instructions = explode(",",base64_decode($b));
+            
+            $stringCount = array_shift($instructions);
+            $stringlengths = $instructions;
+            
+            $strings = [];
+            
+            for($i=0;$i<strlen($c);$i++) {
+                $strings[$i%$stringCount].=$c[$i];
+            }
+            
+            foreach($strings as $i => $string) {
+                $strings[$i] = substr($string,0,$stringlengths[$i]);
+            }
+            
+            return $strings;
+        }
+        
 }

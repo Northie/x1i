@@ -27,6 +27,10 @@ class viewFilter {
 
                 $view = \views\factory::Build($this->normalisedRequest);
 
+                if($this->normalisedRequest['path']) {
+                    $view->setPath($this->normalisedRequest['path']);
+                }
+                
                 $view->setData($data);
                 
                 $view->serve();

@@ -21,5 +21,9 @@ class fileList {
         return $this->classList[$cls];
     }
     
+    public function getClassForFile($file) {
+        return array_search($file, $this->classList);
+    }
+    
      
 }

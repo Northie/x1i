@@ -55,5 +55,9 @@ class App {
             //\modules\factory::Build($module);
         }
     }
+    
+    public function getModules() {
+        return $this->modules;
+    }
 }
 

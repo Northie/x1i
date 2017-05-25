@@ -17,6 +17,7 @@ class Request {
             'context'=>false,
             'endpoint'=>false,
             'module'=>false,
+            'path'=>false,
         ];
         
 
@@ -64,6 +65,15 @@ class Request {
 		if (count($ext) > 1) {
 			$this->ext = array_pop($ext);
 		}
+                
+                if($this->REQUEST_METHOD == 'POST') {
+                    $this->POST_DATA = $_POST;
+                    $this->notify('postDataReceived',$this);
+                }
+                if(!!$_COOKIE) {
+                    $this->COOKIE_DATA = $_COOKIE;
+                    $this->notify('cookieDataReceived',$this);
+                }
 
 		$this->after('RequestConstruct', $this);
 	}

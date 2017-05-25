@@ -14,11 +14,11 @@ abstract class module
         $moduleFile = \settings\fileList::Load()->getFileForClass($class);
        
         $cacheKey = "context-module-endpoint--".str_replace('\\','-',$class);
-
+        
         $cache = \settings\registry::Load()->get('APP_CACHE');
 
         $contexts = $cache->read($cacheKey);
-
+        
         if ($contexts) {
             $this->contexts = $contexts;
         } else {
@@ -61,6 +61,28 @@ abstract class module
         return isset($this->contexts[$context][$endPoint]);
     }
 
+    public function getContextEndpoints($context) {
+       
+        $dir = $this->contextDir.DIRECTORY_SEPARATOR.$context.DIRECTORY_SEPARATOR.'endpoints';
+       
+       $files = scandir($dir);
+       
+       foreach ($files as $file) {
+           if(in_array($file,['.','..'])) {
+               continue;
+           }
+           
+           $filePath = $dir.DIRECTORY_SEPARATOR.$file;
+           
+           $endpoints[] = \settings\fileList::Load()->getClassForFile($filePath);
+           
+       }
+       
+       return $endpoints;
+       
+       
+    }
+    
     abstract public function init();
 
 }

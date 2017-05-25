@@ -119,7 +119,7 @@ class FrontController {
         } else {
             $this->createEndpoint($request['context'],$request['endpoint']);
         }
-                
+        
         $this->filters = $this->endpoint->getNamedFilterList();
         $this->filterList = \libs\DoublyLinkedList\factory::Build();
 

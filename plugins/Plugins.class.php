@@ -7,7 +7,9 @@ class Plugins {
 	private static $instance;
 	public $plugins = array();
 	static $use_plugins = false;
-
+        public $events = [];
+        public $triggered = [];
+        
 	private function __construct() {
 
 	}
@@ -62,12 +64,16 @@ class Plugins {
 	}
 
 	public function DoPlugins($when, $obj, $options = false) {
+            
+                $this->events[$when]++;
+                
 		if (!self::$use_plugins) {
 			return true;
 		}
 
 		for ($i = 0; $i < count($this->plugins[$when]); $i++) {
 			$tmp = new $this->plugins[$when][$i];
+                        $this->triggered[$when][] = $this->plugins[$when][$i];
 			set_time_limit(30); //update with settings default???
 			$o = $tmp->Initiate($obj, $options, $when);
 			set_time_limit(30); //update with settings default???
@@ -78,5 +84,13 @@ class Plugins {
 
 		return true;
 	}
+        
+        public function debug() {
+            return [
+                'registered'=>$this->plugins,
+                'observed_events'=>$this->events,
+                'triggered'=>$this->triggered
+            ];
+        }
 
 }
