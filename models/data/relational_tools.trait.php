@@ -17,7 +17,7 @@ trait relational_tools {
 	}
 
 	public function map($data) {
-		foreach ($this->fields as $key=> $val) {
+		foreach ($this->fields as $key => $val) {
 			$this->data[$key] = $data[$key];
 		}
 	}
@@ -27,18 +27,18 @@ trait relational_tools {
 	}
 
 	public function getById($id) {
-		$this->map($this->db->read(['id'=>$id]));
+            return $this->db->read(['id'=>$id]);
 	}
 
 	public function __get($field) {
-		if (isset($this->fields[$field])) {
+		if ($this->fields[$field]) {
 			if (isset($this->data[$field])) {
 				return $this->data[$field];
 			}
 			return null;
 		}
 
-		throw new RelationalExeption('Attempt to get non-existant field');
+		throw new RelationalExeption('Attempt to get non-existant field, '.$field.', from '.implode(", ",array_keys($this->fields)).' or '.implode(", ",array_keys($this->data)));
 	}
 
 	public function __set($field, $value) {
@@ -50,21 +50,24 @@ trait relational_tools {
 		throw new RelationalExeption('Attempt to set non-existant field');
 	}
 
-	public function __call($name, $args = false) {
-
+	public function __call($name, $args = false)  {
+            
 		$test = ['set'=>1, 'get'=>1];
 
 		$mode = $name[0] . $name[1] . $name[2];
 		$opperator = strtolower($name[3] . $name[4]);
-
+                
 		if ($test[$mode] && $opperator != 'by') {
 			return $this->setGet($mode, substr($name, 3), $args);
 		}
 
-		if ($mode == 'get' && $opperator != 'by') {
+		if ($mode == 'get' && $opperator == 'by') {
 			$field = substr($name, 5);
+                        $field = \utils\Tools::camel_to_field($field);
+
 			if ($this->fields[$field]) {
-				$this->map($this->db->read([$field=>$args]));
+				//$this->map($this->db->read([$field=>$args[0]]));
+                                return $this->db->read([$field=>$args[0]]);
 			}
 		}
 	}

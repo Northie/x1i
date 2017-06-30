@@ -61,11 +61,15 @@ class structure {
 
         $key = sha1(__CLASS__ . "-" . __METHOD__);
 
-        //$data = \libs\misc\Tools::getCache($key);
-        $data = false;
+        $data = \utils\Tools::getCache($key);
+        //$data = false;
 
+        set_time_limit(0);
+        
         if ($retry || !$data) {
 
+            \OS\App::Load()->setTimeLimit(0);
+            
             $this->db->Execute("SHOW TABLES")->fetchArray($table_data);
 
             foreach ($table_data as $tables) {
@@ -81,8 +85,10 @@ class structure {
                     }
                 }
             }
+            
+            \OS\App::Load()->resetTimeLimit();
 
-            // \libs\misc\Tools::setCache($key, $this->structure, (24 * 60 * 60));
+            \utils\Tools::setCache($key, $this->structure, (24 * 60 * 60));
         } else {
             $this->structure = $data;
         }

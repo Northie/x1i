@@ -12,7 +12,7 @@ class adapter extends \services\data\adapter {
 	
 	public function __construct($settings) {
 	    $this->path = $settings['path'];
-            \services\data\filesystem\vendor\local\factory::Build($settings['name'])
+            $this->adapter = \services\data\filesystem\vendor\local\factory::Build($settings);
 	}
 
 	public function create($key, $data,$lifetime=false) {
@@ -31,12 +31,12 @@ class adapter extends \services\data\adapter {
                 ]);
                 
                 //file put contents
-		return $this->couchbase->set($key, $data);
+		return $this->adapter->create($key, $data);
 	}
 
 	public function read($key) {
             
-		//$json = $this->couchbase->get($key);
+		$json = $this->adapter->read($key);
                 //file get contents
                 
                 $data = json_decode($json,1);
@@ -69,12 +69,13 @@ class adapter extends \services\data\adapter {
 		$exists = 0;
                 //unlink file
                 if($force) {
-                    $rs = $this->couchbase->delete($key);
+                    var_dump($key);
+                    $rs = $this->adapter->delete($key);
                 } else {
 
                     if ($this->read($key)) {
                             $exists = 1;
-                            $rs = $this->couchbase->delete($key);
+                            $rs = $this->adapter->delete($key);
                             if (!$rs) {
                                     $exists = -1;
                             }

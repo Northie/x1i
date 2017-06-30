@@ -150,7 +150,7 @@ class Request {
         }
         
         public function normaliseQuery($arr) {
-           
+            
             list($path,$query) = explode("?",array_pop($arr));
             
             parse_str($query, $get);

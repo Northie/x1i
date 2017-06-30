@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * possible replacement at https://github.com/ioncube/php-openssl-cryptor/blob/master/cryptor.php
+ */
+
 namespace utils;
 
 class Crypto {

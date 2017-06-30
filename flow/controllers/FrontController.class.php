@@ -67,13 +67,13 @@ class FrontController {
         
         $this->before('FrontControllerInit', $this);
         
-        $aCmds = explode("/",str_replace($this->basePath,"",$this->request->REQUEST_URI));        
+        $aCmds = preg_split("/\/|\\\/",str_replace($this->basePath,"",$this->request->REQUEST_URI));        
         
         $cmds = [];
         
         foreach($aCmds as $i => $cmd) {
             if($cmd != '') {
-                $cmds[] = $cmd;
+                $cmds[] = trim($cmd,"/\\");
             }
         }
         
@@ -93,10 +93,10 @@ class FrontController {
         if ($cmds[0] == '') {
             $cmds[0] = 'index';
         }
-
+        
         //$this->request->normalise(['endpoint' => $cmds[0]]);
         $this->request->normalise(['endpoint' => array_shift($cmds)]);
-        
+          
         $this->request->normaliseQuery($cmds);
         
         $this->notify('requestNormalised');
@@ -108,7 +108,7 @@ class FrontController {
     public function Execute() {
         
         $request = $this->request->getNormalisedRequest();
-        
+                
         if($this->moduleExists($request['module'])) {
             
             $module = \modules\factory::Build($request['module']);
@@ -131,7 +131,7 @@ class FrontController {
                 $filter->init();
                 
         }
-       
+        
         $start = $this->filterList->getFirstNode(true);
         $this->before('FilterListStart', $this);
         $start->in();

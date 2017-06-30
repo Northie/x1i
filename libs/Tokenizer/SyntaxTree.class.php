@@ -12,11 +12,13 @@ class syntaxTree {
     private $processed = [];
 
     public function __construct() {
-        $this->tree = \libs\DoublyLinkedList\factory::Build();
+        //$this->tree = \libs\DoublyLinkedList\factory::Build();
+        $this->tree = [];
     }
 
     public function setStream($stream) {
         $this->stream = $stream;
+        return $this;
     }
 
     /**
@@ -40,6 +42,7 @@ class syntaxTree {
             if (key($this->stream[$i]) == $key) {   //nesting in
                 $ignore++;
             }
+            
             if (key($this->stream[$i]) == $token[$key]['closed_by']) {  //closing token
                 if ($ignore == 0) {
                     $foundClose = true;
@@ -68,14 +71,15 @@ class syntaxTree {
 
         $branch = $this->toBranch($this->stream);
 
-        $this->tree->push(-1, $branch);
+        //$this->tree->push(-1, $branch);
+        $this->tree = $branch;
     }
 
     private function toBranch($segment) {
-        $branch = \libs\DoublyLinkedList\factory::Build();
+        //$branch = \libs\DoublyLinkedList\factory::Build();
+        $branch = [];
 
         $j = 0;
-
         foreach ($segment as $idx => $token) {
 
             $j++;
@@ -91,7 +95,7 @@ class syntaxTree {
             }
 
             $key = key($token); //token name
-
+            
             $obj = new \stdClass();
             $obj->token = $key;
             $obj->data = $token[$key];
@@ -99,16 +103,19 @@ class syntaxTree {
             $obj->branch = false;
 
             if (isset($token[$key]['is_opener']) && $token[$key]['is_opener']) {
-                $segment = $this->buildSegment($idx, $token);
+                $nestedSegment = $this->buildSegment($idx, $token);
 
-                $obj->branch = $this->toBranch($segment);
+                $obj->branch = $this->toBranch($nestedSegment);
+                
+                $obj->branchRaw = $nestedSegment;
                 $obj->leaf = false;
             }
-
-            $branch->push($idx, $obj);
+            
+            //$branch->push($idx, $obj);
+            $branch[$idx] = json_decode(json_encode($obj),1);
             $this->processed[$idx] = true;
         }
-
+        
         //$this->tree->push($idx, $branch);
         return $branch;
     }

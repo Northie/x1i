@@ -8,8 +8,10 @@ class App {
     
     private $modules = [];
     
+    private $appTimeLimit = 30;
+    
     private function __construct() {
-
+        
     }
     
     public function start() {
@@ -59,5 +61,22 @@ class App {
     public function getModules() {
         return $this->modules;
     }
+    
+    public function setTimeLimit($t) {
+        if(!$this->before('SetTimeLimit',$this,['t'=>$t])) {
+            return false;
+        }
+        $tg = (int) $t;
+        $this->appTimeLimit = ini_get('max_execution_time');
+        set_time_limit($t);
+        $this->after('SetTimeLimit',$this,['t'=>$t]);
+        
+        
+    }
+    
+    public function resetTimeLimit() {
+        set_time_limit($this->appTimeLimit);
+    }
+            
 }
 

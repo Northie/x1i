@@ -350,9 +350,11 @@ class linkedList implements \Iterator { //which implements Traversable
 
 		$return = $this->index[$this->position]->getNext();
 
-		$this->position = $return->getLabel();
+                if($return) {
+                    $this->position = $return->getLabel();
+                }
 
-		return $r;
+		return $return;
 	}
 
 	public function rewind() {

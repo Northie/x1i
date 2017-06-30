@@ -67,12 +67,12 @@ class Tools {
 	}
 
 	public static function encryptStr($msg, $key) {
-		$c = new \utils\Crypto;
+		$c = new \utils\Cryptor;
 		return $c->encrypt($msg, $key);
 	}
 
 	public static function decryptStr($msg, $key) {
-		$c = new \utils\Crypto;
+		$c = new \utils\Cryptor;
 		return $c->decrypt($msg, $key);
 	}
 
@@ -87,6 +87,16 @@ class Tools {
 				)
 			)
 		);
+	}
+        
+	public static function camel_to_field($str) {	    
+            return trim(
+                strtolower(
+                    preg_replace(
+                        '/([0-9]+)|([A-Z])/', '_$0', $str
+                    )
+                )
+            , '_');
 	}
 
 	public static function to_camel_case($str) {
@@ -104,15 +114,13 @@ class Tools {
 	}
 
 	public static function setCache($key, $data, $ttl = 3600) {
-		return false;
-		//get default cache adapter
-		apc_store($key, $data, $ttl);
+                $adapter = \settings\registry::Load()->get('APP_CACHE');
+                return $adapter->create($key, $data, $ttl);
 	}
 
 	public static function getCache($key) {
-		return false;
-		//get default cache adapter
-		return apc_fetch($key);
+                $adapter = \settings\registry::Load()->get('APP_CACHE');
+                return $adapter->read($key);
 	}
 
 	public static function html_escape($raw_input) {

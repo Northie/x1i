@@ -2,12 +2,12 @@
 
 namespace services\data\filesystem\vendor\local;
 
-class adapter extends services\data\adapter {
+class adapter extends \services\data\adapter {
 
 	
-	public function __construct( $namespace = '') {
-		$this->path = '';
-		if($namespace) {
+	public function __construct( $settings = '') {
+		$this->path = $settings['path'];
+		if($settings['namespace']) {
 			$namespace = \utils\Tools::filePathProtect($namespace);
 			$this->path.='../namespaces/'.$namespace;
 		}
@@ -26,11 +26,12 @@ class adapter extends services\data\adapter {
 	public function read($key) {
 		
 		$path = \utils\Tools::filePathProtect($this->path.$key);
+
 		if($this->exists($key)) {
 			$data = file_get_contents($path);
 			return $data;
 		} else {
-			throw new \Exception("Could not read ".__NAMESPACE__.": Key does not exist");
+			return false;
 		}
 		
 	}
@@ -64,7 +65,6 @@ class adapter extends services\data\adapter {
 	
 	public function exists($key) {
 		$path = \utils\Tools::filePathProtect($this->path.$key);
-		
 		return file_exists($path);
 	}
 	
