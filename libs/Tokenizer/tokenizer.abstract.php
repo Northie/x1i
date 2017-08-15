@@ -49,8 +49,8 @@ abstract class tokenizer implements iTokenizer {
             $matched = false;
             foreach ($this->terminals as $regex => $token) {
 
-                if (preg_match($regex, $val)) {
-                    $stream[] = [$token => $this->lexicals[$token]];
+                if (preg_match($regex, $val, $m)) {
+                    $stream[] = [$token => $this->lexicals[$token],'m'=>$m[1]];
                     $matched = true;
                     break;
                 }
@@ -65,6 +65,7 @@ abstract class tokenizer implements iTokenizer {
     }
 
     public function getStream() {
+        print_r($this->stream);
         return $this->stream;
     }
 

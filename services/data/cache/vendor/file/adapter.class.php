@@ -28,7 +28,7 @@ class adapter extends \services\data\adapter {
 		$data = json_encode([
                      'meta'=>$meta
                     ,'data'=>$data
-                ]);
+                ],JSON_PRETTY_PRINT);
                 
                 //file put contents
 		return $this->adapter->create($key, $data);

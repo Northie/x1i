@@ -336,7 +336,7 @@ class adapter
      * @param string $type lof type
      * @desc local log method
      */
-    private function log($message, $type = 'info')    
+    private function log($message, $type = 'info') { 
         \utils\debug::printComment([$type=>$message]);
     }
 

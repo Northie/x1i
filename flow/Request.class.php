@@ -141,7 +141,6 @@ class Request {
         }
         
         public function normalise($array) {
-            
             foreach($array as $key => $val) {
                 if(isset($this->normalisedRequest[$key])) {
                     $this->normalisedRequest[$key] = $val;

@@ -108,13 +108,16 @@ class FrontController {
     public function Execute() {
         
         $request = $this->request->getNormalisedRequest();
-                
+        
         if($this->moduleExists($request['module'])) {
             
             $module = \modules\factory::Build($request['module']);
             
             if($module->hasContextEndPoint($request['context'],$request['endpoint'])) {
                 $this->createModuleEndpoint($module,$request['context'],$request['endpoint']);
+            } else {
+                //module exists but without endpoint, might mean that context has endpoint
+                $this->createEndpoint($request['context'],$request['module']);
             }
         } else {
             $this->createEndpoint($request['context'],$request['endpoint']);

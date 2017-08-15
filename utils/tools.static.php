@@ -311,4 +311,21 @@ class Tools {
             return $strings;
         }
         
+        public static function encryptData($data,$key) {
+            $data = [
+                'data'=>$data,
+                'ts'=> microtime(true),
+                'data_is_scalar'=> is_scalar($data)
+            ];
+            $json = json_encode($data,JSON_PRETTY_PRINT);
+            
+            return self::encryptStr($json,$key);
+        }
+        
+        public static function decryptData($source,$key) {
+            $json = self::decryptStr($source, $key);
+            $data = json_decode($json,1);
+            return $data['data'];
+        }
+        
 }
