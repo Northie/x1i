@@ -8,7 +8,7 @@ class adapter extends \services\data\adapter {
 	
 	
 	public function __construct($settings) {
-		if(class_exists("\\Couchbase",false)) {
+		if(class_exists("\\CouchbaseCluster",false)) {
                         
                         $host       = $settings['host'];
                         $port       = $settings['port'];
@@ -16,7 +16,10 @@ class adapter extends \services\data\adapter {
                         $password   = $settings['pass'];
                         $bucket     = $settings['name'];
                         
-                        $this->couchbase = new \Couchbase($host.":".$port,$user,$password,$bucket);
+                        //$this->couchbase = new \Couchbase($host.":".$port,$user,$password,$bucket);
+                        
+                        $cluster = new \CouchbaseCluster("couchbase://".$host);
+                        $this->couchbase = $cluster->openBucket($bucket,$password);
                         
 		} else {
 			throw new \services\data\cacheException('Couchbase not enabled');
@@ -33,27 +36,30 @@ class adapter extends \services\data\adapter {
             
                 $meta = ['expires'=>$expires];
             
-		$data = json_encode([
+		$data = [
                      'meta'=>$meta
                     ,'data'=>$data
-                ]);
+                ];
                 
-		return $this->couchbase->set($key, $data);
+		return $this->couchbase->upsert($key, $data);
 	}
 
 	public function read($key) {
-            
-		$json = $this->couchbase->get($key);
-                
-                $data = json_decode($json,1);
-                
-                if(isset($data['meta']['expires']) && $data['meta']['expires'] < time()) {
-                    //cleanup
-                    $this->delete($key,true);
+                try {
+                    $rs = $this->couchbase->get($key);
+                    
+                    $data = \utils\Tools::object2array($rs->value);
+
+                    if(isset($data['meta']['expires']) && $data['meta']['expires'] < time()) {
+                        //cleanup
+                        $this->delete($key,true);
+                        return [];
+                    }
+
+                    return isset($data['data']) ? $data['data'] : $data;
+                } catch (\Exception $e) {
                     return [];
                 }
-                
-		return isset($data['data']) ? $data['data'] : $data;
 	}
 
 	/**	 *
@@ -81,7 +87,7 @@ class adapter extends \services\data\adapter {
                             ,'data'=>$data
                         ]);
                         
-			$rs = $this->couchbase->replace($key, $data);
+			$rs = $this->couchbase->upsert($key, $data);
 			if (!$rs) {
 				$exists = -1;
 			}
@@ -100,12 +106,12 @@ class adapter extends \services\data\adapter {
 		$exists = 0;
 
                 if($force) {
-                    $rs = $this->couchbase->delete($key);
+                    $rs = $this->couchbase->remove($key);
                 } else {
 
                     if ($this->read($key)) {
                             $exists = 1;
-                            $rs = $this->couchbase->delete($key);
+                            $rs = $this->couchbase->remove($key);
                             if (!$rs) {
                                     $exists = -1;
                             }
