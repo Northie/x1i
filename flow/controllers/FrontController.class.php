@@ -57,6 +57,10 @@ class FrontController {
     public function setContextType($type) {
         $this->contextType = $type;
     }
+    
+    public function getContextType() {
+        return $this->contextType;
+    }
 
     public function setDefaultContext($context) {
         $this->defaultContext = $context;
@@ -77,12 +81,22 @@ class FrontController {
             }
         }
         
-        if($this->contexts[$cmds[0]]) {
-            $context = array_shift($cmds);
-        } else {
-            $context = 'www';
+        switch($this->contextType) {
+            case (self::CONTEXT_TYPE_FOLDER):
+                if ($this->contexts[$cmds[0]]) {
+                    $context = array_shift($cmds);
+                } else {
+                    $context = 'www';
+                }
+                break;
+            case (self::CONTEXT_TYPE_DOMAIN):
+                break;
+            case (self::CONTEXT_TYPE_SUBDOMAIN):
+                $dm = explode(".",$this->request->SERVER_NAME);
+                $context = $dm[0];
+                break;
         }
-
+        
         $this->request->normalise(['context' => $context]);
 
         if ($this->moduleExists($cmds[0])) {
