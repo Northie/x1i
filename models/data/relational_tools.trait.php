@@ -30,7 +30,7 @@ trait relational_tools {
             return $this->db->read(['id'=>$id]);
 	}
 
-	public function __get($field) {
+	public function __get($field) {               
 		if ($this->fields[$field]) {
 			if (isset($this->data[$field])) {
 				return $this->data[$field];

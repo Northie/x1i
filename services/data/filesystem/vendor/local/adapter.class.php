@@ -13,7 +13,8 @@ class adapter extends \services\data\adapter {
 		}
 	}
 
-	public function create($key, $data) {
+	public function create($data, $id = false) {
+                $key = $id;
 		if($this->read($key)) {
 			throw new \Exception("Could not create ".__NAMESPACE__.": Key exists");
 		}
@@ -37,8 +38,9 @@ class adapter extends \services\data\adapter {
 	}
 
 
-	public function update($key, $data) {
+	public function update($data, $conditions = false) {
 
+            $key = $conditions;
 		if ($this->exists($key)) {
 			
 			$path = \utils\Tools::filePathProtect($this->path.$key);
@@ -52,8 +54,9 @@ class adapter extends \services\data\adapter {
 		
 	}
 
-	public function delete($key) {
+	public function delete($data, $conditions = false) {
 		$exists = 0;
+                $key = $conditions;
 
 		if ($this->exists($key)) {
 			$path = $this->path.$key;
@@ -71,5 +74,9 @@ class adapter extends \services\data\adapter {
 	private function write($path, $data) {
 		return file_put_contents($path, $data);
 	}
+        
+        public function query($query, $parameters = false){
+            return false;
+        }
 
 }

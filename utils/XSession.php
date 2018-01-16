@@ -49,5 +49,13 @@ class XSession {
 	public function getSessionId() {
 		return session_id();
 	}
+        
+        public function append($key,$value) {
+            if(!is_array($_SESSION[$this->namespace][$key])) {
+                $_SESSION[$this->namespace][$key] = [];
+            }
+            
+            $_SESSION[$this->namespace][$key][] = $value;
+        }
 
 }

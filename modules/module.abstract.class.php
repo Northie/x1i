@@ -19,11 +19,11 @@ abstract class module
 
         $contexts = $cache->read($cacheKey);
         
+        $this->contextDir = realpath(dirname($moduleFile) . DIRECTORY_SEPARATOR . 'contexts');
+        
         if ($contexts) {
             $this->contexts = $contexts;
         } else {
-
-            $this->contextDir = realpath(dirname($moduleFile) . DIRECTORY_SEPARATOR . 'contexts');
             
             foreach (scandir($this->contextDir) as $fsItem) {
                 if (strpos($fsItem, ".") === 0) {
@@ -63,7 +63,7 @@ abstract class module
 
     public function getContextEndpoints($context) {
        
-        $dir = $this->contextDir.DIRECTORY_SEPARATOR.$context.DIRECTORY_SEPARATOR.'endpoints';
+       $dir = $this->contextDir.DIRECTORY_SEPARATOR.$context.DIRECTORY_SEPARATOR.'endpoints';
        
        $files = scandir($dir);
        

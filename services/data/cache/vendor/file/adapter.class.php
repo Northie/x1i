@@ -15,7 +15,9 @@ class adapter extends \services\data\adapter {
             $this->adapter = \services\data\filesystem\vendor\local\factory::Build($settings);
 	}
 
-	public function create($key, $data,$lifetime=false) {
+	public function create($data, $id = false) {
+            
+                $key = $id;
             
                 if($lifetime) {
                     $expires = time() + $lifetime;
@@ -56,7 +58,8 @@ class adapter extends \services\data\adapter {
 	 * @return int; 1 for success, 0 for didn't exist, nothing to do and -1 for failed to delete existing key
 	 * @desc matching apc user cache behaviour
 	 */
-	public function update($key, $data,$lifetime=false) {
+	public function update($data, $conditions = false) {
+            $key = $conditions;
             return $this->create($key, $data,$lifetime=false);
 	}
 
@@ -91,4 +94,9 @@ class adapter extends \services\data\adapter {
             }
             return 3600;
         }
+        
+        public function query($query, $parameters = false) {
+            return false;
+        }
+        
 }

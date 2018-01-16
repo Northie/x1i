@@ -2,7 +2,7 @@
 
 namespace services\data;
 
-interface iAdapter extends iCrud {
+interface iCacheAdapter extends iCrud {
 
     public function query($query,$parameters=false);
         

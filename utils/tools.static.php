@@ -134,8 +134,30 @@ class Tools {
 	public static function object2array($object) {
 		return json_decode(json_encode($object), 1);
 	}
+        
+        public static function array2xml($array,&$xml=null) {
+            if(is_null($xml)) {
+                $xml =  new SimpleXMLElement('<?xml version="1.0"?><data></data>');
+            }
+            foreach($array as $key => $val) {
+                if (is_numeric($key)) {
+                    $key = 'item' . $key;
+                }
+   
+                if(!is_scalar($val) && !is_array($val)) {
+                    $val = self::object2array($val);
+                }
+                
+                if(is_array($val)) {
+                    $subnode = $xml->addChild($key);
+                    self::array2xml($val,$subnode);
+                } else {
+                    $xml->addChild($key, htmlspecialchars($val));
+                }
+            }
+        }
 
-	public static function cleanHtml($html, $attr_black_list = false, $elem_black_list = false) {
+        public static function cleanHtml($html, $attr_black_list = false, $elem_black_list = false) {
 		if (!$attr_black_list || !is_array($attr_black_list)) {
 			$attr_black_list = ['onclick'];
 		}

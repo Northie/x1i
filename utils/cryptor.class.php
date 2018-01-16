@@ -151,10 +151,10 @@ class Cryptor
         // and decrypt.
         $opts = OPENSSL_RAW_DATA;
         $res = openssl_decrypt($raw, $this->cipher_algo, $keyhash, $opts, $iv);
-
+        
         if ($res === false)
         {
-            throw new \Exception('Cryptor::decryptString - decryption failed: ' . openssl_error_string());
+            //throw new \Exception('Cryptor::decryptString - decryption failed: ' . openssl_error_string());
         }
 
         return $res;

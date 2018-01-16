@@ -12,7 +12,13 @@ class adapter extends \services\data\adapter {
 		$this->model = $model;
 	}
 
-	public function create($args) {
+	public function create($data, $id = false) {
+            
+            $args = $data;
+            
+            if($id) {
+                $args['id'] = $id;
+            }
             
             $values = [];
             foreach($args as $key => $val) {
@@ -50,15 +56,19 @@ class adapter extends \services\data\adapter {
             return $this->query($sql, $where['args'])->returnArray();
 	}
 
-	public function update() {
+	public function update($data, $conditions = false) {
 
 	}
 
-	public function delete() {
+	public function delete($data, $conditions = false) {
 
 	}
 
-	public function query($sql, $args) {
+	public function query($query, $parameters = false) {
+            
+                $sql = $query;
+                $args = $parameters ? $parameters : [];
+            
 		return $this->db->Execute($sql, $args);
 	}
 

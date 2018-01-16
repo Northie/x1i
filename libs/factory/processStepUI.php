@@ -31,4 +31,12 @@ abstract class processStepUI extends processStep implements iProcessStepUI {
 
 	}
 
+        public function getUI() {
+            //get response
+            //if view filter applied, get view filter and set form
+            //else???
+            
+            //how to deal with ext/sencha ui?
+        }
+        
 }

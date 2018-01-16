@@ -37,7 +37,7 @@ class fileFinder {
 
                 $error_level = ini_get('error_reporting');
                 ini_set('error_reporting',(E_ALL ^ E_NOTICE));  //ignore notices;
-        
+                print_r($all);
 		foreach ($all as $file) {
 
 			set_time_limit(30);
@@ -77,6 +77,9 @@ class fileFinder {
 
 		file_put_contents(\APP_CLASS_LIST, "<?php\n\n" . $lines);
 		file_put_contents(dirname(APP_CLASS_LIST).'/hook-list.txt', implode("\n", $h));
+                
+                require \APP_CLASS_LIST;
+                //file_put_contents(APP_CLASS_LIST_JSON, json_encode($classlist,JSON_PRETTY_PRINT));
 
 		//echo "class list written";
 	}

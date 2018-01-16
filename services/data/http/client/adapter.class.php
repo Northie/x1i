@@ -8,18 +8,69 @@ class adapter extends \services\data\adapter {
 	private $options = [
 		\CURLOPT_RETURNTRANSFER=>true
 	];
+        
+        private $payloadMode = 0;
+        
+        const PAYLOAD_URL_ENCODED = 0;
+        const PAYLOAD_JSON_ENCODED = 1;
+        const PAYLOAD_XML = 2;
+        
 
-	public function __construct() {
+	public function __construct($payloadMode=0) {
 		$this->client = curl_init();
+                $this->payloadMode = $payloadMode;
+                
 	}
+        
 
-	public function post($url, $data = false, $headers = false) {
+        public static function encodePayload($payloadMode,$data,$client=null) {
+            
+            $return = null;
+            
+            switch($payloadMode) {
+                case self::PAYLOAD_URL_ENCODED:
+                    $return = http_build_query($data);
+                    break;
+                case self::PAYLOAD_JSON_ENCODED:
+                    $return = json_encode($data,JSON_PRETTY_PRINT);
+                    
+                    curl_setopt($client, \CURLOPT_HTTPHEADER, array(                                                                          
+                        'Content-Type: application/json',                                                                                
+                        'Content-Length: ' . strlen($return))                                                                       
+                    );
+                    
+                    break;
+                case self::PAYLOAD_XML:
+                    \utils\Tools::array2xml($data, $return);
+                default :
+                    $return = '';
+            }
+            
+            return $return;
+        }
+        
+        public static function normaliseHeaders($headers) {
+            
+            if(\utils\validators::is_assoc($headers)) {
+                $return = [];
+                foreach ($headers as $key => $val) {
+                    $return[] = implode(": ",[$key,$val]);
+                }
+            } else {
+                $return = $headers;
+            }
+            
+            return $return;
+                    
+        }
 
+
+        public function post($url, $data = false, $headers = false) {
+                
 		curl_setopt($this->client, \CURLOPT_URL, $url);
 
 		if (is_array($data)) {
-			$query = http_build_query($data);
-
+			$query = self::encodePayload($this->payloadMode,$data,$this->client);
 			curl_setopt($this->client, \CURLOPT_POST, count($data));
 			curl_setopt($this->client, \CURLOPT_POSTFIELDS, $query);
 		}
@@ -49,8 +100,9 @@ class adapter extends \services\data\adapter {
 
 		curl_setopt($this->client, \CURLOPT_URL, $url);
 		curl_setopt($this->client, \CURLOPT_HTTPGET, true);
-
+                
 		if (is_array($headers)) {
+                        $headers = self::normaliseHeaders($headers);
 			curl_setopt($this->client, \CURLOPT_HTTPHEADER, $headers);
 		}
 
@@ -67,7 +119,7 @@ class adapter extends \services\data\adapter {
 		curl_setopt($this->client, \CURLOPT_CUSTOMREQUEST, "PUT");
 
 		if (is_array($data)) {
-			$query = http_build_query($data);
+			$query = self::encodePayload($this->payloadMode,$data);
 
 			curl_setopt($this->client, \CURLOPT_POST, count($data));
 			curl_setopt($this->client, \CURLOPT_POSTFIELDS, $query);
@@ -91,7 +143,7 @@ class adapter extends \services\data\adapter {
 		curl_setopt($this->client, \CURLOPT_CUSTOMREQUEST, "DELETE");
 
 		if (is_array($data)) {
-			$query = http_build_query($data);
+			$query = self::encodePayload($this->payloadMode,$data);
 
 			curl_setopt($this->client, \CURLOPT_POST, count($data));
 			curl_setopt($this->client, \CURLOPT_POSTFIELDS, $query);
@@ -111,15 +163,15 @@ class adapter extends \services\data\adapter {
 
 	//map required fucntions to http verb methods
 
-	public function create() {
+	public function create($data, $id = false) {
 		return call_user_func_array([$this, 'post'], func_get_args());
 	}
 
-	public function read() {
+	public function read($data) {
 		return call_user_func_array([$this, 'get'], func_get_args());
 	}
 
-	public function update() {
+	public function update($data, $conditions = false) {
 		return call_user_func_array([$this, 'put'], func_get_args());
 	}
 
@@ -129,7 +181,11 @@ class adapter extends \services\data\adapter {
 	  }
 	 */
 
-	public function getAdapter() {
+        public function query($query, $parameters = false) {
+            
+        }
+
+        public function getAdapter() {
 		return $this->client;
 	}
 

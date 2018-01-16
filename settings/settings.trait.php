@@ -17,6 +17,18 @@ trait _settings {
 	}
 
 	public function get($key1 = false, $key2 = false) {
+
+                if(is_array($key1)) {
+                    $aKeys = $key1;
+                    if(isset($aKeys[0])) {
+                        $key1 = $aKeys[0];    
+                    }
+                    if(isset($aKeys[1])) {
+                        $key2 = $aKeys[1];    
+                    }
+                            
+                }
+            
 		if ($key1) {
 			if ($key2) {
 				return $this->settings[$key1][$key2];

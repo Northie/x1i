@@ -2,7 +2,7 @@
 
 namespace models\data;
 
-class tracker extends relational {
+class tracker extends storage {
 	use relational_tools {
 		relational_tools::mapToDb as parentMapToDb;
 	}

@@ -143,6 +143,12 @@ class Request {
         public function normalise($array) {
             foreach($array as $key => $val) {
                 if(isset($this->normalisedRequest[$key])) {
+                    if($key == 'endpoint') {
+                        if(strpos($val,'?') > -1) {
+                            list($endpoint,$query) = explode('?',$val);
+                            $val = $endpoint;
+                        }
+                    }
                     $this->normalisedRequest[$key] = $val;
                 }
             }

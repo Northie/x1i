@@ -65,7 +65,6 @@ abstract class tokenizer implements iTokenizer {
     }
 
     public function getStream() {
-        print_r($this->stream);
         return $this->stream;
     }
 

@@ -13,7 +13,7 @@ class FrontController {
     public $filters = ['dispatch', 'action'];
     public $request;
     public $response;
-    protected $filterList;
+    public $filterList;
 
     public function __construct($settings) {
 
@@ -27,6 +27,8 @@ class FrontController {
         
         $this->request = new \flow\Request;
         $this->response = new \flow\Response;
+        
+        \settings\registry::Load()->set('FrontController',$this);
     }
 
     public function setContexts($contexts = false, $default = false, $active = false) {
@@ -122,7 +124,7 @@ class FrontController {
     public function Execute() {
         
         $request = $this->request->getNormalisedRequest();
-        
+                
         if($this->moduleExists($request['module'])) {
             
             $module = \modules\factory::Build($request['module']);
@@ -156,7 +158,7 @@ class FrontController {
     }
 
     public function createEndpoint($context,$endpoint) {
-
+        
         if ($endpoint == '') {
             $endpoint = 'index';
         }

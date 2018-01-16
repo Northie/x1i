@@ -46,6 +46,7 @@ class syntaxTree {
             if (key($this->stream[$i]) == $token[$key]['closed_by']) {  //closing token
                 if ($ignore == 0) {
                     $foundClose = true;
+                    $segment[$i] = $this->stream[$i];
                     break;
                 }
 
@@ -60,7 +61,7 @@ class syntaxTree {
             throw new \Exception("Could not close " . $key . " opened at " . $idx . ".");
         }
 
-        $this->closeAt = $i;
+        $this->closeAt = $i+1;
 
         return $segment;
     }
@@ -101,6 +102,7 @@ class syntaxTree {
             $obj->data = $token[$key];
             $obj->leaf = true;
             $obj->branch = false;
+            $obj->original = $token['m'];
 
             if (isset($token[$key]['is_opener']) && $token[$key]['is_opener']) {
                 $nestedSegment = $this->buildSegment($idx, $token);

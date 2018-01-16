@@ -41,8 +41,10 @@ trait filter {
 		$filter = $this->getNext();
 
 		if ($filter) {
+                        \settings\registry::Load()->set('ActiveFilter',$filter);
 			$filter->in();
 		} else {
+                        \settings\registry::Load()->set('ActiveFilter',$this);
 			$this->out();
 		}
 	}

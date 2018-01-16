@@ -10,15 +10,21 @@ class fileList {
      
     private function __construct() {
         $this->includeFileList();
+        //$this->parseJsonFileList();
     }
     
     public function includeFileList() {
-        require \APP_CLASS_LIST;
+        require_once \APP_CLASS_LIST;
         $this->classList = $classlist;        
     }
-    
+    /*
+    public function parseJsonFileList() {
+        $json = file_get_contents(\APP_CLASS_LIST_JSON);
+        $this->classList = json_decode($json,1);
+    }
+    //*/
     public function getFileForClass($cls) {
-        return $this->classList[$cls];
+        return isset($this->classList[$cls]) ? $this->classList[$cls] : false;
     }
     
     public function getClassForFile($file) {
