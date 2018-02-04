@@ -75,4 +75,8 @@ trait endpointHelper {
             }
         
         }
+        
+        public function addData($key,$value) {
+            $this->data[$key] = $value;
+        }
 }

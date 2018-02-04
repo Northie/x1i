@@ -12,7 +12,7 @@ class XSession {
 		if ($namespace == '') {
 			$namespace = $this->default_namespace;
 		}
-		$this->namespace = $namespace;
+		$this->namespace = '_'.$namespace;
 		if (!is_array($_SESSION['_' . $namespace])) {
 			$_SESSION['_' . $namespace] = array();
 		}
@@ -31,11 +31,11 @@ class XSession {
 	}
 
 	public function __set($key, $value) {
-		$this->set($key, $value);
+		//$this->set($key, $value);
 	}
 
 	public function __get($key) {
-		return $this->get($key);
+		//return $this->get($key);
 	}
 
 	public function set($key, $value) {

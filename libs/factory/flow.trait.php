@@ -68,7 +68,6 @@ trait flow {
 		if (method_exists($this->parent, 'failed')) {
 			$this->parent->failed($this->currentNode->label);
 		}
-
 		$this->Unbuild();
 	}
 
