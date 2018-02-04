@@ -36,3 +36,49 @@ Development / Production / Environment modes can be set by the implementing appl
 
 The farmework carries out other tasks when in "DEV" mode
 
+Set the mode in bootstrap.php with
+
+    \settings\general::Load()->set(['XENECO','ENV'], 'DEV');
+	
+## General Concepts
+
+### Contexts and Endpoints
+
+An endpoint is ultimately the class that will be instantiated for given request.
+
+Contexts allow grouping and routing rules to be applied to a set of Endpoints
+
+All endpoints must be declared inside a Context
+
+The application must have at least one context
+
+When using more than one context, one of the contexts must be defined as the default context
+
+Examples of different contexts may include
+
+* web (default) - Where all front end web traffic for general browsing is routed too
+* admin - where your build your application's back end
+* api - somewhere to expose your ReSTful API
+
+Set the contexts in bootstrap.php
+
+Context routing may be folder based, eg
+
+* www.mywebsite.com/
+* www.mywebsite.com/admin/
+* www.mywebsite.com/api/
+
+or subdomain based, eg
+
+* www.mywebsite.com/
+* admin.mywebsite.com/
+* api.mywebsite.com/
+
+### Dispatch Loop and Filters
+
+### Events and Plugins
+
+### Modules
+
+# Setup
+
