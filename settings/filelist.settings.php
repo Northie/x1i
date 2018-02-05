@@ -24,6 +24,7 @@ class fileList {
     }
     //*/
     public function getFileForClass($cls) {
+        $cls = trim($cls,'\\');
         return isset($this->classList[$cls]) ? $this->classList[$cls] : false;
     }
     

@@ -99,11 +99,14 @@ class adapter extends \services\data\adapter {
 	}
         
         public function query($query,$parameters=false) {
-            $query = CouchbaseN1qlQuery::fromString($query);
+            $query = \CouchbaseN1qlQuery::fromString($query);
             if(is_array($parameters)){
                 $query->namedParams($parameters);
             }
-            $result = $bucket->query($query);
+            
+            $r = new \ReflectionObject($this->couchbase);
+            
+            $result = $this->couchbase->query($query);
             return $result;
         }
 }

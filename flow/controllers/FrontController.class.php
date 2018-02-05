@@ -163,7 +163,7 @@ class FrontController {
             $endpoint = 'index';
         }
         
-        $endPointClass = "\\endpoints\\".$context."\\".$endpoint;
+        $endPointClass = $this->makeEndpointClassString('endpoints',$context,$endpoint);
         
         $this->before('FrontControllerCreateEndpoint', $this,['context'=>$context,'endpoint'=>$endpoint]);
         
@@ -171,6 +171,22 @@ class FrontController {
         $this->request->setEndpoint($this->endpoint);
         
         $this->after('FrontControllerCreateEndpoint', $this);
+        
+    }
+    
+    public function makeEndpointClassString($ns,$context,$endpoint) {
+      
+        $endPointClass = "\\".$ns."\\".$context."\\".$endpoint;
+        
+        $endpointFile = \settings\fileList::Load()->getFileForClass($endPointClass);
+
+        if($endpointFile) {
+            $this->notify('routeMatched');
+        } else {
+            $this->notify('routeNotMatched');
+        }
+        
+        return $endPointClass;
         
     }
     
@@ -182,7 +198,7 @@ class FrontController {
             $endpoint = 'index';
         }
 
-        $endPointClass = "\\".$ns."\\".$context."\\".$endpoint;
+        $endPointClass = $this->makeEndpointClassString($ns,$context,$endpoint);
         
         $this->before('FrontControllerCreateModuleEndpoint', $this, ['module'=>$module,'ns'=> $ns,'context'=>$context,'endpoint'=>$endpoint]);
         
