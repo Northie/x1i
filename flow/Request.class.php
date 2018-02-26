@@ -188,4 +188,8 @@ class Request {
                 $this->query['path'][$newPathQuery[$i]] = $newPathQuery[$i+1];
             }
         }
+        
+        public function getRequest() {
+            return $this->dynamic;
+        }
 }

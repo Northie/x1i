@@ -28,7 +28,7 @@ class adapter extends \services\data\adapter {
 
 	public function create($data,$id = false) {
             
-                $key = $id;
+                $key = X1_APP_NAME.'-'.$id;
             
                 if($lifetime) {
                     $expires = time() + $lifetime;
@@ -47,6 +47,8 @@ class adapter extends \services\data\adapter {
 	}
 
 	public function read($key) {
+                $key = X1_APP_NAME.'-'.$key;
+            
                 try {
                     $rs = $this->couchbase->get($key);
                     
@@ -72,7 +74,7 @@ class adapter extends \services\data\adapter {
 	 */
         public function update($data, $conditions = false) {
 	
-                $key = $conditions;
+                $key = $key = X1_APP_NAME.'-'.$conditions;
                 
 		$exists = 0;
 
@@ -109,7 +111,7 @@ class adapter extends \services\data\adapter {
 	 */
 	public function delete($key,$force=false) {
 		$exists = 0;
-
+                $key = X1_APP_NAME.'-'.$key;
                 if($force) {
                     $rs = $this->couchbase->remove($key);
                 } else {

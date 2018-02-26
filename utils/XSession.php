@@ -57,5 +57,9 @@ class XSession {
             
             $_SESSION[$this->namespace][$key][] = $value;
         }
+        
+        public function destroyNameSpace($ns) {
+            $_SESSION[$ns] = [];
+        }
 
 }

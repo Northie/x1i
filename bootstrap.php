@@ -5,6 +5,7 @@ $requiredConstants = [
     ,"X1_APP_PATH"
     ,"X1_WEB_PATH"
     ,"X1_DAT_PATH"
+    ,"X1_APP_NAME"
     ,"APP_CLASS_LIST"
 ];
 

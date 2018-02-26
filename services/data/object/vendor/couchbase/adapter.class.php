@@ -104,8 +104,6 @@ class adapter extends \services\data\adapter {
                 $query->namedParams($parameters);
             }
             
-            $r = new \ReflectionObject($this->couchbase);
-            
             $result = $this->couchbase->query($query);
             return $result;
         }
