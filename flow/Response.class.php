@@ -47,7 +47,7 @@ class Response {
         
         public function respond($headers) {
             foreach($headers as $key => $val) {
-                if(is_null($key)) {
+                if(is_null($key) || is_int($key)) {
                     header($val);
                 } else {
                     $header = "$key: $val";
