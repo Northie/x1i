@@ -48,7 +48,7 @@ class debug {
 
 		$stack = debug_backtrace();
 
-		$trace = $stack[1];
+		$trace = $stack[1] ? $stack[1] : $stack[0];
 
 		$var['trace']['file'] = $trace['file'];
 		$var['trace']['line'] = $trace['line'];
