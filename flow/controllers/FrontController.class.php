@@ -144,7 +144,11 @@ class FrontController {
 
         foreach ($this->filters as $f) {
                 $_f = '\\flow\\filters\\' . $f . 'Filter';
+                
+                $filterOptions = $this->endpoint->getFilterOptions($f);
+                
                 $filter = new $_f($this->filterList, $this->request, $this->response);
+                $filter->setOptions($filterOptions);
                 $this->filterList->push($f, $filter);
                 
                 $filter->init();

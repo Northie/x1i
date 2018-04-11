@@ -10,6 +10,7 @@ trait filter {
 	private $list;
 	private $request;
 	private $response;
+        protected $options = [];
 
 	public function __construct($list, $request, $response) {
 		$this->list = $list;
@@ -55,6 +56,14 @@ trait filter {
 			$filter->out();
 		}
 	}
+        
+        public function setOptions($options) {
+            $this->options = $options;
+        }
+        
+        public function getOptions() {
+            return $this->options;
+        }
         
         public function getRequest() {
             return $this->request;

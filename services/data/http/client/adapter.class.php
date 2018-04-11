@@ -11,14 +11,17 @@ class adapter extends \services\data\adapter {
         
         private $payloadMode = 0;
         
+        static $initHeaders = [];
+        
         const PAYLOAD_URL_ENCODED = 0;
         const PAYLOAD_JSON_ENCODED = 1;
         const PAYLOAD_XML = 2;
-        
 
 	public function __construct($payloadMode=0) {
 		$this->client = curl_init();
                 $this->payloadMode = $payloadMode;
+                
+                curl_setopt($this->client, \CURLOPT_SSL_VERIFYPEER, false);
                 
 	}
         
@@ -34,11 +37,11 @@ class adapter extends \services\data\adapter {
                 case self::PAYLOAD_JSON_ENCODED:
                     $return = json_encode($data,JSON_PRETTY_PRINT);
                     
-                    curl_setopt($client, \CURLOPT_HTTPHEADER, array(                                                                          
-                        'Content-Type: application/json',                                                                                
-                        'Content-Length: ' . strlen($return))                                                                       
-                    );
+                    self::$initHeaders = [
+                        'Content-Type: application/json'
+                    ];
                     
+                    curl_setopt($client, \CURLOPT_HTTPHEADER, self::$initHeaders); 
                     break;
                 case self::PAYLOAD_XML:
                     \utils\Tools::array2xml($data, $return);
@@ -76,6 +79,7 @@ class adapter extends \services\data\adapter {
 		}
 
 		if (is_array($headers)) {
+                        $headers = array_merge(static::$initHeaders,$headers);
 			curl_setopt($this->client, \CURLOPT_HTTPHEADER, $headers);
 		}
 
@@ -103,6 +107,7 @@ class adapter extends \services\data\adapter {
                 
 		if (is_array($headers)) {
                         $headers = self::normaliseHeaders($headers);
+                        $headers = array_merge(static::$initHeaders,$headers);
 			curl_setopt($this->client, \CURLOPT_HTTPHEADER, $headers);
 		}
 
@@ -114,27 +119,28 @@ class adapter extends \services\data\adapter {
 	}
 
 	public function put($url, $data = false, $headers = false) {
+            curl_setopt($this->client, \CURLOPT_URL, $url);
 
-		curl_setopt($this->client, \CURLOPT_URL, $url);
-		curl_setopt($this->client, \CURLOPT_CUSTOMREQUEST, "PUT");
+            if (is_array($data)) {
+                    $query = self::encodePayload($this->payloadMode,$data,$this->client);
+                    curl_setopt($this->client, \CURLOPT_POST, count($data));
+                    curl_setopt($this->client, \CURLOPT_POSTFIELDS, $query);
+            }
 
-		if (is_array($data)) {
-			$query = self::encodePayload($this->payloadMode,$data);
-
-			curl_setopt($this->client, \CURLOPT_POST, count($data));
-			curl_setopt($this->client, \CURLOPT_POSTFIELDS, $query);
-		}
-
-		if (is_array($headers)) {
-			curl_setopt($this->client, \CURLOPT_HTTPHEADER, $headers);
-		}
+            if (is_array($headers)) {
+                    $headers = array_merge(static::$initHeaders,$headers);                    
+                    curl_setopt($this->client, \CURLOPT_HTTPHEADER, $headers);
+            }
 
 
-		foreach ($this->options as $opt=> $value) {
-			curl_setopt($this->client, $opt, $value);
-		}
+            foreach ($this->options as $opt=> $value) {
+                    curl_setopt($this->client, $opt, $value);
+            }
 
-		return curl_exec($this->client);
+            curl_setopt($this->client, \CURLOPT_HTTP_VERSION, \CURL_HTTP_VERSION_1_1);
+            curl_setopt($this->client, \CURLOPT_CUSTOMREQUEST, "PUT");
+            return curl_exec($this->client);
+            
 	}
 
 	public function delete($url, $data = false, $headers = false) {
@@ -150,6 +156,7 @@ class adapter extends \services\data\adapter {
 		}
 
 		if (is_array($headers)) {
+                    $headers = array_merge(static::$initHeaders,$headers);
 			curl_setopt($this->client, \CURLOPT_HTTPHEADER, $headers);
 		}
 
