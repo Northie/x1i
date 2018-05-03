@@ -79,6 +79,7 @@ class adapter extends \services\data\adapter {
 		}
 
 		if (is_array($headers)) {
+                        $headers = self::normaliseHeaders($headers);
                         $headers = array_merge(static::$initHeaders,$headers);
 			curl_setopt($this->client, \CURLOPT_HTTPHEADER, $headers);
 		}
@@ -157,7 +158,8 @@ class adapter extends \services\data\adapter {
 		}
 
 		if (is_array($headers)) {
-                    $headers = array_merge(static::$initHeaders,$headers);
+                        $headers = self::normaliseHeaders($headers);
+                        $headers = array_merge(static::$initHeaders,$headers);
 			curl_setopt($this->client, \CURLOPT_HTTPHEADER, $headers);
 		}
 
