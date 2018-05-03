@@ -6,7 +6,7 @@ class adapter extends \services\data\adapter {
 
 	
 	public function __construct( $settings = '') {
-		$this->path = $settings['path'];
+		$this->path = rtrim($settings['path'],DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
 		if($settings['namespace']) {
 			$namespace = \utils\Tools::filePathProtect($namespace);
 			$this->path.='../namespaces/'.$namespace;

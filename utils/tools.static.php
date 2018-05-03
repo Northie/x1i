@@ -137,7 +137,7 @@ class Tools {
         
         public static function array2xml($array,&$xml=null) {
             if(is_null($xml)) {
-                $xml =  new SimpleXMLElement('<?xml version="1.0"?><data></data>');
+                $xml =  new \SimpleXMLElement('<?xml version="1.0"?><data></data>');
             }
             foreach($array as $key => $val) {
                 if (is_numeric($key)) {
