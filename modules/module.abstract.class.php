@@ -46,7 +46,7 @@ abstract class module
                         }
                     }
                 }
-            }            
+            }
             $cache->create($cacheKey, $this->contexts);
         }
     }

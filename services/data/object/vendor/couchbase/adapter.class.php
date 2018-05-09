@@ -55,13 +55,13 @@ class adapter extends \services\data\adapter {
 	 * @return int; 1 for success, 0 for didn't exist, nothing to do and -1 for failed to delete existing key
 	 * @desc matching apc user cache behaviour
 	 */
-	public function update($data, $conditions = false) {
+	public function replace($data, $conditions = false) {
             
                 $key = $conditions;
             
 		$exists = 0;
-
-		if ($this->read($key)) {
+                
+		if ($this->read($key) !== null) {
 			$exists = 1;
                         
 			$rs = $this->couchbase->upsert($key, $data);
@@ -73,8 +73,41 @@ class adapter extends \services\data\adapter {
 
 		return $exists;
 	}
+        
+        public function update($data, $conditions = false, $createIfNotExists=true) {
+            $key = $conditions;
 
-	/**
+            $exists = 0;
+
+            $original = $this->read($key);
+
+            if ($original !== null) {
+                $exists = 1;
+                if(!is_array($original)) {
+                    if(!is_array($data)) {
+                        $new = $data;
+                    } else {
+                        $original = [$original];
+                        $new = array_replace_recursive($original, $data);
+                    }
+                } else {
+                    $new = array_replace_recursive($original, $data);
+                }
+
+                $rs = $this->couchbase->upsert($key, $new);
+                if (!$rs) {
+                    $exists = -1;
+                }
+            } else {
+                if($createIfNotExists) {
+                    $this->create($data,$key);
+                }
+            }
+
+            return $exists;
+        }
+
+    /**
 	 *
 	 * @param string $key
 	 * @return int; 1 for success, 0 for didn't exist, nothing to do and -1 for failed to delete existing key
