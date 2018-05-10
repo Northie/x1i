@@ -350,4 +350,30 @@ class Tools {
             return $data['data'];
         }
         
+        /**
+         * 
+         * @return mixed the first non-null and non-empty argument supplied
+         */
+        
+        public static function coalesce() {
+            //get a list of values to test on
+            $args = func_get_args();
+            
+            //if an array of values has been sent instead
+            if(count($args) == 1 && is_array($args[0])) {
+                $args = $args[0];
+            }
+            
+            $return = null;
+            
+            foreach($args as $arg) {
+                if(!is_null($arg) && trim($arg) != '') {
+                    $return = $arg;
+                    break;
+                }
+            }
+            
+            return $return;
+        }
+        
 }
