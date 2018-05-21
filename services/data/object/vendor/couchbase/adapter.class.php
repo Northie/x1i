@@ -140,4 +140,14 @@ class adapter extends \services\data\adapter {
             $result = $this->couchbase->query($query);
             return $result;
         }
+        
+        public function queryView($design,$view) {
+            $query = \CouchbaseViewQuery::from($design,$view);            
+            $result = $this->couchbase->query($query);
+            return $result;
+        }
+        
+        public function getService() {
+            return $this->couchbase;
+        }
 }
