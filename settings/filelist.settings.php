@@ -14,7 +14,7 @@ class fileList {
     }
     
     public function includeFileList() {
-        require_once \APP_CLASS_LIST;
+        include_once \APP_CLASS_LIST;
         $this->classList = $classlist;        
     }
     /*
