@@ -43,6 +43,10 @@ class fileFinder {
 			set_time_limit(30);
 
 			$d = self::getContexts($file);
+                        
+                        if(!$d) {
+                            continue;
+                        }
 
 			//echo "$file\n=========================\n\n".print_r($d,1)."\n";
 
@@ -112,6 +116,12 @@ class fileFinder {
 	public static function getContexts($path) {
 
 		$c = file_get_contents($path);
+                
+                $c = trim($c);
+                
+                if(strpos($c,"<?") !== 0) {
+                    return [];
+                }
 
 		echo "Scanning File ".$path."....\n";
 
