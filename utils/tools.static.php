@@ -376,4 +376,55 @@ class Tools {
             return $return;
         }
         
+
+        /**
+         * @desc take a 2D assoc array containing IDs (specified by key, $idKey) and parent Ids (specified by $parentKey) and return a nested structure
+         * @param array $data the input array
+         * @param integer $parentId the id of the parent to find children for
+         * @param string $idKey the array key containing the row id
+         * @param string $parentKey the array key containing the row's parent id
+         * @param string $childrenKey the array key to use for populating the children into
+         * @return array
+         */
+        public static function getNestedChildren($data,$parentId,$idKey='id',$parentKey='parentId',$childrenKey='children') {
+            $nestedTreeStructure = [];
+            $length = count($data);
+
+            for($i=0;$i<$length;$i++) {
+                $row = $data[$i];
+                if($row[$parentKey] == $parentId) {
+                    $children = self::getNestedChildren($data,$row[$idKey],$idKey,$parentKey,$childrenKey);
+                    if(count($children) > 0) {
+                        $row[$childrenKey] = $children;
+                    }
+                    $nestedTreeStructure[] = $row;
+                }
+            }
+
+            return $nestedTreeStructure;
+
+        }
+        
+        /**
+         * 
+         * @param string $singular Singular form, eg item or quantity
+         * @param string $plural plural form, eg s or quantities
+         * @param numeric $count number to compare for
+         * @param bool $append append the plural form to the singular (eg item+s) or not (eg quantities)
+         * @return string 
+         * @example \utils\tools::pluralise('Item','s',$qty);
+         */
+        
+        public static function pluralise($singular,$plural,$count,$append=true) {
+            if($append) {
+                $plural = $singular.$plural;
+            }
+            
+            if($count == 1) {
+                return $singular;
+            }
+            
+            return $plural;
+        }
+        
 }

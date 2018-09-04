@@ -40,20 +40,38 @@ trait filter {
 
 	public function FFW() {
 		$filter = $this->getNext();
-
+                
+                
+                
 		if ($filter) {
-                        \settings\registry::Load()->set('ActiveFilter',$filter);
-			$filter->in();
+                        $r = new \ReflectionObject($filter);
+                        $filterName = $r->getName();
+                        if(\Plugins\Plugins::Load()->DoPlugins("onBefore".$filterName."In",$filter)) {
+                            \settings\registry::Load()->set('ActiveFilter',$filter);
+                            $filter->in();
+                            \Plugins\Plugins::Load()->DoPlugins("onBefore".$filterName."In",$filter);
+                        }
 		} else {
-                        \settings\registry::Load()->set('ActiveFilter',$this);
-			$this->out();
+                        $r = new \ReflectionObject($this);
+                        $filterName = $r->getName();
+                        if(\Plugins\Plugins::Load()->DoPlugins("onBefore".$filterName."Out",$filter)) {
+                            \settings\registry::Load()->set('ActiveFilter',$this);
+                            $this->out();
+                            \Plugins\Plugins::Load()->DoPlugins("onAfter".$filterName."Out",$filter);
+                        }
 		}
 	}
 
 	public function RWD() {
 		$filter = $this->getPrev();
 		if ($filter) {
+                    $r = new \ReflectionObject($filter);
+                    $filterName = $r->getName();
+                    if(\Plugins\Plugins::Load()->DoPlugins("onBefore".$filterName."Out",$filter)) {
+                        \settings\registry::Load()->set('ActiveFilter',$filter);
 			$filter->out();
+                        \Plugins\Plugins::Load()->DoPlugins("onAfter".$filterName."Out",$filter);
+                    }
 		}
 	}
         

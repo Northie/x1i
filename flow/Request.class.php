@@ -148,6 +148,16 @@ class Request {
                             list($endpoint,$query) = explode('?',$val);
                             $val = $endpoint;
                         }
+                        if(strpos($val,'.') > -1) {
+                            list($endpoint,$view) = explode('.',$val);
+                            $val = $endpoint;
+                        }                        
+                        if($query) {
+                            $this->normalisedRequest['query_string'] = $query;
+                        }
+                        if($view) {
+                            $this->normalisedRequest['view_format'] = $view;
+                        }
                     }
                     $this->normalisedRequest[$key] = $val;
                 }

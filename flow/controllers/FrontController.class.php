@@ -124,7 +124,7 @@ class FrontController {
     public function Execute() {
         
         $request = $this->request->getNormalisedRequest();
-                
+
         if($this->moduleExists($request['module'])) {
             
             $module = \modules\factory::Build($request['module']);
