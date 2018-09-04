@@ -94,8 +94,12 @@ Logic within a filter may decide not to proceed with the loop and directly call 
 
 An out method could call the in method of its self again, but without care this could lead to an infinate loop.
 
-
 ### Events and Plugins
+
+An event handler is provided whereby at any point in the execution of a request an event can be triggered. In practice the event name is a string, passed to the event handling function. The event handler will match the given string to any plugins registered to that event name.
+
+To use plugins, write a plugin class in the plugins folder of the application, or {modulename}/plugins with a plublic static method "RegisterMe". Bind the plugin class to the event names here
+
 
 ### Modules
 
