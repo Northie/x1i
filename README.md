@@ -46,6 +46,10 @@ Set the mode in bootstrap.php with
 
 An endpoint is ultimately the class that will be instantiated for given request.
 
+The method signature of an endpoint has a constructor and an Execute method. The endpoint class is always instantiated so the constructor is always called.
+
+The Execute method is called by the Action Filter (see Dispatch Loop and Filters below)
+
 Contexts allow grouping and routing rules to be applied to a set of Endpoints
 
 All endpoints must be declared inside a Context
@@ -75,6 +79,21 @@ or subdomain based, eg
 * api.mywebsite.com/
 
 ### Dispatch Loop and Filters
+
+The "controller" aspect from MVC is distributed across many layers in Xeneco; the front controller, filters and the endpoint
+
+An instance of the Request object and the Front Controller are two of the first classes to be intantiated, logic within the front controller identifies the context, module and endpoint for the given request and instantiates the endpoint.
+
+There is one main dispatch loop in Xeneco consisting of a doubly linked list of "Filters". Eaxch Filter has an "In" method and an "Out" method. The default filter list, has just two filters: "dispatch" and "action". Logic in an Endpoint's  constructor can add and remove more filters to this list with before/after type methods
+
+The linked list executes all the In methods in turn, then all the out methods in reverse order. The final filter, "Action" calles the Execute method on the endpoint within the "In" method and the getData method of the endpoint on the "out" method.
+
+It is the responsibility of the filters to call Fwd (forward) for Rwd (reverse/rewind) which will pick the next filter's in/out method respectivly.
+
+Logic within a filter may decide not to proceed with the loop and directly call the out method of its self from the in method. This can be useful for form validation, implementing a cache layer or as part of security measures.
+
+An out method could call the in method of its self again, but without care this could lead to an infinate loop.
+
 
 ### Events and Plugins
 
