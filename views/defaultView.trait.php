@@ -30,4 +30,20 @@ trait view  {
      {
          return $this->data[$name];
      }
+     
+     public function renderPartial($partial,$data) {
+         $fc = \settings\registry::Load()->get('FrontController');
+         
+         $req = $fc->request->getNormalisedRequest();
+         
+         if($req['module']) {
+             $path = implode(\DIRECTORY_SEPARATOR,[X1_APP_PATH,'modules',$req['module'],'contexts',$req['context'],'templates']);
+         } else {
+             $path = implode(\DIRECTORY_SEPARATOR,[X1_APP_PATH,'contexts',$req['context'],'templates']);
+         }
+         
+         $file = $path.\DIRECTORY_SEPARATOR.$partial.".phtml";
+         
+         include($file);
+     }
 }
