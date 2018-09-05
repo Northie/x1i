@@ -31,7 +31,7 @@ trait view  {
          return $this->data[$name];
      }
      
-     public function renderPartial($partial,$data) {
+     public function renderPartial($partial,$data=[]) {
          $fc = \settings\registry::Load()->get('FrontController');
          
          $req = $fc->request->getNormalisedRequest();
