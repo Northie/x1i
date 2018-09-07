@@ -36,7 +36,14 @@ trait view  {
          
          $req = $fc->request->getNormalisedRequest();
          
-         if($req['module']) {
+         $default = false;
+         
+         if($partial[0] == '^') {
+             $default = true;
+             $partial = trim($partial,'^');
+         }
+         
+         if($req['module'] && !$default) {
              $path = implode(\DIRECTORY_SEPARATOR,[X1_APP_PATH,'modules',$req['module'],'contexts',$req['context'],'templates']);
          } else {
              $path = implode(\DIRECTORY_SEPARATOR,[X1_APP_PATH,'contexts',$req['context'],'templates']);
