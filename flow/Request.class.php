@@ -172,7 +172,6 @@ class Request {
             
             $arr[] = $path;
             $pQuery = [];
-            
             for($i=0; $i<count($arr);$i+=2) {
                 $pQuery[$arr[$i]] = $arr[$i+1];
             }

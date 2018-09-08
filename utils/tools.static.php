@@ -427,4 +427,14 @@ class Tools {
             return $plural;
         }
         
+        public static function scanDirRecursive($path) {
+            $directory = new \RecursiveDirectoryIterator($path);
+            $iterator = new \RecursiveIteratorIterator($directory); 
+            $files = [];
+            foreach ($iterator as $info) {
+               $files[] = $info->getPathname();
+            }
+            return $files;
+        }
+
 }

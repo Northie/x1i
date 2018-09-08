@@ -202,7 +202,7 @@ class FrontController {
             $endpoint = 'index';
         }
 
-        $endPointClass = $this->makeEndpointClassString($ns,$context,$endpoint);
+        $endPointClass = $this->makeEndpointClassString('endpoints\\'.$ns,$context,$endpoint);
         
         $this->before('FrontControllerCreateModuleEndpoint', $this, ['module'=>$module,'ns'=> $ns,'context'=>$context,'endpoint'=>$endpoint]);
         

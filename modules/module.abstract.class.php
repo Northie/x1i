@@ -20,33 +20,33 @@ abstract class module
         $contexts = $cache->read($cacheKey);
         
         $this->contextDir = realpath(dirname($moduleFile) . DIRECTORY_SEPARATOR . 'contexts');
-        
+
         if ($contexts) {
             $this->contexts = $contexts;
         } else {
+            $files = \utils\Tools::scanDirRecursive($this->contextDir);
             
-            foreach (scandir($this->contextDir) as $fsItem) {
-                if (strpos($fsItem, ".") === 0) {
+            foreach ($files as $file) {
+
+                if (strpos($file, ".php") === false || is_dir($file)) {
                     continue;
                 }
-
-                if (is_dir($this->contextDir . DIRECTORY_SEPARATOR . $fsItem)) {
-                    $this->contexts[$fsItem] = [];
-                    $path = realpath($this->contextDir . DIRECTORY_SEPARATOR . $fsItem . DIRECTORY_SEPARATOR . 'endpoints');
-                    if($path) {
-                        $files = scandir($path);
-                        foreach ($files as $endpoint) {
-                            if (strpos($fsItem, ".") === 0) {
-                                continue;
-                            }
-                            if (is_file($this->contextDir . DIRECTORY_SEPARATOR . $fsItem . DIRECTORY_SEPARATOR . 'endpoints' . DIRECTORY_SEPARATOR . $endpoint)) {
-                                $endpoint = str_replace(".class.php", "", $endpoint);
-                                $this->contexts[$fsItem][$endpoint] = true;
-                            }
-                        }
-                    }
+                
+                if(strpos($file,'endpoints/') > -1) {
+                    
+                    $endpoint = str_replace([$this->contextDir,".class",".php"], "", $file);
+                    
+                    $e = explode(\DIRECTORY_SEPARATOR,trim($endpoint,\DIRECTORY_SEPARATOR));
+                    
+                    $context = \array_shift($e);
+                    \array_shift($e);
+                    $endpoint = implode("\\",$e);
+                    
+                    $this->contexts[$context][$endpoint] = true;
                 }
+                
             }
+
             $cache->create($this->contexts,$cacheKey);
         }
     }
@@ -58,6 +58,7 @@ abstract class module
 
     public function hasContextEndPoint($context, $endPoint)
     {   
+        
         return isset($this->contexts[$context][$endPoint]);
     }
 
