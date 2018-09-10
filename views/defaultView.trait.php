@@ -31,6 +31,11 @@ trait view  {
          return $this->data[$name];
      }
      
+     public function setFrontEndPath($path) {
+         $this->frontEndPath = $path;
+     }
+
+
      public function renderPartial($partial,$data=[]) {
          $fc = \settings\registry::Load()->get('FrontController');
          

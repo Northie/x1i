@@ -64,6 +64,8 @@ abstract class module
 
     public function getContextEndpoints($context) {
        
+       return $this->contexts[$context]; 
+       /*
        $dir = $this->contextDir.DIRECTORY_SEPARATOR.$context.DIRECTORY_SEPARATOR.'endpoints';
        
        $files = scandir($dir);
@@ -80,7 +82,7 @@ abstract class module
        }
        
        return $endpoints;
-       
+       //*/
        
     }
     

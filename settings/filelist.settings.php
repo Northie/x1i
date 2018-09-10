@@ -14,6 +14,7 @@ class fileList {
     }
     
     public function includeFileList() {
+        
         include_once \APP_CLASS_LIST;
         $this->classList = $classlist;        
     }
@@ -25,7 +26,8 @@ class fileList {
     //*/
     public function getFileForClass($cls) {
         $cls = trim($cls,'\\');
-        return isset($this->classList[$cls]) ? $this->classList[$cls] : false;
+        return $this->classList[$cls];
+        //return isset($this->classList[$cls]) ? $this->classList[$cls] : false;
     }
     
     public function getClassForFile($file) {

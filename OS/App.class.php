@@ -29,9 +29,11 @@ class App {
         
         $cacheSettings = \settings\database::Load()->get('app_cache');
         
-        $adapterString = "\\services\\data\\cache\\vendor\\".$cacheSettings['type']."\\factory";
+        list($type,$vendor) = explode("/",$cacheSettings['type']);
         
-        $cacheAdapter = $adapterString::Build($cacheSettings);
+        $factoryString = "\\services\\data\\$type\\vendor\\$vendor\\factory";
+        
+        $cacheAdapter = $factoryString::Build($cacheSettings);
         
         \settings\registry::Load()->set('APP_CACHE',$cacheAdapter);
     }

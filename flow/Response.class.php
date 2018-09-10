@@ -20,6 +20,14 @@ class Response {
 		$this->data = $data;
 		$this->after('ResponseSetData', $this);
 	}
+        
+            public function addData($key,$data) {
+		if (!\Plugins\Plugins::Load()->DoPlugins('onBeforeResponseAddData', $this)) {
+			return false;
+		}
+		$this->data[$key] = $data;
+		$this->after('ResponseAddData', $this);
+	}
 
 	public function getData() {
 		if (!$this->before('ResponseGetData', $this)) {
