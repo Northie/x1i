@@ -57,7 +57,29 @@ class adapter extends \services\data\adapter {
 	}
 
 	public function update($data, $conditions = false) {
-
+            
+            $sets = [];
+            foreach($data as $key => $val) {
+                $sets[] = "`".$key."` = :".$key;
+                $args[$key] = $val;
+            }
+            
+            $set = implode(", ",$sets);
+            
+            $sql = "
+                UPDATE
+                    `".$this->model."`
+                SET
+                    ".$set."
+            ";
+            
+            if($conditions) {
+                $where = $this->toWhere($conditions);
+                array_merge($args,$where['args']);
+                $sql.= " WHERE ".implode(" AND ",$where['sql']);
+            }
+            
+            
 	}
 
 	public function delete($data, $conditions = false) {
