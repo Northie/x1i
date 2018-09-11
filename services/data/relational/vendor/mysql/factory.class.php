@@ -10,7 +10,9 @@ class factory {
             $id = json_encode($settings);
             $a = \settings\registry::Load()->get($id);
             if(!$a) {
-                $a = new adapter($settings);
+                $connector = new \services\data\relational\connector($settings); //relational / pdo uses a common connection mechanism
+                //give the vendor specific adapter the pdo connection
+                $a = new adapter($connector);
                 \settings\registry::Load()->set($id,$a);
             }
             return $a;
