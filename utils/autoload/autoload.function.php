@@ -4,13 +4,7 @@ function xeneco_autoloader($cls) {
     
 	$file = \settings\fileList::Load()->getFileForClass($cls);
         
-	//$c = \settings\general::Load()->get('XENECO', 'ENV');
-
-        //if (require_once($file)) {
-        //    return;
-        //}
-        
-	$c = 'DEV';
+	$c = \settings\general::Load()->get('XENECO', 'ENV');
 
 	if ($c != 'DEV') {
 

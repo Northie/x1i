@@ -1,7 +1,7 @@
 <?php
 
 {{defaultNsComment}} namespace endpoints\{{context}};
-{{moduleNsComment}} namespace modules\{{module}}\{{context}};
+{{moduleNsComment}} namespace endpoints\modules\{{module}}\{{context}};
 
 class {{name}} {
 

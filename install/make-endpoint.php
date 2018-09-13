@@ -38,7 +38,7 @@ if(isset($cmd['module'])) {
    
    $targetEpPath = "app/modules/$module/contexts/$context/endpoints/$name.class.php";
    $targetVPath = "app/modules/$module/contexts/$context/views/$name.php";
-   $targetTPath = "app/modules/$module/contexts/$context/templates/$name/index.html";
+   $targetTPath = "app/modules/$module/contexts/$context/templates/$name/index.phtml";
    
 } else {
    $find['{{moduleNsComment}}'] = '//';

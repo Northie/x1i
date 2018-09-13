@@ -32,6 +32,10 @@ class adapter extends \services\data\adapter {
 		}
 	}
 
+	public function setModelName($model) {
+		$this->model = $model;
+	}
+        
 	public function create($data, $id = false) {
             
                 $key = $id;
@@ -41,6 +45,10 @@ class adapter extends \services\data\adapter {
 
 	public function read($key) {
                 try {
+                    if($this->model) {
+                        $key = $this->model."_".$key;
+                    }
+                    
                     $rs = $this->couchbase->get($key);
                     
                     return \utils\Tools::object2array($rs->value);

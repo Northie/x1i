@@ -170,6 +170,10 @@ class Request {
             
             parse_str($query, $get);
             
+            if(!$get) {
+                $get = [];
+            }
+            
             $arr[] = $path;
             $pQuery = [];
             for($i=0; $i<count($arr);$i+=2) {
