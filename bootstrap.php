@@ -10,9 +10,9 @@ $requiredConstants = [
 ];
 
 foreach($requiredConstants as $requiredConstant) {
-    if(!defined($requiredConstant)) {
-        die('constant '.$requiredConstant.' is not defined');
-    }
+	if(!defined($requiredConstant)) {
+		die('constant '.$requiredConstant.' is not defined');
+	}
 }
 
 include 'utils/traits/singleton.trait.php';

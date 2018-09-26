@@ -10,15 +10,15 @@ class Request {
 	private $https = false;
 	private $dynamic = [];
 	private $endpoint = false;
-        private $modules = [];
-        private $query = [];
-        
-        private $normalisedRequest = [
-            'context'=>false,
-            'endpoint'=>false,
-            'module'=>false,
-            'path'=>false,
-        ];
+	private $modules = [];
+	private $query = [];
+	
+	private $normalisedRequest = [
+		'context'=>false,
+		'endpoint'=>false,
+		'module'=>false,
+		'path'=>false,
+	];
         
 
 	public function __construct($server = false) {
@@ -78,11 +78,11 @@ class Request {
 		$this->after('RequestConstruct', $this);
 	}
 
-        public function setActiveContext($context) {            
-            $this->context = $context;
-        }
+	public function setActiveContext($context) {            
+		$this->context = $context;
+	}
 
-        public function isHTTPS() {
+	public function isHTTPS() {
 		return $this->https;
 	}
 
@@ -109,12 +109,12 @@ class Request {
 
 	public function setEndpoint($endpoint) {
 
-            \settings\registry::Load()->set(['REQUEST', 'CONTEXT'], $this->context);
-            \settings\registry::Load()->set(['REQUEST', 'ENDPOINT'], $endpoint);
-
-            $this->ENDPOINT = $endpoint;
-            $this->endpoint = $endpoint;
-        }
+		\settings\registry::Load()->set(['REQUEST', 'CONTEXT'], $this->context);
+		\settings\registry::Load()->set(['REQUEST', 'ENDPOINT'], $endpoint);
+		
+		$this->ENDPOINT = $endpoint;
+		$this->endpoint = $endpoint;
+	}
 
 	public function getEndpoint() {
 		return $this->endpoint;
@@ -128,81 +128,81 @@ class Request {
 		$this->requestType = strtoupper($verb);
 	}
         
-        public function addModule($module) {
-            $this->modules[] = $module;
-        }
+	public function addModule($module) {
+		$this->modules[] = $module;
+	}
+	
+	public function getModules() {
+		return $this->modules;
+	}
+	
+	public function getNormalisedRequest() {
+		return $this->normalisedRequest;
+	}
         
-        public function getModules() {
-            return $this->modules;
-        }
+	public function normalise($array) {
+		foreach($array as $key => $val) {
+			if(isset($this->normalisedRequest[$key])) {
+				if($key == 'endpoint') {
+					if(strpos($val,'?') > -1) {
+						list($endpoint,$query) = explode('?',$val);
+						$val = $endpoint;
+					}
+					if(strpos($val,'.') > -1) {
+						list($endpoint,$view) = explode('.',$val);
+						$val = $endpoint;
+					}                        
+					if($query) {
+						$this->normalisedRequest['query_string'] = $query;
+					}
+					if($view) {
+						$this->normalisedRequest['view_format'] = $view;
+					}
+				}
+				$this->normalisedRequest[$key] = $val;
+			}
+		}
+	}
         
-        public function getNormalisedRequest() {
-            return $this->normalisedRequest;
-        }
-        
-        public function normalise($array) {
-            foreach($array as $key => $val) {
-                if(isset($this->normalisedRequest[$key])) {
-                    if($key == 'endpoint') {
-                        if(strpos($val,'?') > -1) {
-                            list($endpoint,$query) = explode('?',$val);
-                            $val = $endpoint;
-                        }
-                        if(strpos($val,'.') > -1) {
-                            list($endpoint,$view) = explode('.',$val);
-                            $val = $endpoint;
-                        }                        
-                        if($query) {
-                            $this->normalisedRequest['query_string'] = $query;
-                        }
-                        if($view) {
-                            $this->normalisedRequest['view_format'] = $view;
-                        }
-                    }
-                    $this->normalisedRequest[$key] = $val;
-                }
-            }
-        }
-        
-        public function normaliseQuery($arr) {
-            
-            list($path,$query) = explode("?",array_pop($arr));
-            
-            parse_str($query, $get);
-            
-            if(!$get) {
-                $get = [];
-            }
-            
-            $arr[] = $path;
-            $pQuery = [];
-            for($i=0; $i<count($arr);$i+=2) {
-                $pQuery[$arr[$i]] = $arr[$i+1];
-            }
-            
-            $this->setQuery(['path'=>$pQuery,'queryString'=>$get]);
-            
-        }
-        
-        public function setQuery($query) {
-            $this->query = $query;
-        }
-        
-        public function getQuery() {
-            return $this->query;
-        }
-        
-        public function getCombinedQuery() {
-            return array_merge($this->query['queryString'],$this->query['path']);
-        }
-        
-        public function addPathQuery($newPathQuery) {
-            for($i=0;$i<count($newPathQuery);$i+=2) {
-                $this->query['path'][$newPathQuery[$i]] = $newPathQuery[$i+1];
-            }
-        }
-        
-        public function getRequest() {
-            return $this->dynamic;
-        }
+	public function normaliseQuery($arr) {
+		
+		list($path,$query) = explode("?",array_pop($arr));
+		
+		parse_str($query, $get);
+		
+		if(!$get) {
+			$get = [];
+		}
+		
+		$arr[] = $path;
+		$pQuery = [];
+		for($i=0; $i<count($arr);$i+=2) {
+			$pQuery[$arr[$i]] = $arr[$i+1];
+		}
+		
+		$this->setQuery(['path'=>$pQuery,'queryString'=>$get]);
+		
+	}
+	
+	public function setQuery($query) {
+		$this->query = $query;
+	}
+	
+	public function getQuery() {
+		return $this->query;
+	}
+	
+	public function getCombinedQuery() {
+		return array_merge($this->query['queryString'],$this->query['path']);
+	}
+	
+	public function addPathQuery($newPathQuery) {
+		for($i=0;$i<count($newPathQuery);$i+=2) {
+		    $this->query['path'][$newPathQuery[$i]] = $newPathQuery[$i+1];
+		}
+	}
+	
+	public function getRequest() {
+		return $this->dynamic;
+	}
 }
