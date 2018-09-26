@@ -52,16 +52,17 @@ class Response {
 
 		$this->after('ResponseSetResponseFormat', $this);
 	}
+
 		
-		public function respond($headers) {
-			foreach($headers as $key => $val) {
-				if(is_null($key) || is_int($key)) {
-					header($val);
-				} else {
-					$header = "$key: $val";
-					header($header);
-				}
+	public function respond($headers) {
+		foreach($headers as $key => $val) {
+			if(is_null($key) || is_int($key)) {
+				header($val);
+			} else {
+				$header = "$key: $val";
+				header($header);
 			}
 		}
+	}
 
 }

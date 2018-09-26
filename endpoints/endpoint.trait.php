@@ -25,13 +25,14 @@ trait endpointHelper {
 	public function getNamedFilterList() {
 		return $this->filters;
 	}
+
 		
-		public function getFilterOptions($filter) {
-			return $this->filterOptions[$filter];
-		}
+	public function getFilterOptions($filter) {
+		return $this->filterOptions[$filter];
+	}
 
 
-		public function filterInsertBefore($filter, $before,$options=[]) {
+	public function filterInsertBefore($filter, $before,$options=[]) {
 		$newList = [];
 		foreach ($this->filters as $i=> $filterName) {
 			$newList[] = $filterName;
@@ -54,6 +55,7 @@ trait endpointHelper {
 				$this->filterOptions[$filter] = $options;
 		$this->filters = $newList;
 	}
+
 	public function getData() {
 		return $this->data;
 	}
@@ -65,26 +67,28 @@ trait endpointHelper {
 	public function getAppliedFilters() {
 		return $this->appliedFilters;
 	}
+
 		
-		public function Execute() {
-			
-			$action = key($this->request->getQuery()['path']);
-			
-			$action = $action ? $action : 'index';
-			
-			if(method_exists($this, $action)) {
-				if($this->before(__CLASS__."::".$action,$this)) {
-					$this->notify(__CLASS__."::".$action,$this);
-					$this->{$action}();
-				}
-				$this->after(__CLASS__."::".$action,$this);
-			} else {
-				$this->notify('EndpointActionNotFound');
+	public function Execute() {
+		
+		$action = key($this->request->getQuery()['path']);
+		
+		$action = $action ? $action : 'index';
+		
+		if(method_exists($this, $action)) {
+			if($this->before(__CLASS__."::".$action,$this)) {
+				$this->notify(__CLASS__."::".$action,$this);
+				$this->{$action}();
 			}
-		
+			$this->after(__CLASS__."::".$action,$this);
+		} else {
+			$this->notify('EndpointActionNotFound');
 		}
+	
+	}
 		
-		public function addData($key,$value) {
-			$this->data[$key] = $value;
-		}
+	public function addData($key,$value) {
+		$this->data[$key] = $value;
+	}
+
 }
