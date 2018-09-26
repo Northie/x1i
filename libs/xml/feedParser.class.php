@@ -3,12 +3,12 @@
 namespace libs\xml;
 
 	/*=======================================================================+
-	|                       PHP Universal Feed Parser                        |   
+	|					   PHP Universal Feed Parser						|   
 	+------------------------------------------------------------------------/
 
-	Author          : Anis uddin Ahmad <admin@ajaxray.com>
-	Web             : http://www.ajaxray.com
-	Publish Date    : March 24, 2008
+	Author		  : Anis uddin Ahmad <admin@ajaxray.com>
+	Web			 : http://www.ajaxray.com
+	Publish Date	: March 24, 2008
 
 LICENSE
 ----------------------------------------------------------------------
@@ -40,13 +40,13 @@ It's very easy to use. Just follow this 3 steps:
 	
 Done. 
 Now you can use this functions to get various information of parsed feed:
-	1. $Parser->getChannels()        - To get all channel elements as array
-	2. $Parser->getItems()           - To get all feed elements as array
-	3. $Parser->getChannel($name)    - To get a channel element by name
-	4. $Parser->getItem($index)      - To get a feed element as array by it's index
-	5. $Parser->getTotalItems()      - To get the number of total feed elements
-	6. $Parser->getFeedVersion()     - To get the detected version of parsed feed
-	7. $Parser->getParsedUrl()       - To get the parsed feed URL  
+	1. $Parser->getChannels()		- To get all channel elements as array
+	2. $Parser->getItems()		   - To get all feed elements as array
+	3. $Parser->getChannel($name)	- To get a channel element by name
+	4. $Parser->getItem($index)	  - To get a feed element as array by it's index
+	5. $Parser->getTotalItems()	  - To get the number of total feed elements
+	6. $Parser->getFeedVersion()	 - To get the detected version of parsed feed
+	7. $Parser->getParsedUrl()	   - To get the parsed feed URL  
 	
 ======================================================================= 
 
@@ -72,37 +72,37 @@ To see more details and examples, please visit:
 *
 * Parses RSS 1.0, RSS2.0 and ATOM Feed
 * 
-* @license     GNU General Public License (GPL)                            
-* @author      Anis uddin Ahmad <admin@ajaxray.com>
-* @link        http://www.ajaxray.com/blog/2008/05/02/php-universal-feed-parser-lightweight-php-class-for-parsing-rss-and-atom-feeds/
+* @license	 GNU General Public License (GPL)							
+* @author	  Anis uddin Ahmad <admin@ajaxray.com>
+* @link		http://www.ajaxray.com/blog/2008/05/02/php-universal-feed-parser-lightweight-php-class-for-parsing-rss-and-atom-feeds/
 */
 class FeedParser{
 		
-	private $xmlParser      = null;
-	private $insideItem     = array();                  // Keep track of current position in tag tree
-	private $currentTag     = null;                     // Last entered tag name      
-	private $currentAttr    = null;                     // Attributes array of last entered tag
+	private $xmlParser	  = null;
+	private $insideItem	 = array();				  // Keep track of current position in tag tree
+	private $currentTag	 = null;					 // Last entered tag name	  
+	private $currentAttr	= null;					 // Attributes array of last entered tag
 	
-	private $namespaces     = array(
-							'http://purl.org/rss/1.0/'                  => 'RSS 1.0',
+	private $namespaces	 = array(
+							'http://purl.org/rss/1.0/'				  => 'RSS 1.0',
 							'http://purl.org/rss/1.0/modules/content/'  => 'RSS 2.0',
-							'http://www.w3.org/2005/Atom'               => 'ATOM 1',
-							);                          // Namespaces to detact feed version
-	private $itemTags       = array('ITEM','ENTRY');    // List of tag names which holds a feed item
-	private $channelTags    = array('CHANNEL','FEED');  // List of tag names which holds all channel elements
-	private $dateTags       = array('UPDATED','PUBDATE','DC:DATE');  
-	private $hasSubTags     = array('IMAGE','AUTHOR');  // List of tag names which have sub tags
-	private $channels       = array();                  
-	private $items          = array();
-	private $itemIndex      = 0;
+							'http://www.w3.org/2005/Atom'			   => 'ATOM 1',
+							);						  // Namespaces to detact feed version
+	private $itemTags	   = array('ITEM','ENTRY');	// List of tag names which holds a feed item
+	private $channelTags	= array('CHANNEL','FEED');  // List of tag names which holds all channel elements
+	private $dateTags	   = array('UPDATED','PUBDATE','DC:DATE');  
+	private $hasSubTags	 = array('IMAGE','AUTHOR');  // List of tag names which have sub tags
+	private $channels	   = array();				  
+	private $items		  = array();
+	private $itemIndex	  = 0;
 
-	private $url            = null;                     // The parsed url
-	private $version        = null;                     // Detected feed version 
+	private $url			= null;					 // The parsed url
+	private $version		= null;					 // Detected feed version 
 	
 	   
 	/**
 	* Constructor - Initialize and set event handler functions to xmlParser
-	*/    
+	*/	
 	function __construct()
 	{
 		$this->xmlParser = xml_parser_create();
@@ -113,7 +113,7 @@ class FeedParser{
 	}   
 
 	/*-----------------------------------------------------------------------+
-	|  Public functions. Use to parse feed and get informations.             |   
+	|  Public functions. Use to parse feed and get informations.			 |   
 	+-----------------------------------------------------------------------*/
    
 	/**
@@ -153,7 +153,7 @@ class FeedParser{
 	* Get a feed item by index
 	* 
 	* @access   public
-	* @param    number  index of feed item
+	* @param	number  index of feed item
 	* @return   array   feed item as associative array of it's elements 
 	*/   
 	public function getItem($index)
@@ -166,14 +166,14 @@ class FeedParser{
 		{
 			throw new \Exception("Item index is learger then total items.");
 			return false;
-		}        
+		}		
 	}
    
 	/**
 	* Get a channel element by name
 	* 
 	* @access   public
-	* @param    string  the name of channel tag
+	* @param	string  the name of channel tag
 	* @return   string
 	*/   
 	public function getChannel($tagName)
@@ -225,7 +225,7 @@ class FeedParser{
 	* Parses a feed url
 	* 
 	* @access   public
-	* @param    srting  teh feed url
+	* @param	srting  teh feed url
 	* @return   void
 	*/   
 	public function parse($url)
@@ -260,7 +260,7 @@ class FeedParser{
    // End public functions -------------------------------------------------
    
    /*-----------------------------------------------------------------------+
-   | Private functions. Be careful to edit them.                            |   
+   | Private functions. Be careful to edit them.							|   
    +-----------------------------------------------------------------------*/
 
    /**
@@ -283,14 +283,14 @@ class FeedParser{
 		}
 		else
 		{
-			$ch         = curl_init();
+			$ch		 = curl_init();
 			
 			curl_setopt($ch, CURLOPT_URL, $this->url);
 			curl_setopt($ch, CURLOPT_HEADER, false);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-			$content    = curl_exec($ch);
-			$error      = curl_error($ch);
+			$content	= curl_exec($ch);
+			$error	  = curl_error($ch);
 			
 			curl_close($ch);
 			
@@ -311,9 +311,9 @@ class FeedParser{
 	* Handle the start event of a tag while parsing
 	* 
 	* @access   private
-	* @param    object  the xmlParser object
-	* @param    string  name of currently entering tag
-	* @param    array   array of attributes
+	* @param	object  the xmlParser object
+	* @param	string  name of currently entering tag
+	* @param	array   array of attributes
 	* @return   void
 	*/ 
 	private function startElement($parser, $tagName, $attrs) 
@@ -321,7 +321,7 @@ class FeedParser{
 		if(!$this->version)
 		{
 			$this->findVersion($tagName, $attrs);
-		}       
+		}	   
 		
 		array_push($this->insideItem, $tagName);
 		
@@ -333,10 +333,10 @@ class FeedParser{
 	* Handle the end event of a tag while parsing
 	* 
 	* @access   private
-	* @param    object  the xmlParser object
-	* @param    string  name of currently ending tag
+	* @param	object  the xmlParser object
+	* @param	string  name of currently ending tag
 	* @return   void
-	*/    
+	*/	
 	private function endElement($parser, $tagName) 
 	{   
 		if (in_array($tagName, $this->itemTags)) 
@@ -352,8 +352,8 @@ class FeedParser{
 	* Handle character data of a tag while parsing
 	* 
 	* @access   private
-	* @param    object  the xmlParser object
-	* @param    string  tag value
+	* @param	object  the xmlParser object
+	* @param	string  tag value
 	* @return   void
 	*/
 	private function characterData($parser, $data) 
@@ -387,7 +387,7 @@ class FeedParser{
 					   
 			if(!empty($this->currentAttr))
 			{
-				$this->channels[$this->currentTag . '_ATTRS'] = $this->currentAttr;          
+				$this->channels[$this->currentTag . '_ATTRS'] = $this->currentAttr;		  
 				
 				//If the tag has no value
 				if(strlen($this->channels[$this->currentTag]) < 2) 
@@ -404,7 +404,7 @@ class FeedParser{
 					else
 					{
 						$this->channels[$this->currentTag] = $this->currentAttr;
-					}                        
+					}						
 				}
 			}
 	   }
@@ -432,7 +432,7 @@ class FeedParser{
 			 
 			if(!empty($this->currentAttr))
 			{
-				$this->items[$this->itemIndex][$this->currentTag . '_ATTRS'] = $this->currentAttr;          
+				$this->items[$this->itemIndex][$this->currentTag . '_ATTRS'] = $this->currentAttr;		  
 				
 				//If the tag has no value
 				
@@ -450,7 +450,7 @@ class FeedParser{
 					else
 					{
 					   $this->items[$this->itemIndex][$this->currentTag] = $this->currentAttr;
-					}                        
+					}						
 				}
 			}
 	   }
@@ -460,8 +460,8 @@ class FeedParser{
 	* Find out the feed version
 	* 
 	* @access   private
-	* @param    string  name of current tag
-	* @param    array   array of attributes
+	* @param	string  name of current tag
+	* @param	array   array of attributes
 	* @return   void
 	*/   
 	private function findVersion($tagName, $attrs)
@@ -473,7 +473,7 @@ class FeedParser{
 			{
 				$this->version = $version;
 				return;
-			}    
+			}	
 		}
 	}
 	
@@ -498,12 +498,12 @@ class FeedParser{
 		elseif($this->version == 'RSS 2.0')
 		{
 			if(in_array('CHANNEL', $this->insideItem) && !in_array('ITEM', $this->insideItem) && $this->currentTag != 'CHANNEL')
-			return TRUE;    
+			return TRUE;	
 		}
 		elseif($this->version == 'ATOM 1')
 		{
 			if(in_array('FEED', $this->insideItem) && !in_array('ENTRY', $this->insideItem) && $this->currentTag != 'FEED')
-			return TRUE;    
+			return TRUE;	
 		}
 		
 		return FALSE;
@@ -514,7 +514,7 @@ class FeedParser{
 	* 
 	* @access   private
 	* @return   bool
-	*/    
+	*/	
 	private function inItem()
 	{
 		if($this->version == 'RSS 1.0' || $this->version == 'RSS 2.0')
@@ -525,7 +525,7 @@ class FeedParser{
 		elseif($this->version == 'ATOM 1')
 		{
 			if(in_array('ENTRY', $this->insideItem) && $this->currentTag != 'ENTRY')
-			return TRUE;    
+			return TRUE;	
 		}
 		
 		return FALSE;
@@ -538,8 +538,8 @@ class FeedParser{
 	* 
 	* @access   private
 	* @author   Vojtech Semecky <webmaster@oslab.net>
-	* @link     http://lastrss.oslab.net/
-	* @param    string
+	* @link	 http://lastrss.oslab.net/
+	* @param	string
 	* @return   string
 	*/   
 	private function unhtmlentities($string) 

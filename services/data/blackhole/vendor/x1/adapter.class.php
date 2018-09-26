@@ -10,31 +10,31 @@ class adapter extends \services\data\adapter {
 	}
 
 	public function create($data, $id = false) {
-            return true;
+			return true;
 	}
 
 	public function read($key) {
-            return [];
+			return [];
 	}
 
 	public function update($data, $conditions = false) {		
-            return true;
+			return true;
 	}
 
 	public function delete($data, $conditions = false) {
-            return true;
+			return true;
 	}
 	
 	public function exists($key) {
-            return false;
+			return false;
 	}
 	
-        public function query($query, $parameters = false) {
-            
-        }
-        
+		public function query($query, $parameters = false) {
+			
+		}
+		
 	private function write($path, $data) {
-            return true;
+			return true;
 	}
 
 }

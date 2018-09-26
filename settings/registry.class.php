@@ -7,13 +7,13 @@ namespace settings;
  */
 class registry {
 
-    use \utils\traits\singleton;
-    use _settings;
+	use \utils\traits\singleton;
+	use _settings;
 
-    private $settings = [];
+	private $settings = [];
 
-    private function __construct() {
-        
-    }
+	private function __construct() {
+		
+	}
 
 }

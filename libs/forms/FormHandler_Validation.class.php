@@ -19,8 +19,8 @@ class FormHandler_Validation {
 	public static function URL($key) {
 		return filter_var($_POST[$key], FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED);
 	}
-        
-        public static function match() {
-            var_dump(func_get_args());
-        }
+		
+		public static function match() {
+			var_dump(func_get_args());
+		}
 }

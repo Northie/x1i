@@ -88,15 +88,15 @@ class Tools {
 			)
 		);
 	}
-        
-	public static function camel_to_field($str) {	    
-            return trim(
-                strtolower(
-                    preg_replace(
-                        '/([0-9]+)|([A-Z])/', '_$0', $str
-                    )
-                )
-            , '_');
+		
+	public static function camel_to_field($str) {		
+			return trim(
+				strtolower(
+					preg_replace(
+						'/([0-9]+)|([A-Z])/', '_$0', $str
+					)
+				)
+			, '_');
 	}
 
 	public static function to_camel_case($str) {
@@ -114,13 +114,13 @@ class Tools {
 	}
 
 	public static function setCache($key, $data, $ttl = 3600) {
-                $adapter = \settings\registry::Load()->get('APP_CACHE');
-                return $adapter->create($key, $data, $ttl);
+				$adapter = \settings\registry::Load()->get('APP_CACHE');
+				return $adapter->create($key, $data, $ttl);
 	}
 
 	public static function getCache($key) {
-                $adapter = \settings\registry::Load()->get('APP_CACHE');
-                return $adapter->read($key);
+				$adapter = \settings\registry::Load()->get('APP_CACHE');
+				return $adapter->read($key);
 	}
 
 	public static function html_escape($raw_input) {
@@ -134,30 +134,30 @@ class Tools {
 	public static function object2array($object) {
 		return json_decode(json_encode($object), 1);
 	}
-        
-        public static function array2xml($array,&$xml=null) {
-            if(is_null($xml)) {
-                $xml =  new \SimpleXMLElement('<?xml version="1.0"?><data></data>');
-            }
-            foreach($array as $key => $val) {
-                if (is_numeric($key)) {
-                    $key = 'item' . $key;
-                }
+		
+		public static function array2xml($array,&$xml=null) {
+			if(is_null($xml)) {
+				$xml =  new \SimpleXMLElement('<?xml version="1.0"?><data></data>');
+			}
+			foreach($array as $key => $val) {
+				if (is_numeric($key)) {
+					$key = 'item' . $key;
+				}
    
-                if(!is_scalar($val) && !is_array($val)) {
-                    $val = self::object2array($val);
-                }
-                
-                if(is_array($val)) {
-                    $subnode = $xml->addChild($key);
-                    self::array2xml($val,$subnode);
-                } else {
-                    $xml->addChild($key, htmlspecialchars($val));
-                }
-            }
-        }
+				if(!is_scalar($val) && !is_array($val)) {
+					$val = self::object2array($val);
+				}
+				
+				if(is_array($val)) {
+					$subnode = $xml->addChild($key);
+					self::array2xml($val,$subnode);
+				} else {
+					$xml->addChild($key, htmlspecialchars($val));
+				}
+			}
+		}
 
-        public static function cleanHtml($html, $attr_black_list = false, $elem_black_list = false) {
+		public static function cleanHtml($html, $attr_black_list = false, $elem_black_list = false) {
 		if (!$attr_black_list || !is_array($attr_black_list)) {
 			$attr_black_list = ['onclick'];
 		}
@@ -229,7 +229,7 @@ class Tools {
 		//http://stackoverflow.com/questions/2040240/php-function-to-generate-v4-uuid#15875555
 
 		$data = openssl_random_pseudo_bytes(16);
-                
+				
 		$data[6] = chr(ord($data[6]) & 0x0f | 0x40); // set version to 0100
 		$data[8] = chr(ord($data[8]) & 0x3f | 0x80); // set bits 6-7 to 10
 
@@ -271,170 +271,170 @@ class Tools {
 		
 		return str_replace("//","/",str_replace($find,$replace,$path));
 	}
-        
-        public static function looksLikeSerialized($str) {
-            $pattern = "/^[aOids]\:[0-9]/";
-            $subject = substr($str, 0, 10);
-            return preg_match($pattern, $subject);
-        }
-        
-        public static function looksLikeJson($str) {
-            $pattern = "/^(\[|\{|[0-9]|\")/";
-            $subject = substr($str, 0, 10);
-            return preg_match($pattern, $subject);
-        }
-        
-        public static function lace(array $strings) {
-            foreach($strings as $i => $string) {
-                $length = strlen($string);
-                $lengths[$i] = $length;
-            }
-            $maxLength = max($lengths);
-            
-            foreach($strings as $i => $string) {
-                $length = strlen($string);
-                if($length < $maxLength) {
-                    //$strings[$i] = str_pad($string, $maxLength,"=");
-                    $strings[$i] = $string.self::generatePassword($maxLength-$length);
-                }
-            }
-            
-            $output = '';
-            
-            for($i = 0;$i<$maxLength;$i++) {
-                foreach($strings as $j => $string) {
-                    $output.=$string[$i];
-                }
-            }
-            
-            $prepend = base64_encode(count($strings).",".implode(",",$lengths));
-            
-            return strlen($prepend)."|".$prepend."|".$output;
-        }
-        
-        public static function unlace($string) {
-            list($a,$b,$c) = explode("|",$string);
-            
-            $instructions = explode(",",base64_decode($b));
-            
-            $stringCount = array_shift($instructions);
-            $stringlengths = $instructions;
-            
-            $strings = [];
-            
-            for($i=0;$i<strlen($c);$i++) {
-                $strings[$i%$stringCount].=$c[$i];
-            }
-            
-            foreach($strings as $i => $string) {
-                $strings[$i] = substr($string,0,$stringlengths[$i]);
-            }
-            
-            return $strings;
-        }
-        
-        public static function encryptData($data,$key) {
-            $data = [
-                'data'=>$data,
-                'ts'=> microtime(true),
-                'data_is_scalar'=> is_scalar($data)
-            ];
-            $json = json_encode($data,JSON_PRETTY_PRINT);
-            
-            return self::encryptStr($json,$key);
-        }
-        
-        public static function decryptData($source,$key) {
-            $json = self::decryptStr($source, $key);
-            $data = json_decode($json,1);
-            return $data['data'];
-        }
-        
-        /**
-         * 
-         * @return mixed the first non-null and non-empty argument supplied
-         */
-        
-        public static function coalesce() {
-            //get a list of values to test on
-            $args = func_get_args();
-            
-            //if an array of values has been sent instead
-            if(count($args) == 1 && is_array($args[0])) {
-                $args = $args[0];
-            }
-            
-            $return = null;
-            
-            foreach($args as $arg) {
-                if(!is_null($arg) && trim($arg) != '') {
-                    $return = $arg;
-                    break;
-                }
-            }
-            
-            return $return;
-        }
-        
+		
+		public static function looksLikeSerialized($str) {
+			$pattern = "/^[aOids]\:[0-9]/";
+			$subject = substr($str, 0, 10);
+			return preg_match($pattern, $subject);
+		}
+		
+		public static function looksLikeJson($str) {
+			$pattern = "/^(\[|\{|[0-9]|\")/";
+			$subject = substr($str, 0, 10);
+			return preg_match($pattern, $subject);
+		}
+		
+		public static function lace(array $strings) {
+			foreach($strings as $i => $string) {
+				$length = strlen($string);
+				$lengths[$i] = $length;
+			}
+			$maxLength = max($lengths);
+			
+			foreach($strings as $i => $string) {
+				$length = strlen($string);
+				if($length < $maxLength) {
+					//$strings[$i] = str_pad($string, $maxLength,"=");
+					$strings[$i] = $string.self::generatePassword($maxLength-$length);
+				}
+			}
+			
+			$output = '';
+			
+			for($i = 0;$i<$maxLength;$i++) {
+				foreach($strings as $j => $string) {
+					$output.=$string[$i];
+				}
+			}
+			
+			$prepend = base64_encode(count($strings).",".implode(",",$lengths));
+			
+			return strlen($prepend)."|".$prepend."|".$output;
+		}
+		
+		public static function unlace($string) {
+			list($a,$b,$c) = explode("|",$string);
+			
+			$instructions = explode(",",base64_decode($b));
+			
+			$stringCount = array_shift($instructions);
+			$stringlengths = $instructions;
+			
+			$strings = [];
+			
+			for($i=0;$i<strlen($c);$i++) {
+				$strings[$i%$stringCount].=$c[$i];
+			}
+			
+			foreach($strings as $i => $string) {
+				$strings[$i] = substr($string,0,$stringlengths[$i]);
+			}
+			
+			return $strings;
+		}
+		
+		public static function encryptData($data,$key) {
+			$data = [
+				'data'=>$data,
+				'ts'=> microtime(true),
+				'data_is_scalar'=> is_scalar($data)
+			];
+			$json = json_encode($data,JSON_PRETTY_PRINT);
+			
+			return self::encryptStr($json,$key);
+		}
+		
+		public static function decryptData($source,$key) {
+			$json = self::decryptStr($source, $key);
+			$data = json_decode($json,1);
+			return $data['data'];
+		}
+		
+		/**
+		 * 
+		 * @return mixed the first non-null and non-empty argument supplied
+		 */
+		
+		public static function coalesce() {
+			//get a list of values to test on
+			$args = func_get_args();
+			
+			//if an array of values has been sent instead
+			if(count($args) == 1 && is_array($args[0])) {
+				$args = $args[0];
+			}
+			
+			$return = null;
+			
+			foreach($args as $arg) {
+				if(!is_null($arg) && trim($arg) != '') {
+					$return = $arg;
+					break;
+				}
+			}
+			
+			return $return;
+		}
+		
 
-        /**
-         * @desc take a 2D assoc array containing IDs (specified by key, $idKey) and parent Ids (specified by $parentKey) and return a nested structure
-         * @param array $data the input array
-         * @param integer $parentId the id of the parent to find children for
-         * @param string $idKey the array key containing the row id
-         * @param string $parentKey the array key containing the row's parent id
-         * @param string $childrenKey the array key to use for populating the children into
-         * @return array
-         */
-        public static function getNestedChildren($data,$parentId,$idKey='id',$parentKey='parentId',$childrenKey='children') {
-            $nestedTreeStructure = [];
-            $length = count($data);
+		/**
+		 * @desc take a 2D assoc array containing IDs (specified by key, $idKey) and parent Ids (specified by $parentKey) and return a nested structure
+		 * @param array $data the input array
+		 * @param integer $parentId the id of the parent to find children for
+		 * @param string $idKey the array key containing the row id
+		 * @param string $parentKey the array key containing the row's parent id
+		 * @param string $childrenKey the array key to use for populating the children into
+		 * @return array
+		 */
+		public static function getNestedChildren($data,$parentId,$idKey='id',$parentKey='parentId',$childrenKey='children') {
+			$nestedTreeStructure = [];
+			$length = count($data);
 
-            for($i=0;$i<$length;$i++) {
-                $row = $data[$i];
-                if($row[$parentKey] == $parentId) {
-                    $children = self::getNestedChildren($data,$row[$idKey],$idKey,$parentKey,$childrenKey);
-                    if(count($children) > 0) {
-                        $row[$childrenKey] = $children;
-                    }
-                    $nestedTreeStructure[] = $row;
-                }
-            }
+			for($i=0;$i<$length;$i++) {
+				$row = $data[$i];
+				if($row[$parentKey] == $parentId) {
+					$children = self::getNestedChildren($data,$row[$idKey],$idKey,$parentKey,$childrenKey);
+					if(count($children) > 0) {
+						$row[$childrenKey] = $children;
+					}
+					$nestedTreeStructure[] = $row;
+				}
+			}
 
-            return $nestedTreeStructure;
+			return $nestedTreeStructure;
 
-        }
-        
-        /**
-         * 
-         * @param string $singular Singular form, eg item or quantity
-         * @param string $plural plural form, eg s or quantities
-         * @param numeric $count number to compare for
-         * @param bool $append append the plural form to the singular (eg item+s) or not (eg quantities)
-         * @return string 
-         * @example \utils\tools::pluralise('Item','s',$qty);
-         */
-        
-        public static function pluralise($singular,$plural,$count,$append=true) {
-            if($append) {
-                $plural = $singular.$plural;
-            }
-            
-            if($count == 1) {
-                return $singular;
-            }
-            
-            return $plural;
-        }
-        
-        public static function scanDirRecursive($path) {
-            $directory = new \RecursiveDirectoryIterator($path);
-            $iterator = new \RecursiveIteratorIterator($directory); 
-            $files = [];
-            foreach ($iterator as $info) {
-               $files[] = $info->getPathname();
-            }
-            return $files;
-        }
+		}
+		
+		/**
+		 * 
+		 * @param string $singular Singular form, eg item or quantity
+		 * @param string $plural plural form, eg s or quantities
+		 * @param numeric $count number to compare for
+		 * @param bool $append append the plural form to the singular (eg item+s) or not (eg quantities)
+		 * @return string 
+		 * @example \utils\tools::pluralise('Item','s',$qty);
+		 */
+		
+		public static function pluralise($singular,$plural,$count,$append=true) {
+			if($append) {
+				$plural = $singular.$plural;
+			}
+			
+			if($count == 1) {
+				return $singular;
+			}
+			
+			return $plural;
+		}
+		
+		public static function scanDirRecursive($path) {
+			$directory = new \RecursiveDirectoryIterator($path);
+			$iterator = new \RecursiveIteratorIterator($directory); 
+			$files = [];
+			foreach ($iterator as $info) {
+			   $files[] = $info->getPathname();
+			}
+			return $files;
+		}
 
 }

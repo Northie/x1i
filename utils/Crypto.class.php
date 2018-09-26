@@ -65,7 +65,7 @@ class Crypto {
 		//echo "key = ".$k."\n";
 
 		if ($base64) {
-			$msg = base64_decode($msg);    # base64 decode?
+			$msg = base64_decode($msg);	# base64 decode?
 		}
 
 		# open cipher module (do not change cipher/mode)
@@ -75,11 +75,11 @@ class Crypto {
 
 		$iv = substr($msg, 0, 32); # extract iv
 
-		$mo = strlen($msg) - 32;       # mac offset
+		$mo = strlen($msg) - 32;	   # mac offset
 
-		$em = substr($msg, $mo);       # extract mac
+		$em = substr($msg, $mo);	   # extract mac
 
-		$msg = substr($msg, 32, strlen($msg) - 64);     # extract ciphertext
+		$msg = substr($msg, 32, strlen($msg) - 64);	 # extract ciphertext
 
 		$mac = $this->pbkdf2($iv . $msg, $k, 1000, 32);  # create mac
 
@@ -91,11 +91,11 @@ class Crypto {
 			return false;
 		}
 
-		$msg = mdecrypt_generic($td, $msg);     # decrypt
+		$msg = mdecrypt_generic($td, $msg);	 # decrypt
 
 		$msg = unserialize($msg);  # unserialize
 
-		mcrypt_generic_deinit($td);       # clear buffers
+		mcrypt_generic_deinit($td);	   # clear buffers
 
 		mcrypt_module_close($td);  # close cipher module
 		//echo "value = ".$msg."\n";
@@ -116,7 +116,7 @@ class Crypto {
 	public function pbkdf2($p, $s, $c, $kl, $a = 'sha256') {
 		$hl = strlen(hash($a, null, true)); # Hash length
 
-		$kb = ceil($kl / $hl);     # Key blocks to compute
+		$kb = ceil($kl / $hl);	 # Key blocks to compute
 
 		$dk = '';  # Derived key
 		# Create key

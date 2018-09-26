@@ -27,10 +27,10 @@ trait relational_tools {
 	}
 
 	public function getById($id) {
-            return $this->db->read(['id'=>$id]);
+			return $this->db->read(['id'=>$id]);
 	}
 
-	public function __get($field) {               
+	public function __get($field) {			   
 		if ($this->fields[$field]) {
 			if (isset($this->data[$field])) {
 				return $this->data[$field];
@@ -51,23 +51,23 @@ trait relational_tools {
 	}
 
 	public function __call($name, $args = false)  {
-            
+			
 		$test = ['set'=>1, 'get'=>1];
 
 		$mode = $name[0] . $name[1] . $name[2];
 		$opperator = strtolower($name[3] . $name[4]);
-                
+				
 		if ($test[$mode] && $opperator != 'by') {
 			return $this->setGet($mode, substr($name, 3), $args);
 		}
 
 		if ($mode == 'get' && $opperator == 'by') {
 			$field = substr($name, 5);
-                        $field = \utils\Tools::camel_to_field($field);
+						$field = \utils\Tools::camel_to_field($field);
 
 			if ($this->fields[$field]) {
 				//$this->map($this->db->read([$field=>$args[0]]));
-                                return $this->db->read([$field=>$args[0]]);
+								return $this->db->read([$field=>$args[0]]);
 			}
 		}
 	}

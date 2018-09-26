@@ -2,5 +2,5 @@
 namespace tokenizer;
 
 interface iTokenizer {
-    
+	
 }

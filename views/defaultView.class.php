@@ -2,5 +2,5 @@
 namespace views;
 
 class DefaultView implements \views\iView {
-    use view;
+	use view;
 }

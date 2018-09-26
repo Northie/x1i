@@ -31,11 +31,11 @@ class XSession {
 	}
 
 	public function __set($key, $value) {
-		//$this->set($key, $value);
+		$this->set($key, $value);
 	}
 
 	public function __get($key) {
-		//return $this->get($key);
+		return $this->get($key);
 	}
 
 	public function set($key, $value) {
@@ -49,17 +49,17 @@ class XSession {
 	public function getSessionId() {
 		return session_id();
 	}
-        
-        public function append($key,$value) {
-            if(!is_array($_SESSION[$this->namespace][$key])) {
-                $_SESSION[$this->namespace][$key] = [];
-            }
-            
-            $_SESSION[$this->namespace][$key][] = $value;
-        }
-        
-        public function destroyNameSpace($ns) {
-            $_SESSION[$ns] = [];
-        }
+		
+		public function append($key,$value) {
+			if(!is_array($_SESSION[$this->namespace][$key])) {
+				$_SESSION[$this->namespace][$key] = [];
+			}
+			
+			$_SESSION[$this->namespace][$key][] = $value;
+		}
+		
+		public function destroyNameSpace($ns) {
+			$_SESSION[$ns] = [];
+		}
 
 }

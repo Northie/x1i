@@ -8,7 +8,7 @@ class filters {
 		if($type == 'password') {
 			//$data = \libs\misc\Tools::hashPassword($data);
 			//$data = '';
-                    return $data;
+					return $data;
 		} else {
 
 			if(is_array($data)) {

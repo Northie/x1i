@@ -1,18 +1,18 @@
 <?php
 
 $requiredConstants = [
-     "X1_PATH"
-    ,"X1_APP_PATH"
-    ,"X1_WEB_PATH"
-    ,"X1_DAT_PATH"
-    ,"X1_APP_NAME"
-    ,"APP_CLASS_LIST"
+	 "X1_PATH"
+	,"X1_APP_PATH"
+	,"X1_WEB_PATH"
+	,"X1_DAT_PATH"
+	,"X1_APP_NAME"
+	,"APP_CLASS_LIST"
 ];
 
 foreach($requiredConstants as $requiredConstant) {
-    if(!defined($requiredConstant)) {
-        die('constant '.$requiredConstant.' is not defined');
-    }
+	if(!defined($requiredConstant)) {
+		die('constant '.$requiredConstant.' is not defined');
+	}
 }
 
 include 'utils/traits/singleton.trait.php';

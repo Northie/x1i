@@ -14,8 +14,8 @@ abstract class controller {
 		$this->request = new \flow\Request;
 		$this->response = new \flow\Response;
 	}
-        
-        /*
+		
+		/*
 	public final function Init() {
 
 		$this->filters = $this->request->getEndpoint()->getNamedFilterList();
@@ -29,7 +29,7 @@ abstract class controller {
 			$filter->init();
 		}
 	}
-        //*/
+		//*/
 	public function Execute() {
 		$start = $this->filterList->getFirstNode(true);
 		$start->in();

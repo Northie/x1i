@@ -170,7 +170,7 @@ class Renderer {
 				}
 				
 				if( isset( $this->data[$i]['place_holder'] ) == true && strlen( $this->data[$i]['place_holder'] ) > 0 ) {
-				    $data .= ' placeholder="'.$this->data[$i]['place_holder'].'" ';
+					$data .= ' placeholder="'.$this->data[$i]['place_holder'].'" ';
 				}
 				
 				switch ($this->data[$i]['input_type']) {
@@ -219,24 +219,24 @@ class Renderer {
 						//$publickey = \core\System_Settings::Load()->getSettings('recaptcha', 'publickey');
 						//$input = recaptcha_get_html($publickey);
 						
-					    $input = '<div id="captcha_wrap" align="center" class="col-xs-12 col-lg-12 col-md-12">';
-				        $input_code = '<div class="col-xs-6 col-lg-6 col-md-6 d-captcha_input"><input name="recaptcha" type="text" id="captcha_input" maxlength=8></div>';
-				        $input_image = '<div class="col-xs-6 col-lg-6 col-md-6 d-captcha_imgage"><img src="/captcha/get_captcha.php" alt="" id="captcha_imgage" /><img src="/captcha/refresh.jpg" width="25" alt="" id="captcha_refresh" /></div>';
-					    
-				        $mobile_view = \core\Domain::Load()->getConfig('mobile_view' );
-				        if( empty( $mobile_view ) == false ){
-					       $input .= $input_image.$input_code;
-					    } else {
-					        $input .= $input_code.$input_image;
-					    }
-					    $input .= '</div><br class="clear" />';
+						$input = '<div id="captcha_wrap" align="center" class="col-xs-12 col-lg-12 col-md-12">';
+						$input_code = '<div class="col-xs-6 col-lg-6 col-md-6 d-captcha_input"><input name="recaptcha" type="text" id="captcha_input" maxlength=8></div>';
+						$input_image = '<div class="col-xs-6 col-lg-6 col-md-6 d-captcha_imgage"><img src="/captcha/get_captcha.php" alt="" id="captcha_imgage" /><img src="/captcha/refresh.jpg" width="25" alt="" id="captcha_refresh" /></div>';
+						
+						$mobile_view = \core\Domain::Load()->getConfig('mobile_view' );
+						if( empty( $mobile_view ) == false ){
+						   $input .= $input_image.$input_code;
+						} else {
+							$input .= $input_code.$input_image;
+						}
+						$input .= '</div><br class="clear" />';
 
 						break;
 					default:
-					    $no_use_color = '';
-					    if( $this->data[$i]['input_type'] == 'color' && empty( $value)  == true ) {
-					        $no_use_color = 'no-use="true" ';
-					    }
+						$no_use_color = '';
+						if( $this->data[$i]['input_type'] == 'color' && empty( $value)  == true ) {
+							$no_use_color = 'no-use="true" ';
+						}
 						$input = "<input " . $disabled . " " . $data . $no_use_color. " class='-text" . ($this->data[$i]['auto_suggest'] != "" ? " autosuggest" : "") . "' " . ($this->data[$i]['auto_suggest'] != "" ? "data-autosuggest-source='" . $this->data[$i]['auto_suggest'] . "'" : "") . " type='" . $this->data[$i]['input_type'] . "' name='" . $this->data[$i]['name'] . "' id='_" . $this->data[$i]['name'] . "' value='" . $value . "' />";
 						break;
 				}
@@ -255,9 +255,9 @@ class Renderer {
 				
 				// Get custom error 
 				if( strlen( $req ) == 0 && $this->data[$i]['name'] == 'page_alias' ) {
-				    if( empty( $this->data[$i]['errors'] ) == false ) {
-				        $req = $this->data[$i]['errors'][0];
-				    }
+					if( empty( $this->data[$i]['errors'] ) == false ) {
+						$req = $this->data[$i]['errors'][0];
+					}
 				}
 
 				$label = "<label class='control-label' for='_" . $this->data[$i]['name'] . "'>" . $this->data[$i]['label'] . " " . ($this->data[$i]['required'] ? "*" : "") . "</label>";
@@ -308,14 +308,14 @@ class Renderer {
 		  <input type='hidden' name='submitted' value='1' />
 		  ";
 		  // */
-        
+		
 		$actions = "<div class='form-actions'>" . $submitLabel . "<div class=''>";
 		
 		
 		if( $this->form_name == 'Settings' ) {
-		    $actions .= "<input class='btn btn-primary saveInputForm' type='button' name='" . strtolower(str_replace(" ", "_", $this->submit_label)) . "' value='" . $this->submit_label . "' />";
+			$actions .= "<input class='btn btn-primary saveInputForm' type='button' name='" . strtolower(str_replace(" ", "_", $this->submit_label)) . "' value='" . $this->submit_label . "' />";
 		} else {
-		    $actions .= "<input class='btn btn-primary' type='submit' name='" . strtolower(str_replace(" ", "_", $this->submit_label)) . "' value='" . $this->submit_label . "' />";
+			$actions .= "<input class='btn btn-primary' type='submit' name='" . strtolower(str_replace(" ", "_", $this->submit_label)) . "' value='" . $this->submit_label . "' />";
 		}
 		
 		$actions .= "</div></div>";

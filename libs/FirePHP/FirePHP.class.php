@@ -13,16 +13,16 @@
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
  *
- *     * Redistributions of source code must retain the above copyright notice,
- *       this list of conditions and the following disclaimer.
+ *	 * Redistributions of source code must retain the above copyright notice,
+ *	   this list of conditions and the following disclaimer.
  *
- *     * Redistributions in binary form must reproduce the above copyright notice,
- *       this list of conditions and the following disclaimer in the documentation
- *       and/or other materials provided with the distribution.
+ *	 * Redistributions in binary form must reproduce the above copyright notice,
+ *	   this list of conditions and the following disclaimer in the documentation
+ *	   and/or other materials provided with the distribution.
  *
- *     * Neither the name of Christoph Dorn nor the names of its
- *       contributors may be used to endorse or promote products derived from this
- *       software without specific prior written permission.
+ *	 * Neither the name of Christoph Dorn nor the names of its
+ *	   contributors may be used to endorse or promote products derived from this
+ *	   software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -37,10 +37,10 @@
  *
  * ***** END LICENSE BLOCK *****
  *
- * @copyright       Copyright (C) 2007-2009 Christoph Dorn
- * @author          Christoph Dorn <christoph@christophdorn.com>
- * @license         http://www.opensource.org/licenses/bsd-license.php
- * @package         FirePHPCore
+ * @copyright	   Copyright (C) 2007-2009 Christoph Dorn
+ * @author		  Christoph Dorn <christoph@christophdorn.com>
+ * @license		 http://www.opensource.org/licenses/bsd-license.php
+ * @package		 FirePHPCore
  */
 /**
  * @see http://code.google.com/p/firephp/issues/detail?id=112
@@ -52,10 +52,10 @@
  *
  * For more information see: http://www.firephp.org/
  *
- * @copyright       Copyright (C) 2007-2009 Christoph Dorn
- * @author          Christoph Dorn <christoph@christophdorn.com>
- * @license         http://www.opensource.org/licenses/bsd-license.php
- * @package         FirePHPCore
+ * @copyright	   Copyright (C) 2007-2009 Christoph Dorn
+ * @author		  Christoph Dorn <christoph@christophdorn.com>
+ * @license		 http://www.opensource.org/licenses/bsd-license.php
+ * @package		 FirePHPCore
  */
 
 namespace libs\FirePHP;
@@ -67,7 +67,7 @@ class FirePHP {
 	 *
 	 * @var string
 	 */
-	const VERSION = '0.3';    // @pinf replace '0.3' with '%%package.version%%'
+	const VERSION = '0.3';	// @pinf replace '0.3' with '%%package.version%%'
 
 	/**
 	 * Firebug LOG level
@@ -387,9 +387,9 @@ class FirePHP {
 	 */
 	public function registerErrorHandler($throwErrorExceptions = false) {
 		//NOTE: The following errors will not be caught by this error handler:
-		//      E_ERROR, E_PARSE, E_CORE_ERROR,
-		//      E_CORE_WARNING, E_COMPILE_ERROR,
-		//      E_COMPILE_WARNING, E_STRICT
+		//	  E_ERROR, E_PARSE, E_CORE_ERROR,
+		//	  E_CORE_WARNING, E_COMPILE_ERROR,
+		//	  E_COMPILE_WARNING, E_STRICT
 
 		$this->throwErrorExceptions = $throwErrorExceptions;
 
@@ -428,8 +428,8 @@ class FirePHP {
 	 * Register FirePHP as your exception handler
 	 *
 	 * @return mixed Returns the name of the previously defined exception handler,
-	 *               or NULL on error.
-	 *               If no previous handler was defined, NULL is also returned.
+	 *			   or NULL on error.
+	 *			   If no previous handler was defined, NULL is also returned.
 	 */
 	public function registerExceptionHandler() {
 		return set_exception_handler(array($this, 'exceptionHandler'));
@@ -481,7 +481,7 @@ class FirePHP {
 	 * Logs all assertions to your firebug console and then stops the script.
 	 *
 	 * @param string $file File source of assertion
-	 * @param int    $line Line source of assertion
+	 * @param int	$line Line source of assertion
 	 * @param mixed  $code Assertion code
 	 */
 	public function assertionHandler($file, $line, $code) {
@@ -504,7 +504,7 @@ class FirePHP {
 	 *
 	 * Options:
 	 *   Collapsed: [true|false]
-	 *   Color:     [#RRGGBB|ColorName]
+	 *   Color:	 [#RRGGBB|ColorName]
 	 *
 	 * @param string $Name
 	 * @param array $Options OPTIONAL Instructions on how to log the group
@@ -695,7 +695,7 @@ class FirePHP {
 	 */
 	public function fb($Object) {
 		if ($this instanceof FirePHP_Insight && method_exists($this, '_logUpgradeClientMessage')) {
-			if (!FirePHP_Insight::$upgradeClientMessageLogged) {    // avoid infinite recursion as _logUpgradeClientMessage() logs a message
+			if (!FirePHP_Insight::$upgradeClientMessageLogged) {	// avoid infinite recursion as _logUpgradeClientMessage() logs a message
 				$this->_logUpgradeClientMessage();
 			}
 		}
@@ -1387,15 +1387,15 @@ class FirePHP {
 	 * DAMAGE.
 	 *
 	 * @category
-	 * @package     Services_JSON
-	 * @author      Michal Migurski <mike-json@teczno.com>
-	 * @author      Matt Knapp <mdknapp[at]gmail[dot]com>
-	 * @author      Brett Stimmerman <brettstimmerman[at]gmail[dot]com>
-	 * @author      Christoph Dorn <christoph@christophdorn.com>
+	 * @package	 Services_JSON
+	 * @author	  Michal Migurski <mike-json@teczno.com>
+	 * @author	  Matt Knapp <mdknapp[at]gmail[dot]com>
+	 * @author	  Brett Stimmerman <brettstimmerman[at]gmail[dot]com>
+	 * @author	  Christoph Dorn <christoph@christophdorn.com>
 	 * @copyright   2005 Michal Migurski
-	 * @version     CVS: $Id: JSON.php,v 1.31 2006/06/28 05:54:17 migurski Exp $
-	 * @license     http://www.opensource.org/licenses/bsd-license.php
-	 * @link        http://pear.php.net/pepr/pepr-proposal-show.php?id=198
+	 * @version	 CVS: $Id: JSON.php,v 1.31 2006/06/28 05:54:17 migurski Exp $
+	 * @license	 http://www.opensource.org/licenses/bsd-license.php
+	 * @link		http://pear.php.net/pepr/pepr-proposal-show.php?id=198
 	 */
 
 	/**
@@ -1410,7 +1410,7 @@ class FirePHP {
 	 * provides a slower PHP-only method for installations
 	 * that lack the multibye string extension.
 	 *
-	 * @param    string  $utf8   UTF-8 character
+	 * @param	string  $utf8   UTF-8 character
 	 * @return   string  UTF-16 character
 	 * @access   private
 	 */
@@ -1446,10 +1446,10 @@ class FirePHP {
 	/**
 	 * encodes an arbitrary variable into JSON format
 	 *
-	 * @param    mixed   $var    any number, boolean, string, array, or object to be encoded.
-	 *                           see argument 1 to Services_JSON() above for array-parsing behavior.
-	 *                           if var is a strng, note that encode() always expects it
-	 *                           to be in ASCII or UTF-8 format!
+	 * @param	mixed   $var	any number, boolean, string, array, or object to be encoded.
+	 *						   see argument 1 to Services_JSON() above for array-parsing behavior.
+	 *						   if var is a strng, note that encode() always expects it
+	 *						   to be in ASCII or UTF-8 format!
 	 *
 	 * @return   mixed   JSON string representation of input var or an error if a problem occurs
 	 * @access   public
@@ -1644,8 +1644,8 @@ class FirePHP {
 	/**
 	 * array-walking function for use in generating JSON-formatted name-value pairs
 	 *
-	 * @param    string  $name   name of key to use
-	 * @param    mixed   $value  reference to an array element to be encoded
+	 * @param	string  $name   name of key to use
+	 * @param	mixed   $value  reference to an array element to be encoded
 	 *
 	 * @return   string  JSON-formatted name-value pair, like '"name":value'
 	 * @access   private

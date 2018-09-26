@@ -5,29 +5,29 @@ namespace services\data;
 error_reporting(E_ALL &~ E_NOTICE);
 
 class model {
-    
-    private $model = false;
-    private $adapter = false;
-    private $flat = [];
-    private $joins = [];
+	
+	private $model = false;
+	private $adapter = false;
+	private $flat = [];
+	private $joins = [];
 
-    public function __construct(array $model) {
-        $this->model = $model;
+	public function __construct(array $model) {
+		$this->model = $model;
 	
 	foreach($this->model as $child => $childData) {
 		$this->recurse($child, $childData);
 	}
-    }
-    
-    public function toForm() {
-        if(!$this->model) {
-            throw new Exception("No Model Set");
-        }
-    }
-    
-    public function setServiceDataAdapter(\services\data\adapter $adapter) {
-        $this->adapter = $adapter;
-    }
+	}
+	
+	public function toForm() {
+		if(!$this->model) {
+			throw new Exception("No Model Set");
+		}
+	}
+	
+	public function setServiceDataAdapter(\services\data\adapter $adapter) {
+		$this->adapter = $adapter;
+	}
 
 	private function recurse($key,$data) {
 

@@ -20,8 +20,8 @@ class Response {
 		$this->data = $data;
 		$this->after('ResponseSetData', $this);
 	}
-        
-            public function addData($key,$data) {
+		
+			public function addData($key,$data) {
 		if (!\Plugins\Plugins::Load()->DoPlugins('onBeforeResponseAddData', $this)) {
 			return false;
 		}
@@ -52,16 +52,16 @@ class Response {
 
 		$this->after('ResponseSetResponseFormat', $this);
 	}
-        
-        public function respond($headers) {
-            foreach($headers as $key => $val) {
-                if(is_null($key) || is_int($key)) {
-                    header($val);
-                } else {
-                    $header = "$key: $val";
-                    header($header);
-                }
-            }
-        }
+		
+		public function respond($headers) {
+			foreach($headers as $key => $val) {
+				if(is_null($key) || is_int($key)) {
+					header($val);
+				} else {
+					$header = "$key: $val";
+					header($header);
+				}
+			}
+		}
 
 }

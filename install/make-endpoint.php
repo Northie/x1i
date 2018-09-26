@@ -1,13 +1,13 @@
 <?php
 \error_reporting(E_ALL &~ \E_NOTICE);
 function getArgs($startAt) {
-    $c = $_SERVER['argc'];
-    $args = [];
-    for ($i = $startAt; $i < $c; $i += 2) {
-        $args[preg_replace("/^\-{1,2}/", "", $_SERVER['argv'][$i])] = $_SERVER['argv'][$i + 1];
-    }
-    
-    return $args;
+	$c = $_SERVER['argc'];
+	$args = [];
+	for ($i = $startAt; $i < $c; $i += 2) {
+		$args[preg_replace("/^\-{1,2}/", "", $_SERVER['argv'][$i])] = $_SERVER['argv'][$i + 1];
+	}
+	
+	return $args;
 }
 
 $cmd = \getArgs(1);
@@ -42,7 +42,7 @@ if(isset($cmd['module'])) {
    
 } else {
    $find['{{moduleNsComment}}'] = '//';
-   $find['{{defaultNsComment}}'] = '';    
+   $find['{{defaultNsComment}}'] = '';	
    $find['{{module}}'] = '';
    
    @mkdir("app/contexts/$context/templates/$name");
@@ -60,15 +60,15 @@ $replace = \array_values($find);
 $find = \array_keys($find);
 
 if(!\file_exists($targetEpPath)) {
-    \file_put_contents($targetEpPath, str_replace($find,$replace,$endpointTpl));
+	\file_put_contents($targetEpPath, str_replace($find,$replace,$endpointTpl));
 }
 
 if(!\file_exists($targetVPath)) {
-    \file_put_contents($targetVPath, str_replace($find,$replace,$viewTpl));
+	\file_put_contents($targetVPath, str_replace($find,$replace,$viewTpl));
 }
 
 if(!\file_exists($targetTPath)) {
-    \file_put_contents($targetTPath, str_replace($find,$replace,$templateTpl));
+	\file_put_contents($targetTPath, str_replace($find,$replace,$templateTpl));
 }
 
 echo "Made $module $context $name";

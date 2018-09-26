@@ -7,11 +7,11 @@ class Factory {
 	}
   
   public static function checkImageFile($link) {
-    if (preg_match('/^https?:\/\//i', $link)) {
-      $link = str_replace( 'https://secure.365villas.com/home/general-img/', 'https://secure.365villas.com/getimage/custom.php', $link );
-      return $link;
-    } else {
-      return '/libs/phpthumb/phpThumb.php?src=' . $link;
-    }
+	if (preg_match('/^https?:\/\//i', $link)) {
+	  $link = str_replace( 'https://secure.365villas.com/home/general-img/', 'https://secure.365villas.com/getimage/custom.php', $link );
+	  return $link;
+	} else {
+	  return '/libs/phpthumb/phpThumb.php?src=' . $link;
+	}
   }
 }

@@ -9,26 +9,26 @@ class adapter extends \services\data\adapter {
 	}
 
 	public function create($key, $data,$lifetime=false) {
-            return true;
+			return true;
 	}
 
 	public function read($key) {
-            return false;
+			return false;
 	}
 
 	public function update($key, $data,$lifetime=false) {
-            return $this->create($key, $data,$lifetime=false);
+			return $this->create($key, $data,$lifetime=false);
 	}
 
 	
 	public function delete($key,$force=false) {
-            return true;
+			return true;
 	}
 
-        private function getLifetime() {
-            if(($cacheLifetime = \settings\general::Load()->get(['CACHE_LIFETIME']))) {
-                return $cacheLifetime;
-            }
-            return 3600;
-        }
+		private function getLifetime() {
+			if(($cacheLifetime = \settings\general::Load()->get(['CACHE_LIFETIME']))) {
+				return $cacheLifetime;
+			}
+			return 3600;
+		}
 }

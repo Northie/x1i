@@ -52,18 +52,18 @@ abstract class factory {
 	}
 
 	public function notify($notification) {
-                $notification = $this->currentNotification = $notification;
+				$notification = $this->currentNotification = $notification;
 		$this->notifications[] = $notification;
 		
 		$label = get_class($this->processList->getFirstNode(true)->getParent());
 
-                if($this->isDeferred()) {
-                    //save to queue
-                    $this->queue->log($this->reference, $notification);
-                } else {
-                    $session = new \utils\XSession('PROCESSES');
-                    $session->set($this->reference, [$label=>$this->notifications]);    
-                }
+				if($this->isDeferred()) {
+					//save to queue
+					$this->queue->log($this->reference, $notification);
+				} else {
+					$session = new \utils\XSession('PROCESSES');
+					$session->set($this->reference, [$label=>$this->notifications]);	
+				}
 	}
 
 	public function getNotifications() {

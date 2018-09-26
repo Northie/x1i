@@ -3,7 +3,7 @@
 namespace libs\forms;
 
 class validation {
-    public static $result = null;
+	public static $result = null;
 	public static function Email($key) {
 		if(filter_var($_POST[$key],FILTER_VALIDATE_EMAIL)) {
 			return true;
@@ -30,10 +30,10 @@ class validation {
 		//$resp = recaptcha_check_answer($privatekey, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
 		//self::$result = $resp;
 		
-	    $isvalid = false;
-	    if( isset( $_POST['recaptcha'] ) && isset( $_SESSION['random_number'] ) ) {
-	        $isvalid = ( $_POST['recaptcha'] == $_SESSION['recaptcha_code'] );
-	    }
+		$isvalid = false;
+		if( isset( $_POST['recaptcha'] ) && isset( $_SESSION['random_number'] ) ) {
+			$isvalid = ( $_POST['recaptcha'] == $_SESSION['recaptcha_code'] );
+		}
 		return $isvalid;
 	}
 }

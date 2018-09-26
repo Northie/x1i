@@ -16,9 +16,9 @@ class connector {
 	private $db_pass;
 	private $db_char = 'utf8';
 	private $db_conf = [
-		\PDO::ATTR_EMULATE_PREPARES=>false       // important! use actual prepared statements (default: emulate prepared statements)
-		, \PDO::ATTR_ERRMODE=>\PDO::ERRMODE_EXCEPTION    // throw exceptions on errors (default: stay silent)
-		, \PDO::ATTR_DEFAULT_FETCH_MODE=>\PDO::FETCH_ASSOC      // fetch associative arrays (default: mixed arrays)
+		\PDO::ATTR_EMULATE_PREPARES=>false	   // important! use actual prepared statements (default: emulate prepared statements)
+		, \PDO::ATTR_ERRMODE=>\PDO::ERRMODE_EXCEPTION	// throw exceptions on errors (default: stay silent)
+		, \PDO::ATTR_DEFAULT_FETCH_MODE=>\PDO::FETCH_ASSOC	  // fetch associative arrays (default: mixed arrays)
 	];
 	public $conn;
 
@@ -26,7 +26,7 @@ class connector {
 	 * get settings, noramalise database credentials attempt to connect
 	 */
 	public function __construct($options) {
-            
+			
 		$this->db_type = $options['type'];
 		$this->db_host = $options['host'];
 		$this->db_name = $options['name'];
