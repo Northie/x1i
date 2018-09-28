@@ -75,20 +75,20 @@ trait filter {
 		}
 	}
 		
-		public function setOptions($options) {
-			$this->options = $options;
-		}
-		
-		public function getOptions() {
-			return $this->options;
-		}
-		
-		public function getRequest() {
-			return $this->request;
-		}
-		
-		public function getResponse() {
-			return $this->response;
-		}
+	public function setOptions($options) {
+		$this->options = $options;
+	}
+	
+	public function getOptions() {
+		return $this->options;
+	}
+	
+	public function getRequest() {
+		return $this->request;
+	}
+	
+	public function getResponse() {
+		return $this->response;
+	}
 
 }
