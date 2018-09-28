@@ -2,7 +2,7 @@
 
 namespace Plugins;
 
-abstract class DefaultPlugin implements iDefaultPlugin {
+abstract class DefaultHandler implements iDefaultHandler {
 
 	private $admin = false;
 	protected $db = false;

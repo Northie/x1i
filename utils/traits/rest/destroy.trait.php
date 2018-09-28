@@ -15,7 +15,7 @@ trait destroy {
 		
 		$this->data['meta']['count'] = $this->model->destroy($this->request->resources[0])->getData('count');
 		
-		\Plugins\Plugins::Load()->DoPlugins("onAfterRestDestroy",$this);
+		\Plugins\EventManager::Load()->ObserveEvent("onAfterRestDestroy",$this);
 		
 	}
 }
