@@ -5,48 +5,49 @@ namespace utils\autoload;
 class fileFinder {
 	public static function CompileFiles($vendorPaths=[],$ignore=[]) {
 
-				$appPaths = [
-					\X1_PATH,
-					\X1_APP_PATH
-				];
-				
-				$paths = array_merge($appPaths,$vendorPaths);
+		$appPaths = [
+			\Z4_PATH,
+			\Z4_APP_PATH
+		];
+		
+		$paths = array_merge($appPaths,$vendorPaths);
 
 		$ignore = array_merge($ignore,['.htaccess', 'error_log', 'cgi-bin', 'php.ini', '.ftpquota', '.svn', '.git','.gitignore']);
 				
-				$all = [];
-				
-				foreach($paths as $path) {
-				
-					$dirTree = self::getDirectory($path, $ignore);
+		$all = [];
+		
+		foreach($paths as $path) {
+		
+			$dirTree = self::getDirectory($path, $ignore);
 
-					foreach ($dirTree as $dir => $files) {
-							foreach ($files as $file) {
-									$a = $dir . DIRECTORY_SEPARATOR . $file;
-									$a = str_replace('/', DIRECTORY_SEPARATOR, $a);
-									$a = str_replace('\\', DIRECTORY_SEPARATOR, $a);
+			foreach ($dirTree as $dir => $files) {
+					foreach ($files as $file) {
+							$a = $dir . DIRECTORY_SEPARATOR . $file;
+							$a = str_replace('/', DIRECTORY_SEPARATOR, $a);
+							$a = str_replace('\\', DIRECTORY_SEPARATOR, $a);
 
-									$a = str_replace(DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, $a);
+							$a = str_replace(DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, $a);
 
-									$all[] = $a;
-							}
+							$all[] = $a;
 					}
-				}
+			}
+		}
 				
 		$hooks = array();
 
-				$error_level = ini_get('error_reporting');
-				ini_set('error_reporting',(E_ALL ^ E_NOTICE));  //ignore notices;
-				print_r($all);
+		$error_level = ini_get('error_reporting');
+		ini_set('error_reporting',(E_ALL ^ E_NOTICE));  //ignore notices;
+		print_r($all);
+
 		foreach ($all as $file) {
 
 			set_time_limit(30);
 
 			$d = self::getContexts($file);
 						
-						if(!$d) {
-							continue;
-						}
+			if(!$d) {
+				continue;
+			}
 
 			//echo "$file\n=========================\n\n".print_r($d,1)."\n";
 
@@ -74,7 +75,7 @@ class fileFinder {
 			}
 		}
 
-				ini_set('error_reporting',$error_level);  //restore error_level
+		ini_set('error_reporting',$error_level);  //restore error_level
 		
 		$h = array_keys($hooks);
 		sort($h);
@@ -82,8 +83,8 @@ class fileFinder {
 		file_put_contents(\APP_CLASS_LIST, "<?php\n\n" . $lines);
 		file_put_contents(dirname(APP_CLASS_LIST).'/hook-list.txt', implode("\n", $h));
 				
-				require \APP_CLASS_LIST;
-				//file_put_contents(APP_CLASS_LIST_JSON, json_encode($classlist,JSON_PRETTY_PRINT));
+		require \APP_CLASS_LIST;
+		//file_put_contents(APP_CLASS_LIST_JSON, json_encode($classlist,JSON_PRETTY_PRINT));
 
 		//echo "class list written";
 	}
@@ -116,12 +117,11 @@ class fileFinder {
 	public static function getContexts($path) {
 
 		$c = file_get_contents($path);
-				
-				$c = trim($c);
-				
-				if(strpos($c,"<?") !== 0) {
-					return [];
-				}
+		$c = trim($c);
+		
+		if(strpos($c,"<?") !== 0) {
+			return [];
+		}
 
 		echo "Scanning File ".$path."....\n";
 
@@ -130,7 +130,6 @@ class fileFinder {
 		for ($i = 0; $i < count($a); $i++) {
 			
 			//echo "==<pre>\n".$a[$i][0]."\n".$a[$i][1]."\n</pre>==<br />\n";
-		   
 
 			if (strtolower($a[$i][1]) == 'namespace') {
 				$j = 1;

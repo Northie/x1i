@@ -5,9 +5,9 @@ namespace services\data\cache\vendor\file;
 class adapter extends \services\data\adapter {
 
 	private $path;
-		private $dir = 'cache';
-		private $prefix = 'X1-cache-';
-		private $suffix = '.json';
+	private $dir = 'cache';
+	private $prefix = 'Z4-cache-';
+	private $suffix = '.json';
 	
 	
 	public function __construct($settings) {
@@ -17,15 +17,11 @@ class adapter extends \services\data\adapter {
 
 	public function create($data, $id = false) {
 			
-				$key = $id;
-			
-				if($lifetime) {
-					$expires = time() + $lifetime;
-				} else {
-					$expires = time() + $this->getLifetime();
-				}
-			
-				$meta = ['expires'=>$expires];
+		$key = $id;
+
+		$expires = time() + $this->getLifetime();
+	
+		$meta = ['expires'=>$expires];
 			
 		$data = json_encode([
 					 'meta'=>$meta
@@ -33,21 +29,21 @@ class adapter extends \services\data\adapter {
 				],JSON_PRETTY_PRINT);
 				
 				//file put contents
-		return $this->adapter->create($key, $data);
+		return $this->adapter->create($data, $key);
 	}
 
 	public function read($key) {
 			
 		$json = $this->adapter->read($key);
-				//file get contents
+		//file get contents
 				
-				$data = json_decode($json,1);
-				
-				if(isset($data['meta']['expires']) && $data['meta']['expires'] < time()) {
-					//cleanup
-					$this->delete($key,true);
-					return [];
-				}
+		$data = json_decode($json,1);
+		
+		if(isset($data['meta']['expires']) && $data['meta']['expires'] < time()) {
+			//cleanup
+			$this->delete($key,true);
+			return [];
+		}
 				
 		return isset($data['data']) ? $data['data'] : $data;
 	}
@@ -59,8 +55,8 @@ class adapter extends \services\data\adapter {
 	 * @desc matching apc user cache behaviour
 	 */
 	public function update($data, $conditions = false) {
-			$key = $conditions;
-			return $this->create($key, $data,$lifetime=false);
+		$key = $conditions;
+		return $this->create($data, $key);
 	}
 
 	/**
@@ -70,33 +66,34 @@ class adapter extends \services\data\adapter {
 	 */
 	public function delete($key,$force=false) {
 		$exists = 0;
-				//unlink file
-				if($force) {
-					var_dump($key);
-					$rs = $this->adapter->delete($key);
-				} else {
+		//unlink file
 
-					if ($this->read($key)) {
-							$exists = 1;
-							$rs = $this->adapter->delete($key);
-							if (!$rs) {
-									$exists = -1;
-							}
+		if($force) {
+			var_dump($key);
+			$rs = $this->adapter->delete($key);
+		} else {
+
+			if ($this->read($key)) {
+					$exists = 1;
+					$rs = $this->adapter->delete($key);
+					if (!$rs) {
+							$exists = -1;
 					}
-				}
+			}
+		}
 
 		return $exists;
 	}
 
-		private function getLifetime() {
-			if(($cacheLifetime = \settings\general::Load()->get(['CACHE_LIFETIME']))) {
-				return $cacheLifetime;
-			}
-			return 3600;
+	private function getLifetime() {
+		if(($cacheLifetime = \settings\general::Load()->get(['CACHE_LIFETIME']))) {
+			return $cacheLifetime;
 		}
-		
-		public function query($query, $parameters = false) {
-			return false;
-		}
+		return 3600;
+	}
+	
+	public function query($query, $parameters = false) {
+		return false;
+	}
 		
 }

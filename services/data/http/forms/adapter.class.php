@@ -26,7 +26,7 @@ class adapter extends \services\data\adapter {
 		
 	}
 	
-	public function create($key, $data) {
+	public function create($data, $key) {
 		
 	}
 
@@ -35,7 +35,7 @@ class adapter extends \services\data\adapter {
 	}
 
 
-	public function update($key, $data) {		
+	public function update($data, $conditions) {		
 		
 	}
 

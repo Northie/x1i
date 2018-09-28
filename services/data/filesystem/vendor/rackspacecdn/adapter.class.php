@@ -9,7 +9,7 @@ class adapter extends services\data\adapter {
 		$this->httpClient = \services\data\http\client\factory::Build();
 	}
 
-	public function create($key, $data) {
+	public function create($data, $key=false) {
 		
 	}
 
@@ -18,7 +18,7 @@ class adapter extends services\data\adapter {
 	}
 
 
-	public function update($key, $data) {
+	public function update($data, $conditions=false) {
 
 	}
 

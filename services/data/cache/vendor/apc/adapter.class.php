@@ -10,7 +10,7 @@ class adapter extends services\data\adapter {
 		}
 	}
 
-	public function create($key, $data) {
+	public function create($data, $key) {
 		return apc_store($key, $data);
 	}
 
@@ -28,12 +28,13 @@ class adapter extends services\data\adapter {
 	 * @return int; 1 for success, 0 for didn't exist, nothing to do and -1 for failed to delete existing key
 	 * @desc
 	 */
-	public function update($key, $data) {
+	public function update($data, $conditions) {
 		$exists = 0;
+		$key = $conditions;
 
 		if ($this->read($key)) {
 			$exists = 1;
-			$rs = $this->create($key, $data);
+			$rs = $this->create($data, $key);
 			if (!$rs) {
 				$exists = -1;
 			}

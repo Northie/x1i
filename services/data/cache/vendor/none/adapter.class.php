@@ -17,7 +17,8 @@ class adapter extends \services\data\adapter {
 	}
 
 	public function update($data, $conditions = false) {
-		return $this->create($key, $data);
+		$key = $conditions;
+		return $this->create($data, $key);
 	}
 
 	public function delete($key, $force = false) {
