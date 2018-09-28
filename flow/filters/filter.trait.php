@@ -46,18 +46,18 @@ trait filter {
 		if ($filter) {
 						$r = new \ReflectionObject($filter);
 						$filterName = $r->getName();
-						if(\Plugins\Plugins::Load()->DoPlugins("onBefore".$filterName."In",$filter)) {
+						if(\Plugins\EventManager::Load()->ObserveEvent("onBefore".$filterName."In",$filter)) {
 							\settings\registry::Load()->set('ActiveFilter',$filter);
 							$filter->in();
-							\Plugins\Plugins::Load()->DoPlugins("onBefore".$filterName."In",$filter);
+							\Plugins\EventManager::Load()->ObserveEvent("onBefore".$filterName."In",$filter);
 						}
 		} else {
 						$r = new \ReflectionObject($this);
 						$filterName = $r->getName();
-						if(\Plugins\Plugins::Load()->DoPlugins("onBefore".$filterName."Out",$filter)) {
+						if(\Plugins\EventManager::Load()->ObserveEvent("onBefore".$filterName."Out",$filter)) {
 							\settings\registry::Load()->set('ActiveFilter',$this);
 							$this->out();
-							\Plugins\Plugins::Load()->DoPlugins("onAfter".$filterName."Out",$filter);
+							\Plugins\EventManager::Load()->ObserveEvent("onAfter".$filterName."Out",$filter);
 						}
 		}
 	}
@@ -67,10 +67,10 @@ trait filter {
 		if ($filter) {
 					$r = new \ReflectionObject($filter);
 					$filterName = $r->getName();
-					if(\Plugins\Plugins::Load()->DoPlugins("onBefore".$filterName."Out",$filter)) {
+					if(\Plugins\EventManager::Load()->ObserveEvent("onBefore".$filterName."Out",$filter)) {
 						\settings\registry::Load()->set('ActiveFilter',$filter);
 			$filter->out();
-						\Plugins\Plugins::Load()->DoPlugins("onAfter".$filterName."Out",$filter);
+						\Plugins\EventManager::Load()->ObserveEvent("onAfter".$filterName."Out",$filter);
 					}
 		}
 	}

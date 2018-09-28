@@ -14,7 +14,7 @@ class Response {
 	}
 
 	public function setData($data) {
-		if (!\Plugins\Plugins::Load()->DoPlugins('onBeforeResponseSetData', $this)) {
+		if (!\Plugins\EventManager::Load()->ObserveEvent('onBeforeResponseSetData', $this)) {
 			return false;
 		}
 		$this->data = $data;
@@ -22,7 +22,7 @@ class Response {
 	}
 		
 			public function addData($key,$data) {
-		if (!\Plugins\Plugins::Load()->DoPlugins('onBeforeResponseAddData', $this)) {
+		if (!\Plugins\EventManager::Load()->ObserveEvent('onBeforeResponseAddData', $this)) {
 			return false;
 		}
 		$this->data[$key] = $data;

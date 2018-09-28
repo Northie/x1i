@@ -39,7 +39,7 @@ class App {
 	}
 	
 	private function initPlugins() {
-		\Plugins\Plugins::RegisterPlugins();
+		\Plugins\EventManager::RegisterHandlers();
 	}
 	
 	public function addModule($module) {

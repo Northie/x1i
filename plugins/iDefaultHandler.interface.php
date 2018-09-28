@@ -2,7 +2,7 @@
 
 namespace Plugins;
 
-interface iDefaultPlugin {
+interface iDefaultHandler {
 	public static function RegisterMe();
 		public function Execute();
 }
