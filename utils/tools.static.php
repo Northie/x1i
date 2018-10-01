@@ -115,7 +115,7 @@ class Tools {
 
 	public static function setCache($key, $data, $ttl = 3600) {
 				$adapter = \settings\registry::Load()->get('APP_CACHE');
-				return $adapter->create($key, $data, $ttl);
+				return $adapter->create($data,$key);
 	}
 
 	public static function getCache($key) {
