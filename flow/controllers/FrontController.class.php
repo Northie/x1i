@@ -16,7 +16,6 @@ class FrontController {
 	public $filterList;
 
 	public function __construct($settings) {
-
 		$this->setContextType($settings['contexts']['type']);
 		
 		$this->setContexts($settings['contexts']['names']);
@@ -77,7 +76,7 @@ class FrontController {
 		
 		$cmds = [];
 		
-		foreach($aCmds as $i => $cmd) {
+		foreach($aCmds as $cmd) {
 			if($cmd != '') {
 				$cmds[] = trim($cmd,"/\\");
 			}

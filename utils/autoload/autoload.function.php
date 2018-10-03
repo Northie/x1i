@@ -1,6 +1,6 @@
 <?php
 
-function xeneco_autoloader($cls) {
+function generic_autoloader($cls) {
 	
 	$file = \settings\fileList::Load()->getFileForClass($cls);
 		
@@ -51,4 +51,4 @@ function xeneco_autoloader($cls) {
 	}
 }
 
-spl_autoload_register('xeneco_autoloader');
+spl_autoload_register('generic_autoloader');
