@@ -88,7 +88,7 @@ class FrontController {
 				if ($this->contexts[$cmds[0]]) {
 					$context = array_shift($cmds);
 				} else {
-					$context = 'www';
+					$context = $this->defaultContext;
 				}
 				break;
 			case (self::CONTEXT_TYPE_DOMAIN):
@@ -96,6 +96,11 @@ class FrontController {
 			case (self::CONTEXT_TYPE_SUBDOMAIN):
 				$dm = explode(".",$this->request->SERVER_NAME);
 				$context = $dm[0];
+				//if subdomain does not exist in contexts list then assume default
+				if(!$this->contexts[$context]) {
+					$context = $this->defaultContext;
+				}
+				
 				break;
 		}
 		
