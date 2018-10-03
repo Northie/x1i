@@ -48,9 +48,9 @@ trait view {
 		}
 
 		if ($req['module'] && !$default) {
-			$path = implode(\DIRECTORY_SEPARATOR, [X1_APP_PATH, 'modules', $req['module'], 'contexts', $req['context'], 'templates']);
+			$path = implode(\DIRECTORY_SEPARATOR, [Z4_APP_PATH, 'modules', $req['module'], 'contexts', $req['context'], 'templates']);
 		} else {
-			$path = implode(\DIRECTORY_SEPARATOR, [X1_APP_PATH, 'contexts', $req['context'], 'templates']);
+			$path = implode(\DIRECTORY_SEPARATOR, [Z4_APP_PATH, 'contexts', $req['context'], 'templates']);
 		}
 
 		$eventOptions = [

@@ -16,9 +16,9 @@ class EventManager {
 
 	public static function RegisterHandlers() {
 
-		$plugin_paths = [realpath(\X1_APP_PATH . "/plugins") => true];
+		$plugin_paths = [realpath(\Z4_APP_PATH . "/plugins") => true];
 
-		$modulePath = realpath(\X1_APP_PATH . "/modules");
+		$modulePath = realpath(\Z4_APP_PATH . "/modules");
 
 		$modules = scandir($modulePath);
 		foreach ($modules as $module) {
