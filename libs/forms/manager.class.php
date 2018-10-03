@@ -77,21 +77,21 @@ class manager extends \libs\data\formService {
 
 		if ($this->isSubmitted()) {
 
-			\Plugins\Plugins::Load()->DoPlugins('onFormSubmitted', $this);
+			\Plugins\EventManager::Load()->ObserveEvent('onFormSubmitted', $this);
 			if ($this->CheckIn()) {
-				\Plugins\Plugins::Load()->DoPlugins('onFormSubmitPass', $this);
+				\Plugins\EventManager::Load()->ObserveEvent('onFormSubmitPass', $this);
 
 				$this->valid = true;
 
 				unset($_SESSION['form_data'][$this->form_name]);
 			} else {
-				\Plugins\Plugins::Load()->DoPlugins('onFormSubmitFail', $this);
+				\Plugins\EventManager::Load()->ObserveEvent('onFormSubmitFail', $this);
 
 				$this->valid = false;
 			}
 		} else {
 
-			\Plugins\Plugins::Load()->DoPlugins('onFormRequested', $this);
+			\Plugins\EventManager::Load()->ObserveEvent('onFormRequested', $this);
 		}
 	}
 

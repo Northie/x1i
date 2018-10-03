@@ -63,7 +63,7 @@ trait read {
 		}
 		//*/
 
-		\Plugins\Plugins::Load()->DoPlugins("onAfterRestRead", $this);
+		\Plugins\EventManager::Load()->ObserveEvent("onAfterRestRead", $this);
 	}
 }
 

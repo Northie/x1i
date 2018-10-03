@@ -15,7 +15,7 @@ trait update {
 		
 		$this->data['meta']['count'] = $this->model->update($this->request->resources[0])->set($this->request->getData())->getData('count');
 		
-		\Plugins\Plugins::Load()->DoPlugins("onAfterRestUpdate",$this);
+		\Plugins\EventManager::Load()->ObserveEvent("onAfterRestUpdate",$this);
 
 	}
 }

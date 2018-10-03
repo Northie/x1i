@@ -12,7 +12,7 @@ class adapter extends \services\data\adapter {
 	
 	public function __construct($settings) {
 		$this->path = $settings['path'];
-			$this->adapter = \services\data\filesystem\vendor\local\factory::Build($settings);
+		$this->adapter = \services\data\filesystem\vendor\local\factory::Build($settings);
 	}
 
 	public function create($data, $id = false) {
@@ -33,7 +33,7 @@ class adapter extends \services\data\adapter {
 	}
 
 	public function read($key) {
-			
+
 		$json = $this->adapter->read($key);
 		//file get contents
 				
@@ -64,7 +64,7 @@ class adapter extends \services\data\adapter {
 	 * @param string $key
 	 * @return int; 1 for success, 0 for didn't exist, nothing to do and -1 for failed to delete existing key
 	 */
-	public function delete($key,$force=false) {
+	public function delete($key, $force = false) {
 		$exists = 0;
 		//unlink file
 

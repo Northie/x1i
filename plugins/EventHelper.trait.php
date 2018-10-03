@@ -7,7 +7,7 @@ trait helper {
 	public function notify($event, $object=false, $options = array()) {
 				$object = $object ? $object : $this;
 		$event = "on" . ucfirst($event);
-		return \Plugins\Plugins::Load()->doPlugins($event, $object, $options);
+		return \Plugins\EventManager::Load()->ObserveEvent($event, $object, $options);
 	}
 
 	public function before($event, $object, $options = array()) {

@@ -15,6 +15,6 @@ trait create {
 		
 		$this->data['id'] = $this->model->create($this->request->getData())->returnLastInsertID();
 		
-		\Plugins\Plugins::Load()->DoPlugins("onAfterRestCreate",$this);
+		\Plugins\EventManager::Load()->ObserveEvent("onAfterRestCreate",$this);
 	}
 }
