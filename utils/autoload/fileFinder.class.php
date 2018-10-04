@@ -37,7 +37,7 @@ class fileFinder {
 
 		$error_level = ini_get('error_reporting');
 		ini_set('error_reporting',(E_ALL ^ E_NOTICE));  //ignore notices;
-		print_r($all);
+		//print_r($all);
 
 		foreach ($all as $file) {
 
@@ -123,7 +123,7 @@ class fileFinder {
 			return [];
 		}
 
-		echo "Scanning File ".$path."....\n";
+		//echo "Scanning File ".$path."....\n";
 
 		$a = token_get_all($c);
 
@@ -146,7 +146,7 @@ class fileFinder {
 				}
 				$namespaces[] = trim($namespace);
 				$i+=$j;
-				echo "Logging NameSpace ".$namespace.".....\n";
+				//echo "Logging NameSpace ".$namespace.".....\n";
 			}
 
 			if (strtolower($a[$i][1]) == 'class') {
@@ -165,7 +165,7 @@ class fileFinder {
 
 				$classes[] = trim($class);
 				$i+=$j;
-				echo "Logging Class ".$class.".....\n";
+				//echo "Logging Class ".$class.".....\n";
 			}
 
 			if (strtolower($a[$i][1]) == 'interface') {
@@ -184,7 +184,7 @@ class fileFinder {
 
 				$interfaces[] = trim($interface);
 				$i+=$j;
-				echo "Logging Interface ".$interface.".....\n";
+				//echo "Logging Interface ".$interface.".....\n";
 			}
 
 			if (strtolower($a[$i][1]) == 'trait') {
@@ -203,7 +203,7 @@ class fileFinder {
 
 				$traits[] = trim($trait);
 				$i+=$j;
-				echo "Logging Trait ".$trait.".....\n";
+				//echo "Logging Trait ".$trait.".....\n";
 			}
 		}
 

@@ -45,7 +45,9 @@ function generic_autoloader($cls) {
 				//include the file
 				require_once($file);
 			} else {
-				die($cls . " Has not been defined yet or cannot be found");
+				//echo "<pre>",print_r(\debug_backtrace()),"</pre>";
+				//die($cls . " Has not been defined yet or cannot be found");
+				throw new \Exception($cls . " Has not been defined yet or cannot be found");
 			}
 		}
 	}
