@@ -4,6 +4,8 @@ namespace views;
 
 class factory {
 	 public static function Build($normalisedRequest) {
+		  
+		$normalisedRequest['endpoint'] = $normalisedRequest['endpoint'] ? $normalisedRequest['endpoint'] : 'index';
 		 
 		if($normalisedRequest['module']) {
 			$targetView = "\\views\\modules\\".$normalisedRequest['module']."\\".$normalisedRequest['context']."\\".$normalisedRequest['endpoint'];
