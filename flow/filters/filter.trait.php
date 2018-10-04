@@ -3,14 +3,14 @@
 namespace flow\filters;
 
 trait filter {
-	
+
 	use \Plugins\helper;
 
 	private $currentNode;
 	private $list;
 	private $request;
 	private $response;
-		protected $options = [];
+	protected $options = [];
 
 	public function __construct($list, $request, $response) {
 		$this->list = $list;
@@ -40,53 +40,53 @@ trait filter {
 
 	public function FFW() {
 		$filter = $this->getNext();
-				
-				
-				
+
+
+
 		if ($filter) {
-						$r = new \ReflectionObject($filter);
-						$filterName = $r->getName();
-						if(\Plugins\EventManager::Load()->ObserveEvent("onBefore".$filterName."In",$filter)) {
-							\settings\registry::Load()->set('ActiveFilter',$filter);
-							$filter->in();
-							\Plugins\EventManager::Load()->ObserveEvent("onBefore".$filterName."In",$filter);
-						}
+			$r = new \ReflectionObject($filter);
+			$filterName = $r->getName();
+			if (\Plugins\EventManager::Load()->ObserveEvent("onBefore" . $filterName . "In", $filter)) {
+				\settings\registry::Load()->set('ActiveFilter', $filter);
+				$filter->in();
+				\Plugins\EventManager::Load()->ObserveEvent("onBefore" . $filterName . "In", $filter);
+			}
 		} else {
-						$r = new \ReflectionObject($this);
-						$filterName = $r->getName();
-						if(\Plugins\EventManager::Load()->ObserveEvent("onBefore".$filterName."Out",$filter)) {
-							\settings\registry::Load()->set('ActiveFilter',$this);
-							$this->out();
-							\Plugins\EventManager::Load()->ObserveEvent("onAfter".$filterName."Out",$filter);
-						}
+			$r = new \ReflectionObject($this);
+			$filterName = $r->getName();
+			if (\Plugins\EventManager::Load()->ObserveEvent("onBefore" . $filterName . "Out", $filter)) {
+				\settings\registry::Load()->set('ActiveFilter', $this);
+				$this->out();
+				\Plugins\EventManager::Load()->ObserveEvent("onAfter" . $filterName . "Out", $filter);
+			}
 		}
 	}
 
 	public function RWD() {
 		$filter = $this->getPrev();
 		if ($filter) {
-					$r = new \ReflectionObject($filter);
-					$filterName = $r->getName();
-					if(\Plugins\EventManager::Load()->ObserveEvent("onBefore".$filterName."Out",$filter)) {
-						\settings\registry::Load()->set('ActiveFilter',$filter);
-			$filter->out();
-						\Plugins\EventManager::Load()->ObserveEvent("onAfter".$filterName."Out",$filter);
-					}
+			$r = new \ReflectionObject($filter);
+			$filterName = $r->getName();
+			if (\Plugins\EventManager::Load()->ObserveEvent("onBefore" . $filterName . "Out", $filter)) {
+				\settings\registry::Load()->set('ActiveFilter', $filter);
+				$filter->out();
+				\Plugins\EventManager::Load()->ObserveEvent("onAfter" . $filterName . "Out", $filter);
+			}
 		}
 	}
-		
+
 	public function setOptions($options) {
 		$this->options = $options;
 	}
-	
+
 	public function getOptions() {
 		return $this->options;
 	}
-	
+
 	public function getRequest() {
 		return $this->request;
 	}
-	
+
 	public function getResponse() {
 		return $this->response;
 	}
