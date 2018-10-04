@@ -12,10 +12,14 @@ class factory {
 		}
 		
 		if(class_exists($targetView)) {
-			return new $targetView;
+			$view = new $targetView;
 		} else {
-			return new DefaultView;	
+			$view = new DefaultView;	
 		}
+		
+		\Plugins\EventManager::Load()->observeEvent('onViewCreated',$view,$normalisedRequest);
+				
+		return $view;
 		
 	 }
 }
