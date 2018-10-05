@@ -18,6 +18,10 @@ trait view {
 	public function setData($data) {
 		$this->data = $data;
 	}
+	
+	public function getData() {
+		return $this->data;
+	}
 
 	public function serve() {
 		include 'templates/www/index.php';
