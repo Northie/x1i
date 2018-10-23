@@ -6,8 +6,8 @@ class fileFinder {
 	public static function CompileFiles($vendorPaths=[],$ignore=[]) {
 
 		$appPaths = [
-			\Z4_PATH,
-			\Z4_APP_PATH
+			\X1_PATH,
+			\X1_APP_PATH
 		];
 		
 		$paths = array_merge($appPaths,$vendorPaths);
