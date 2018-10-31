@@ -41,7 +41,7 @@ class App {
 	private function initPlugins() {
 		\Plugins\EventManager::RegisterHandlers();
 	}
-	
+
 	public function addModule($module) {
 		
 		list($a,$b,$c) = explode("\\",get_class($module));

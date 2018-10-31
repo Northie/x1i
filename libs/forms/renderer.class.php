@@ -125,7 +125,7 @@ class Renderer {
 				</div>
 			";
 		}
-
+		
 		for ($i = 0; $i < count($this->data); $i++) {
 			//$value = $this->data[$i]['value'];
 

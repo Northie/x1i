@@ -70,5 +70,21 @@ abstract class model {
 			}
 		}
 	}
+	
+	public function toForm() {
+		
+		$defintion = [];
+		
+		foreach($this->getStructure() as $key => $val) {
+			$defintion[] = [
+				"label"=> \utils\Tools::camel_to_title($key),
+				"name"=>$key,
+				"required"=>$val[0],
+				"input_type"=>$val[1],
+				"data_type"=>$val[1]
+			];
+		}
+		return new class(get_called_class(),$defintion) extends \libs\forms\manager {};
+	}
 
 }

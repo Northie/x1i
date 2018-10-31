@@ -2,7 +2,7 @@
 
 namespace libs\forms;
 
-class manager extends \libs\data\formService {
+class manager /*extends \libs\data\formService*/ {
 
 	private $valid = false;
 	private $isPopulated = false;
@@ -28,6 +28,7 @@ class manager extends \libs\data\formService {
 
 		if ($definition) {
 			$this->definition = $definition;
+			$this->action = $this->action ? $this->action : $this->getDefaultAction();
 		} else {
 			if (get_called_class() != __CLASS__ && method_exists($this, 'getFormDefinition')) {
 				$this->definition = $this->getFormDefinition();
@@ -42,6 +43,13 @@ class manager extends \libs\data\formService {
 
 		$this->outputFilterObject = $this->inputFilterObject;
 		$this->outputFilterMethod = 'output';
+		
+	}
+
+	private function getDefaultAction() {
+		$fc = \settings\registry::Load()->get('FrontController');
+		$req = $fc->request;
+		return $req->REQUEST_URI;
 		
 	}
 

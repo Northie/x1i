@@ -56,18 +56,21 @@ class fileFinder {
 				$class = $d['classes'][$i];
 
 				$lines.='$classlist[\'' . trim($prefix . $d['namespaces'][0] . ($d['namespaces'][0] == '' ? '' : '\\') . $class, '\\') . '\'] = \'' . $file . '\';' . "\n";
+				break;
 			}
 
 			for ($i = 0; $i < count($d['interfaces']); $i++) {
 				$interface = $d['interfaces'][$i];
 
 				$lines.='$classlist[\'' . trim($prefix . $d['namespaces'][0] . ($d['namespaces'][0] == '' ? '' : '\\') . $interface, '\\') . '\'] = \'' . $file . '\';' . "\n";
+				break;
 			}
 
 			for ($i = 0; $i < count($d['traits']); $i++) {
 				$trait = $d['traits'][$i];
 
 				$lines.='$classlist[\'' . trim($prefix . $d['namespaces'][0] . ($d['namespaces'][0] == '' ? '' : '\\') . $trait, '\\') . '\'] = \'' . $file . '\';' . "\n";
+				break;
 			}
 
 			for ($i = 0; $i < count($d['plugins']); $i++) {
