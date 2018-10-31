@@ -23,7 +23,6 @@ class Renderer {
 	private $content;
 	private $errors=null;
 
-	//public function __construct($data,$action,$method='POST',$st='') {
 	public function __construct($form) {
 
 		$this->data = $form->definition;
@@ -114,29 +113,16 @@ class Renderer {
 	}
 
 	private function toHTML() {
-		$act = $this->action;
-		if( isset( $_REQUEST['page_id'] ) == true ) {
-			if( strpos( $act, "?" ) !== false ) {
-				$act .="&page_id=".$_REQUEST['page_id'];
-			} else {
-				$act .="?page_id=".$_REQUEST['page_id'];
-			}
-		} 
+		$act = $this->action; 
 		
 		$c = "<form class='form-horizontal' id='frm".$this->form_name."' action='" . $act . "' method='" . $this->method . "' enctype='multipart/form-data'>";
 
 		if ($this->caption['message']) {
 			$c.="
-				<!--div class='container-fluid'>
-					<div class='row-fluid'>
-						<div class='span12' -->
-							<div class='alert alert-" . ($this->caption['alert'] == '' ? "info" : $this->caption['alert']) . "'>
-								" . $this->caption['message'] . "
-								<a class='close' href='#' data-dismiss='alert'>×</a>
-							</div>
-						<!-- /div>
-					</div>
-				</div -->
+				<div class='alert alert-" . ($this->caption['alert'] == '' ? "info" : $this->caption['alert']) . "'>
+					" . $this->caption['message'] . "
+					<a class='close' href='#' data-dismiss='alert'>×</a>
+				</div>
 			";
 		}
 
@@ -149,15 +135,10 @@ class Renderer {
 				$c.="<input type='hidden' name='" . $this->data[$i]['name'] . "' value='" . $value . "' />\n\n";
 			} else {
 
-				//*
 				if ($this->data[$i]['fieldset'] !== $this->data[$i - 1]['fieldset']) {
-					//start fieldset
-					//start table
 					$c.="<fieldset><legend>" . $this->data[$i]['fieldset'] . "</legend>\n";
-					//$c.=$this->html_wrappers['form']['start'];
 				}
-				//*/
-				//$c.=$this->html_wrappers['input']['start'];
+
 
 				$this->data[$i]['input_type'] = $this->data[$i]['input_type'] == '' ? 'text' : $this->data[$i]['input_type'];
 
@@ -175,7 +156,7 @@ class Renderer {
 				
 				switch ($this->data[$i]['input_type']) {
 					case 'password':
-						$input = "<input " . $disabled . " " . $data . " class='-password' type='password' name='" . $this->data[$i]['name'] . "' id='_" . $this->data[$i]['name'] . "' value = '" . $value . "' />";
+						$input = "<input " . $disabled . " " . $data . " class='password' type='password' name='" . $this->data[$i]['name'] . "' id='_" . $this->data[$i]['name'] . "' value = '" . $value . "' />";
 						break;
 					case 'textarea':
 						$input = "<textarea " . $disabled . " " . $data . " name='" . $this->data[$i]['name'] . "' id='_" . $this->data[$i]['name'] . "'>" . $value . "</textarea>";
@@ -184,7 +165,7 @@ class Renderer {
 						$input = "<textarea " . $disabled . " " . $data . " name='" . $this->data[$i]['name'] . "' id='_" . $this->data[$i]['name'] . "' class='richtext'>" . $value . "</textarea>";
 						break;
 					case 'select':
-						$input = "<select " . $disabled . " " . $data . " class='-select' name='" . $this->data[$i]['name'] . "' id='_" . $this->data[$i]['name'] . "'>\n";
+						$input = "<select " . $disabled . " " . $data . " class='select' name='" . $this->data[$i]['name'] . "' id='_" . $this->data[$i]['name'] . "'>\n";
 						for ($j = 0; $j < count($this->data[$i]['option_data']); $j++) {
 							$input.="<option value='" . $this->data[$i]['option_data'][$j]['post'] . "' " . ($this->data[$i]['option_data'][$j]['post'] == $value ? "selected='selected'" : "") . ">" . $this->data[$i]['option_data'][$j]['display'] . "</option>\n";
 						}
@@ -215,23 +196,6 @@ class Renderer {
 					case 'file2':
 						$input = "<input " . $disabled . " " . $data . " class='file2' name='" . $this->data[$i]['name'] . "' id='_" . $this->data[$i]['name'] . "' value='" . $value . "' type='hidden' /><a href='#' class='btn choose-file " . ($disabled != '' ? "disabled" : "") . "'>Choose...</a> <a href='#' class='btn clear-file btn-warning " . ($disabled != '' ? "disabled" : "") . "' data-clear='_" . $this->data[$i]['name'] . "'>Clear</a><br /><div id='_preview_" . $this->data[$i]['name'] . "' class='image-preview'></div>";
 						break;
-					case 'recaptcha':
-						//$publickey = \core\System_Settings::Load()->getSettings('recaptcha', 'publickey');
-						//$input = recaptcha_get_html($publickey);
-						
-						$input = '<div id="captcha_wrap" align="center" class="col-xs-12 col-lg-12 col-md-12">';
-						$input_code = '<div class="col-xs-6 col-lg-6 col-md-6 d-captcha_input"><input name="recaptcha" type="text" id="captcha_input" maxlength=8></div>';
-						$input_image = '<div class="col-xs-6 col-lg-6 col-md-6 d-captcha_imgage"><img src="/captcha/get_captcha.php" alt="" id="captcha_imgage" /><img src="/captcha/refresh.jpg" width="25" alt="" id="captcha_refresh" /></div>';
-						
-						$mobile_view = \core\Domain::Load()->getConfig('mobile_view' );
-						if( empty( $mobile_view ) == false ){
-						   $input .= $input_image.$input_code;
-						} else {
-							$input .= $input_code.$input_image;
-						}
-						$input .= '</div><br class="clear" />';
-
-						break;
 					default:
 						$no_use_color = '';
 						if( $this->data[$i]['input_type'] == 'color' && empty( $value)  == true ) {
@@ -253,12 +217,6 @@ class Renderer {
 					}
 				}
 				
-				// Get custom error 
-				if( strlen( $req ) == 0 && $this->data[$i]['name'] == 'page_alias' ) {
-					if( empty( $this->data[$i]['errors'] ) == false ) {
-						$req = $this->data[$i]['errors'][0];
-					}
-				}
 
 				$label = "<label class='control-label' for='_" . $this->data[$i]['name'] . "'>" . $this->data[$i]['label'] . " " . ($this->data[$i]['required'] ? "*" : "") . "</label>";
 
@@ -276,14 +234,13 @@ class Renderer {
 
 				$c.=$row;
 
-				//*
 				if ($this->data[$i]['fieldset'] !== $this->data[$i + 1]['fieldset']) {
-					//end table
+
 					$c.=$this->html_wrappers['form']['end'];
-					//end fieldset
+
 					$c.="</fieldset>\n";
 				}
-				//*/
+
 			}
 		}
 
@@ -292,31 +249,10 @@ class Renderer {
 		if ($this->show_submit_label) {
 			$submitLabel = "<label class='control-label' for='" . strtolower(str_replace(" ", "_", $this->submit_label)) . "'>" . $this->submit_label . "</label>";
 		}
-		/*
-		  $c.="
-		  <fieldset>
-		  ".$this->html_wrappers['form']['start']."
 
-		  ".$this->html_wrappers['row']['start']."
-		  ".$this->html_wrappers['label']['start'].$submitLabel.$this->html_wrappers['label']['end']."
-		  ".$this->html_wrappers['input']['start']."<input type='submit' name='".strtolower(str_replace(" ","_",$this->submit_label))."' value='".$this->submit_label."' />".$this->html_wrappers['input']['end']."
-		  ".$this->html_wrappers['row']['end']."
-
-
-		  ".$this->html_wrappers['form']['end']."
-		  </fieldset>
-		  <input type='hidden' name='submitted' value='1' />
-		  ";
-		  // */
-		
 		$actions = "<div class='form-actions'>" . $submitLabel . "<div class=''>";
 		
-		
-		if( $this->form_name == 'Settings' ) {
-			$actions .= "<input class='btn btn-primary saveInputForm' type='button' name='" . strtolower(str_replace(" ", "_", $this->submit_label)) . "' value='" . $this->submit_label . "' />";
-		} else {
-			$actions .= "<input class='btn btn-primary' type='submit' name='" . strtolower(str_replace(" ", "_", $this->submit_label)) . "' value='" . $this->submit_label . "' />";
-		}
+		$actions .= "<input class='btn btn-primary' type='submit' name='" . strtolower(str_replace(" ", "_", $this->submit_label)) . "' value='" . $this->submit_label . "' />";
 		
 		$actions .= "</div></div>";
 

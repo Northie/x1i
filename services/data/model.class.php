@@ -1,10 +1,8 @@
 <?php
 
-namespace services\data;
+namespace models\data;
 
-error_reporting(E_ALL &~ E_NOTICE);
-
-class model {
+class Testmodel {
 	
 	private $model = false;
 	private $adapter = false;
@@ -74,7 +72,7 @@ class model {
  * company.id
  * company.name
  */
-
+/*
 $m = new \services\data\model([
 	'user' => [ //user is a resource
 		'fields' => [
@@ -125,3 +123,5 @@ $m = new \services\data\model([
 
 print_r($m->getFlat());
 print_r($m->getJoin());
+ * 
+ */

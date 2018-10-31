@@ -13,7 +13,11 @@ abstract class factory {
 	public function Build() {
 		ignore_user_abort(true);
 		$this->reference = \utils\Tools::UUID();
+		$steps = $this->processList->exportForward();
 		$start = $this->processList->getFirstNode(true);
+		
+		\state\manager::Load(\get_called_class(),$this->reference);
+		
 		$start->start();
 	}
 
@@ -52,18 +56,18 @@ abstract class factory {
 	}
 
 	public function notify($notification) {
-				$notification = $this->currentNotification = $notification;
+		$notification = $this->currentNotification = $notification;
 		$this->notifications[] = $notification;
-		
+
 		$label = get_class($this->processList->getFirstNode(true)->getParent());
 
-				if($this->isDeferred()) {
-					//save to queue
-					$this->queue->log($this->reference, $notification);
-				} else {
-					$session = new \utils\XSession('PROCESSES');
-					$session->set($this->reference, [$label=>$this->notifications]);	
-				}
+		if ($this->isDeferred()) {
+			//save to queue
+			$this->queue->log($this->reference, $notification);
+		} else {
+			$session = new \utils\XSession('PROCESSES');
+			$session->set($this->reference, [$label => $this->notifications]);
+		}
 	}
 
 	public function getNotifications() {

@@ -42,9 +42,6 @@ class manager extends \libs\data\formService {
 
 		$this->outputFilterObject = $this->inputFilterObject;
 		$this->outputFilterMethod = 'output';
-
-		//include_once($_SERVER['DOCUMENT_ROOT']."/../app/libs/misc/recaptcha.functions.php");
-		
 		
 	}
 
@@ -72,8 +69,6 @@ class manager extends \libs\data\formService {
 	}
 
 	public function Execute() {
-
-		//$ci = $this->CheckIn(); //builds or modifies form data in session
 
 		if ($this->isSubmitted()) {
 
@@ -134,8 +129,6 @@ class manager extends \libs\data\formService {
 
 			$valid = true;
 
-			//$this->definition[$i] = $this->preflight($this->definition[$i]);
-
 			$_SESSION['form_data'][$this->form_name][$i] = $this->definition[$i];
 			$_SESSION['form_data'][$this->form_name][$i]['errors'] = array();
 
@@ -143,7 +136,6 @@ class manager extends \libs\data\formService {
 				$value = $_SESSION['form_data'][$this->form_name][$i]['value'];
 			} else {
 				$value = $this->filterIn($this->definition[$i]['input_type'], $_POST[$this->definition[$i]['name']]);
-				//$value = $_POST[$this->definition[$i]['name']];
 			}
 
 			if ($this->definition[$i]['validate']) {

@@ -3,11 +3,12 @@
 namespace services\data\http\form;
 
 class adapter extends \services\data\adapter {
-	public function __construct($namespace = '', $method='POST') {
+
+	public function __construct($namespace = '', $method = 'POST') {
 		$this->namespace = $namespace;
 		$this->method = $method;
-		
-		switch($method) {
+
+		switch ($method) {
 			case 'POST':
 				$data = $_POST;
 				break;
@@ -17,42 +18,49 @@ class adapter extends \services\data\adapter {
 			default:
 				$data = [];
 		}
-		
-		if($this->namespace) {
+
+		if ($this->namespace) {
 			$data = $data[$this->namespace];
 		}
-		
+
 		$this->data = $data;
-		
 	}
-	
+
 	public function create($data, $key) {
-		
+		//create request for data?
 	}
 
-	public function read($key) {
-		return $this->data[$key];
+	public function read($key = false) {
+		//return 
+		if ($key) {
+			return $this->query($key);
+		}
+		return $this->data;
 	}
 
-
-	public function update($data, $conditions) {		
+	public function update($data, $conditions) {
 		
 	}
 
 	public function delete($key) {
-
-	}
 		
-		public function readRawData() {
-			$fp = fopen("php://input");
-			$c = false;
-			if($fp) {
-				$c = '';
-				while($line = fgets($fp)) {
-					$c.=$line;
-				}
-				fclose($fp);
+	}
+
+	public function readRawData() {
+		$fp = fopen("php://input");
+		$c = false;
+		if ($fp) {
+			$c = '';
+			while ($line = fgets($fp)) {
+				$c .= $line;
 			}
-			return $c;
+			fclose($fp);
 		}
+		return $c;
+	}
+
+	public function query($query, $parameters = false) {
+		return $this->data[$query];
+	}
+
 }

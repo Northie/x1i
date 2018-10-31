@@ -5,7 +5,9 @@ namespace services\data\object\vendor\couchbase;
 class adapter extends \services\data\adapter {
 
 	private $couchbase;
-	
+	private $bucket;
+
+
 	public function __construct($settings) {
 		if(class_exists("\\CouchbaseCluster",false)) {
 						
@@ -13,7 +15,7 @@ class adapter extends \services\data\adapter {
 			$port	   = $settings['port'];
 			$user	   = $settings['user'];
 			$password   = $settings['pass'];
-			$bucket	 = $settings['name'];
+			$this->bucket = $bucket = $settings['name'];
 			
 			//$this->couchbase = new \Couchbase($host.":".$port,$user,$password,$bucket);
 			
@@ -43,6 +45,13 @@ class adapter extends \services\data\adapter {
 		return $this->couchbase->upsert($key, $data);
 	}
 
+	public function readType($type) {
+		$items = $this->query('SELECT * from '.$this->bucket.' where type = $type',['type'=>$type]);
+		foreach($items->rows as $row) {
+			yield \utils\Tools::object2array($row->{$this->bucket});
+		}
+	}
+	
 	public function read($key) {
 		try {
 			if($this->model) {
