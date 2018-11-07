@@ -2,7 +2,7 @@
 
 namespace libs\forms;
 
-class manager /*extends \libs\data\formService*/ {
+class manager {
 
 	private $valid = false;
 	private $isPopulated = false;
@@ -25,6 +25,8 @@ class manager /*extends \libs\data\formService*/ {
 	public function __construct($name, $definition = null) {
 
 		$this->form_name = $name;
+		
+		$this->securityToken = $_SESSION['security_token'];
 
 		if ($definition) {
 			$this->definition = $definition;
@@ -37,13 +39,23 @@ class manager /*extends \libs\data\formService*/ {
 			}
 		}
 
-
 		$this->inputFilterObject = new \libs\forms\filters;
 		$this->inputFilterMethod = 'input';
 
 		$this->outputFilterObject = $this->inputFilterObject;
 		$this->outputFilterMethod = 'output';
 		
+	}
+	
+	public function getDefinition() {
+		$map = [];
+		foreach ($this->definition as $i => $input) {
+			$map[$input['name']] = $i;
+		}
+		return [
+			'defintion'=>$this->definition,
+			'map'=>$map
+		];
 	}
 
 	private function getDefaultAction() {
@@ -68,12 +80,17 @@ class manager /*extends \libs\data\formService*/ {
 	}
 
 	private function filterIn($type, $data) {
-		return $this->inputFilterObject->{$this->inputFilterMethod}($type, $data);
+		if(\method_exists($this->inputFilterObject, $this->inputFilterMethod)) {
+			return $this->inputFilterObject->{$this->inputFilterMethod}($type, $data);
+		}
+		return $data;
 	}
 
 	private function filterOut($type, $data) {
-
-		return $this->outputFilterObject->{$this->ouputFilterMethod}($type, $data);
+		if(\method_exists($this->outputFilterObject, $this->ouputFilterMethod)) {
+			return $this->outputFilterObject->{$this->ouputFilterMethod}($type, $data);
+		}
+		return $data;
 	}
 
 	public function Execute() {
@@ -100,7 +117,15 @@ class manager /*extends \libs\data\formService*/ {
 
 	public function isSubmitted() {
 		if ($_POST['_form_name'] == $this->form_name) {
-			return true;
+			
+			if($this->securityToken == $_POST['security_token']) {
+				if(isset($_POST[sha1($this->form_name . $this->securityToken)])) {
+					return true;		
+				}
+				throw new \Exception('Possible XSRF (2)');
+			}
+			
+			throw new \Exception('Possible XSRF (1)');
 		}
 
 		return false;

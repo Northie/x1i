@@ -7,6 +7,7 @@ abstract class model {
     public static $type = '';
     public $structure = [];
 	public $idParam = 'id';
+	protected $store;
 
     public function __construct() {
 
@@ -15,8 +16,29 @@ abstract class model {
 		
 		$this->getExtensions($r);
     }
-    
-    public final function AddSubType($model,$required,$multiple,$fields=[]) {
+	
+	/**
+	 * 
+	 * @param \services\data\store $store
+	 * @return $this
+	 */
+	
+	public function setStore(\services\data\store $store) {
+		$this->store = $store;
+		return $this;
+	}
+	
+	/**
+	 * 
+	 * @return \services\data\store
+	 */
+	
+	public function getStore() {
+		return $this->store;
+	}
+
+	
+	public final function AddSubType($model,$required,$multiple,$fields=[]) {
         	
 		$modelString = "\\".__NAMESPACE__."\\".$model;
 		
@@ -76,15 +98,27 @@ abstract class model {
 		$defintion = [];
 		
 		foreach($this->getStructure() as $key => $val) {
+			
+			$optionData = [];
+			
+			if(is_array($val['options'])) {
+				foreach ($val['options'] as $option) {
+					$optionData[] = ['display'=>$option,'post'=>$option];
+				}
+			}
+			
 			$defintion[] = [
 				"label"=> \utils\Tools::camel_to_title($key),
 				"name"=>$key,
 				"required"=>$val[0],
 				"input_type"=>$val[1],
-				"data_type"=>$val[1]
+				"data_type"=>$val[1],
+				'option_data' => $optionData
 			];
 		}
-		return new class(get_called_class(),$defintion) extends \libs\forms\manager {};
+		$form = new class(get_called_class(),$defintion) extends \libs\forms\manager {};
+
+		return $form;
 	}
 
 }

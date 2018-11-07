@@ -115,7 +115,7 @@ class Renderer {
 	private function toHTML() {
 		$act = $this->action; 
 		
-		$c = "<form class='form-horizontal' id='frm".$this->form_name."' action='" . $act . "' method='" . $this->method . "' enctype='multipart/form-data'>";
+		$c = "<form class='form-horizontal' id='form-".str_replace("\\","-",$this->form_name)."' action='" . $act . "' method='" . $this->method . "' enctype='multipart/form-data'>";
 
 		if ($this->caption['message']) {
 			$c.="
@@ -143,11 +143,17 @@ class Renderer {
 				$this->data[$i]['input_type'] = $this->data[$i]['input_type'] == '' ? 'text' : $this->data[$i]['input_type'];
 
 				$disabled = '';
+				$readonly = '';
 				$data = '';
 
 				if ($this->data[$i]['disabled']) {
 					$disabled = "disabled='disabled'";
 					$data.="data-disabled='disabled'";
+				}
+				
+				if ($this->data[$i]['readonly']) {
+					$readonly = "readonly='readonly'";
+					$data.="data-readonly='readonly'";
 				}
 				
 				if( isset( $this->data[$i]['place_holder'] ) == true && strlen( $this->data[$i]['place_holder'] ) > 0 ) {
@@ -156,16 +162,16 @@ class Renderer {
 				
 				switch ($this->data[$i]['input_type']) {
 					case 'password':
-						$input = "<input " . $disabled . " " . $data . " class='password' type='password' name='" . $this->data[$i]['name'] . "' id='_" . $this->data[$i]['name'] . "' value = '" . $value . "' />";
+						$input = "<input " . $disabled . " ".$readonly." " . $data . " class='password' type='password' name='" . $this->data[$i]['name'] . "' id='_" . $this->data[$i]['name'] . "' value = '" . $value . "' />";
 						break;
 					case 'textarea':
-						$input = "<textarea " . $disabled . " " . $data . " name='" . $this->data[$i]['name'] . "' id='_" . $this->data[$i]['name'] . "'>" . $value . "</textarea>";
+						$input = "<textarea " . $disabled . " ".$readonly." " . $data . " name='" . $this->data[$i]['name'] . "' id='_" . $this->data[$i]['name'] . "'>" . $value . "</textarea>";
 						break;
 					case 'richtext':
-						$input = "<textarea " . $disabled . " " . $data . " name='" . $this->data[$i]['name'] . "' id='_" . $this->data[$i]['name'] . "' class='richtext'>" . $value . "</textarea>";
+						$input = "<textarea " . $disabled . " ".$readonly." " . $data . " name='" . $this->data[$i]['name'] . "' id='_" . $this->data[$i]['name'] . "' class='richtext'>" . $value . "</textarea>";
 						break;
 					case 'select':
-						$input = "<select " . $disabled . " " . $data . " class='select' name='" . $this->data[$i]['name'] . "' id='_" . $this->data[$i]['name'] . "'>\n";
+						$input = "<select " . $disabled . " ".$readonly." " . $data . " class='select' name='" . $this->data[$i]['name'] . "' id='_" . $this->data[$i]['name'] . "'>\n";
 						for ($j = 0; $j < count($this->data[$i]['option_data']); $j++) {
 							$input.="<option value='" . $this->data[$i]['option_data'][$j]['post'] . "' " . ($this->data[$i]['option_data'][$j]['post'] == $value ? "selected='selected'" : "") . ">" . $this->data[$i]['option_data'][$j]['display'] . "</option>\n";
 						}
@@ -174,7 +180,7 @@ class Renderer {
 					case 'radio':
 						$input = '';
 						for ($j = 0; $j < count($this->data[$i]['option_data']); $j++) {
-							$input.="<span>" . $this->data[$i]['option_data'][$j]['display'] . "</span><input " . $disabled . " class='-radio' type='radio' name='" . $this->data[$i]['name'] . "' id='_" . $this->data[$i]['name'] . "." . $j . "' value='" . $this->data[$i]['option_data'][$j]['post'] . "' " . ($this->data[$i]['option_data'][$j]['selected'] == 'selected' ? "checked='checked'" : "") . " />\n";
+							$input.="<span>" . $this->data[$i]['option_data'][$j]['display'] . "</span><input " . $disabled . " ".$readonly." class='-radio' type='radio' name='" . $this->data[$i]['name'] . "' id='_" . $this->data[$i]['name'] . "." . $j . "' value='" . $this->data[$i]['option_data'][$j]['post'] . "' " . ($this->data[$i]['option_data'][$j]['selected'] == 'selected' ? "checked='checked'" : "") . " />\n";
 						}
 						if ($j == 0) {
 							$input = "<span class='msg'>There are no options for this input</span>";
@@ -190,18 +196,18 @@ class Renderer {
 						}
 						break;
 					case 'file':
-						$input = "<input " . $disabled . " " . $data . " class='text' name='" . \core\System_Settings::Load()->getSettings('ZEST_UPLOAD_FIELD_NAME') . "' type='file' />";
+						$input = "<input " . $disabled . " ".$readonly." " . $data . " class='text' name='" . \core\System_Settings::Load()->getSettings('ZEST_UPLOAD_FIELD_NAME') . "' type='file' />";
 						break;
 					case 'image':
 					case 'file2':
-						$input = "<input " . $disabled . " " . $data . " class='file2' name='" . $this->data[$i]['name'] . "' id='_" . $this->data[$i]['name'] . "' value='" . $value . "' type='hidden' /><a href='#' class='btn choose-file " . ($disabled != '' ? "disabled" : "") . "'>Choose...</a> <a href='#' class='btn clear-file btn-warning " . ($disabled != '' ? "disabled" : "") . "' data-clear='_" . $this->data[$i]['name'] . "'>Clear</a><br /><div id='_preview_" . $this->data[$i]['name'] . "' class='image-preview'></div>";
+						$input = "<input " . $disabled . " ".$readonly." " . $data . " class='file2' name='" . $this->data[$i]['name'] . "' id='_" . $this->data[$i]['name'] . "' value='" . $value . "' type='hidden' /><a href='#' class='btn choose-file " . ($disabled != '' ? "disabled" : "") . "'>Choose...</a> <a href='#' class='btn clear-file btn-warning " . ($disabled != '' ? "disabled" : "") . "' data-clear='_" . $this->data[$i]['name'] . "'>Clear</a><br /><div id='_preview_" . $this->data[$i]['name'] . "' class='image-preview'></div>";
 						break;
 					default:
 						$no_use_color = '';
 						if( $this->data[$i]['input_type'] == 'color' && empty( $value)  == true ) {
 							$no_use_color = 'no-use="true" ';
 						}
-						$input = "<input " . $disabled . " " . $data . $no_use_color. " class='-text" . ($this->data[$i]['auto_suggest'] != "" ? " autosuggest" : "") . "' " . ($this->data[$i]['auto_suggest'] != "" ? "data-autosuggest-source='" . $this->data[$i]['auto_suggest'] . "'" : "") . " type='" . $this->data[$i]['input_type'] . "' name='" . $this->data[$i]['name'] . "' id='_" . $this->data[$i]['name'] . "' value='" . $value . "' />";
+						$input = "<input " . $disabled . " ".$readonly." " . $data . $no_use_color. " class='-text" . ($this->data[$i]['auto_suggest'] != "" ? " autosuggest" : "") . "' " . ($this->data[$i]['auto_suggest'] != "" ? "data-autosuggest-source='" . $this->data[$i]['auto_suggest'] . "'" : "") . " type='" . $this->data[$i]['input_type'] . "' name='" . $this->data[$i]['name'] . "' id='_" . $this->data[$i]['name'] . "' value='" . $value . "' />";
 						break;
 				}
 
@@ -265,7 +271,7 @@ class Renderer {
 		$c.="
 			<input type='hidden' name='submitted' value='1' />
 			<input type='hidden' name='_form_name' value='" . $this->form_name . "' />
-			<input type='hidden' name='" . sha1($this->form_name . $_SESSION['security_token']) . "' value='1' />
+			<input type='hidden' name='" . sha1($this->form_name . $this->securityToken) . "' value='1' />
 		</form>
 		";
 

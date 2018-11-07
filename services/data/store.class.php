@@ -17,6 +17,7 @@ class store {
 
 	public function setModel(\models\data\model $model) {
 		$this->model = $model;
+		$model->setStore($this);
 		return $this;
 	}
 
@@ -73,7 +74,6 @@ class store {
 	}
 	
 	public function saveNew() {
-		
 		foreach ($this->new as $id) {
 			
 			$this->writer->create($this->data[$id],$id);

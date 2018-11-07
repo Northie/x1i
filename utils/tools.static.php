@@ -436,5 +436,15 @@ class Tools {
 			}
 			return $files;
 		}
+		
+	public static function path2array($path) {
+		$parts = explode('/', $path);
+
+		$arr = [];
+		while ($bottom = array_pop($parts)) {
+			$arr = [$bottom => $arr];
+		}
+		return $arr;
+	}
 
 }
