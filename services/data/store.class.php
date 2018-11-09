@@ -73,7 +73,7 @@ class store {
 		$this->saveUpdates();
 	}
 	
-	public function saveNew() {
+	public function saveNew() {	
 		foreach ($this->new as $id) {
 			
 			$this->writer->create($this->data[$id],$id);
