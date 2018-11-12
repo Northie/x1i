@@ -2,13 +2,11 @@
 
 namespace flow\controllers;
 
-class FrontController {
+class CliController {
 	
 	use \Plugins\helper;
 
 	const CONTEXT_TYPE_FOLDER = 1;
-	const CONTEXT_TYPE_DOMAIN = 2;
-	const CONTEXT_TYPE_SUBDOMAIN = 4;
 
 	public $filters = ['dispatch', 'action'];
 	public $request;
@@ -16,7 +14,7 @@ class FrontController {
 	public $filterList;
 
 	public function __construct($settings) {
-		$this->setContextType($settings['contexts']['type']);
+		$this->setContextType(self::CONTEXT_TYPE_FOLDER);
 		
 		$this->setContexts($settings['contexts']['names']);
 		
@@ -28,12 +26,12 @@ class FrontController {
 		$this->response = new \flow\Response;
 		
 		\settings\registry::Load()->set('FrontController',$this);
-		\settings\registry::Load()->set('ControllerType','WEB');
+		\settings\registry::Load()->set('ControllerType','CLI');
 	}
 
 	public function setContexts($contexts = false, $default = false, $active = false) {
 
-		$this->before('FrontControllerSetContexts', $this);
+		$this->before('CliControllerSetContexts', $this);
 		
 		$contexts = $contexts ? $contexts : ['default'];
 
@@ -53,7 +51,7 @@ class FrontController {
 		if ($active && $this->contexts[$active]) {
 			$this->activeContext = $active;
 		}
-		$this->after('FrontControllerSetContexts', $this);
+		$this->after('CliControllerSetContexts', $this);
 	}
 
 	public function setContextType($type) {
@@ -71,7 +69,7 @@ class FrontController {
 	//called by the app's html/index.php 
 	public final function Init() {
 		
-		$this->before('FrontControllerInit', $this);
+		$this->before('CliControllerInit', $this);
 		
 		$aCmds = preg_split("/\/|\\\/",str_replace($this->basePath,"",$this->request->REQUEST_URI));		
 		
@@ -122,7 +120,7 @@ class FrontController {
 		
 		$this->notify('requestNormalised');
  
-		$this->after('FrontControllerInit', $this);
+		$this->after('CliControllerInit', $this);
 				
 	}
 
@@ -174,12 +172,12 @@ class FrontController {
 		
 		$endPointClass = $this->makeEndpointClassString('endpoints',$context,$endpoint);
 		
-		$this->before('FrontControllerCreateEndpoint', $this,['context'=>$context,'endpoint'=>$endpoint]);
+		$this->before('CliControllerCreateEndpoint', $this,['context'=>$context,'endpoint'=>$endpoint]);
 		
 		$this->endpoint = \endpoints\factory::Build($endPointClass, $this->request, $this->response, $this->filters);
 		$this->request->setEndpoint($this->endpoint);
 		
-		$this->after('FrontControllerCreateEndpoint', $this);
+		$this->after('CliControllerCreateEndpoint', $this);
 		
 	}
 	
@@ -209,12 +207,12 @@ class FrontController {
 
 		$endPointClass = $this->makeEndpointClassString('endpoints\\'.$ns,$context,$endpoint);
 		
-		$this->before('FrontControllerCreateModuleEndpoint', $this, ['module'=>$module,'ns'=> $ns,'context'=>$context,'endpoint'=>$endpoint]);
+		$this->before('CliControllerCreateModuleEndpoint', $this, ['module'=>$module,'ns'=> $ns,'context'=>$context,'endpoint'=>$endpoint]);
 		
 		$this->endpoint = \endpoints\factory::Build($endPointClass, $this->request, $this->response, $this->filters);
 		$this->request->setEndpoint($this->endpoint);
 		
-		$this->after('FrontControllerCreateModuleEndpoint', $this);
+		$this->after('CliControllerCreateModuleEndpoint', $this);
 		
 	}
 	
