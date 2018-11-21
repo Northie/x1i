@@ -144,26 +144,31 @@ class FrontController {
 			$this->createEndpoint($request['context'],$request['endpoint']);
 		}
 		
-		$this->filters = $this->endpoint->getNamedFilterList();
-		$this->filterList = \libs\DoublyLinkedList\factory::Build();
-
-		foreach ($this->filters as $f) {
-				$_f = '\\flow\\filters\\' . $f . 'Filter';
-				
-				$filterOptions = $this->endpoint->getFilterOptions($f);
-				
-				$filter = new $_f($this->filterList, $this->request, $this->response);
-				$filter->setOptions($filterOptions);
-				$this->filterList->push($f, $filter);
-				
-				$filter->init();
-				
-		}
+		if($this->endpoint) {
 		
-		$start = $this->filterList->getFirstNode(true);
-		$this->before('FilterListStart', $this);
-		$start->in();
-		$this->after('FilterListStart', $this);
+			$this->filters = $this->endpoint->getNamedFilterList();
+			$this->filterList = \libs\DoublyLinkedList\factory::Build();
+
+			foreach ($this->filters as $f) {
+					$_f = '\\flow\\filters\\' . $f . 'Filter';
+
+					$filterOptions = $this->endpoint->getFilterOptions($f);
+
+					$filter = new $_f($this->filterList, $this->request, $this->response);
+					$filter->setOptions($filterOptions);
+					$this->filterList->push($f, $filter);
+
+					$filter->init();
+
+			}
+
+			$start = $this->filterList->getFirstNode(true);
+			$this->before('FilterListStart', $this);
+			$start->in();
+			$this->after('FilterListStart', $this);
+		} else {
+			$this->response->respond(["HTTP/1.1 404 Not Found"]);
+		}
 	}
 
 	public function createEndpoint($context,$endpoint) {
