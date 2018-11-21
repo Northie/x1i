@@ -4,9 +4,11 @@ namespace services\data\cache\vendor\file;
 
 class adapter extends \services\data\adapter {
 
+	use \services\data\cache\cache;
+	
 	private $path;
 	private $dir = 'cache';
-	private $prefix = 'Z4-cache-';
+	private $prefix = 'X1-cache-';
 	private $suffix = '.json';
 	
 	
@@ -29,12 +31,12 @@ class adapter extends \services\data\adapter {
 				],JSON_PRETTY_PRINT);
 				
 				//file put contents
-		return $this->adapter->create($data, $key);
+		return $this->adapter->create($data, $this->prefix.$key.$this->suffix);
 	}
 
 	public function read($key) {
 
-		$json = $this->adapter->read($key);
+		$json = $this->adapter->read($this->prefix.$key.$this->suffix);
 		//file get contents
 				
 		$data = json_decode($json,1);
@@ -85,13 +87,6 @@ class adapter extends \services\data\adapter {
 		return $exists;
 	}
 
-	private function getLifetime() {
-		if(($cacheLifetime = \settings\general::Load()->get(['CACHE_LIFETIME']))) {
-			return $cacheLifetime;
-		}
-		return 3600;
-	}
-	
 	public function query($query, $parameters = false) {
 		return false;
 	}

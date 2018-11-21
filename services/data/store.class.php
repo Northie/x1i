@@ -134,7 +134,7 @@ class store {
 		
 		foreach($structure as $field => $properties) {
 			if(!$data[$field] && $properties[2]) {
-				$data[$field] = \call_user_func($properties[2]);
+				$data[$field] = \call_user_func_array($properties[2],[$data]);
 			}
 			
 			$item[$field] = $data[$field];

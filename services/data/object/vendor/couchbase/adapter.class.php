@@ -41,8 +41,15 @@ class adapter extends \services\data\adapter {
 	public function create($data, $id = false) {
 			
 		$key = $id;
-			
-		return $this->couchbase->upsert($key, $data);
+
+		try {
+			$rs = $this->couchbase->upsert($key, $data);
+		} catch (\Exception $e) {
+			$rs = false;
+		} finally {
+			return $rs;
+		}
+		
 	}
 
 	public function readType($type) {

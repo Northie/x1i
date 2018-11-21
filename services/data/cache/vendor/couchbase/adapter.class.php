@@ -4,6 +4,8 @@ namespace services\data\cache\vendor\couchbase;
 
 class adapter extends \services\data\adapter {
 
+	use \services\data\cache\cache;
+	
 	private $couchbase;
 	
 	public function __construct($settings) {
@@ -41,8 +43,17 @@ class adapter extends \services\data\adapter {
 					 'meta'=>$meta
 					,'data'=>$data
 				];
-				
-		return $this->couchbase->upsert($key, $data);
+		
+		
+		try {
+			$rs = $this->couchbase->upsert($key, $data);
+		} catch (\Exception $e) {
+			$rs = false;
+		} finally {
+			return $rs;
+		}
+		
+		
 	}
 
 	public function read($key) {
@@ -126,20 +137,13 @@ class adapter extends \services\data\adapter {
 
 		return $exists;
 	}
-
-		private function getLifetime() {
-			if(($cacheLifetime = \settings\general::Load()->get(['CACHE_LIFETIME']))) {
-				return $cacheLifetime;
-			}
-			return 3600;
-		}
 		
-		public function query($query,$parameters=false) {
-			$query = CouchbaseN1qlQuery::fromString($query);
-			if(is_array($parameters)){
-				$query->namedParams($parameters);
-			}
-			$result = $bucket->query($query);
-			return $result;
+	public function query($query,$parameters=false) {
+		$query = CouchbaseN1qlQuery::fromString($query);
+		if(is_array($parameters)){
+			$query->namedParams($parameters);
 		}
+		$result = $bucket->query($query);
+		return $result;
+	}
 }

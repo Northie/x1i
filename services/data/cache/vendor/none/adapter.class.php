@@ -4,6 +4,8 @@ namespace services\data\cache\vendor\none;
 
 class adapter extends \services\data\adapter {
 
+	use \services\data\cache\cache;
+	
 	public function __construct($settings) {
 		
 	}
@@ -23,13 +25,6 @@ class adapter extends \services\data\adapter {
 
 	public function delete($key, $force = false) {
 		return true;
-	}
-
-	private function getLifetime() {
-		if (($cacheLifetime = \settings\general::Load()->get(['CACHE_LIFETIME']))) {
-			return $cacheLifetime;
-		}
-		return 3600;
 	}
 	
 	public function query($query, $parameters = false) {
