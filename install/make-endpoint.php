@@ -36,40 +36,40 @@ if (isset($cmd['module'])) {
 	$find['{{defaultNsComment}}'] = '//';
 	$find['{{module}}'] = $cmd['module'];
 
-	if (!is_dir("app/modules/$module/contexts/$context")) {
-		@mkdir("app/modules/$module/contexts/$context/");
-		chmod("app/modules/$module/contexts/$context/",0777);
+	if (!is_dir("server/modules/$module/contexts/$context")) {
+		@mkdir("server/modules/$module/contexts/$context/");
+		chmod("server/modules/$module/contexts/$context/",0777);
 		
-		@mkdir("app/modules/$module/contexts/$context/endpoints");
-		@mkdir("app/modules/$module/contexts/$context/views");
-		@mkdir("app/modules/$module/contexts/$context/templates");
+		@mkdir("server/modules/$module/contexts/$context/endpoints");
+		@mkdir("server/modules/$module/contexts/$context/views");
+		@mkdir("server/modules/$module/contexts/$context/templates");
 	}
 	
-	@mkdir("app/modules/$module/contexts/$context/templates/$name");
+	@mkdir("server/modules/$module/contexts/$context/templates/$name");
 
 
 
-	$targetEpPath = "app/modules/$module/contexts/$context/endpoints/$name.class.php";
-	$targetVPath = "app/modules/$module/contexts/$context/views/$name.php";
-	$targetTPath = "app/modules/$module/contexts/$context/templates/$name/index.phtml";
+	$targetEpPath = "server/modules/$module/contexts/$context/endpoints/$name.class.php";
+	$targetVPath = "server/modules/$module/contexts/$context/views/$name.php";
+	$targetTPath = "server/modules/$module/contexts/$context/templates/$name/index.phtml";
 } else {
 	$find['{{moduleNsComment}}'] = '//';
 	$find['{{defaultNsComment}}'] = '';
 	$find['{{module}}'] = '';
 
-	if (!is_dir("app/contexts/$context")) {
-		@mkdir("app/contexts/$context/");
-		chmod("app/contexts/$context/",0777);
-		@mkdir("app/contexts/$context/endpoints");
-		@mkdir("app/contexts/$context/views");
-		@mkdir("app/contexts/$context/templates");
+	if (!is_dir("server/contexts/$context")) {
+		@mkdir("server/contexts/$context/");
+		chmod("server/contexts/$context/",0777);
+		@mkdir("server/contexts/$context/endpoints");
+		@mkdir("server/contexts/$context/views");
+		@mkdir("server/contexts/$context/templates");
 	}
 	
-	@mkdir("app/contexts/$context/templates/$name");
+	@mkdir("server/contexts/$context/templates/$name");
 
-	$targetEpPath = "app/contexts/$context/endpoints/$name.class.php";
-	$targetVPath = "app/contexts/$context/views/$name.php";
-	$targetTPath = "app/contexts/$context/templates/$name/index.phtml";
+	$targetEpPath = "server/contexts/$context/endpoints/$name.class.php";
+	$targetVPath = "server/contexts/$context/views/$name.php";
+	$targetTPath = "server/contexts/$context/templates/$name/index.phtml";
 }
 
 $find['{{name}}'] = $cmd['name'];

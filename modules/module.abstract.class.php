@@ -4,7 +4,12 @@ namespace modules;
 
 abstract class module
 {
-
+//*
+	use \settings\_settings {
+		\settings\_settings::get as getSettings;
+		\settings\_settings::set as setSettings;
+	}
+//*/
 	protected $contexts;
 
 	public final function __construct()

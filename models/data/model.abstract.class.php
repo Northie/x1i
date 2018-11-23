@@ -12,7 +12,16 @@ abstract class model {
     public function __construct() {
 
         $r = new \ReflectionObject($this);
-        self::$type = trim(str_replace($r->getNamespaceName(), "", $r->getName()), "\\/");
+		
+		$type = trim(str_replace($r->getNamespaceName(), "", $r->getName()), "\\/");
+		
+		if(strpos($r->getNamespaceName(),'modules') > -1) {
+			$ns = explode('\\',$r->getNamespaceName());
+			$module = \array_pop($ns);
+			$type = $module."_".$type;
+		}
+
+		self::$type = $type;
 		
 		$this->getExtensions($r);
     }

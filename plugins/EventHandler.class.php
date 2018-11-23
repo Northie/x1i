@@ -31,8 +31,8 @@ class EventManager {
 		foreach ($plugin_paths as $plugin_path => $yes) {
 
 			$files = scandir($plugin_path);  //cache? auto generate? like with class list?
-
-			for ($i = 0; $i < count($files); $i++) {
+			$cf = count($files);
+			for ($i = 0; $i < $cf; $i++) {
 				if (strpos($files[$i], ".plugin.class.php") > -1) {
 					//require_once($plugin_path .'/'. $files[$i]);
 					$plugins[] = str_replace(".plugin.class.php", "", $files[$i]);
@@ -49,6 +49,11 @@ class EventManager {
 		self::$use_plugins = true;
 	}
 
+	/**
+	 * 
+	 * @return \Plugins\EventManager
+	 */
+	
 	public static function Load() {
 		if (!isset(self::$instance)) {
 			$c = __CLASS__;
@@ -66,11 +71,13 @@ class EventManager {
 
 		$this->events[$event] ++;
 
-		if (!self::$use_plugins) {
+		if (!self::$use_plugins || !\is_array($this->handlers[$event])) {
 			return true;
 		}
-
-		for ($i = 0; $i < count($this->handlers[$event]); $i++) {
+		/*
+		$ch = count($this->handlers[$event]);
+		
+		for ($i = 0; $i < $ch; $i++) {
 			$tmp = new $this->handlers[$event][$i];
 			$this->triggered[$when][] = $this->handlers[$event][$i];
 			set_time_limit(30); //update with settings default???
@@ -80,7 +87,18 @@ class EventManager {
 				return false;
 			}
 		}
-
+		//*/
+		foreach($this->handlers[$event] as $handler) {
+			$tmp = new $handler;
+			$this->triggered[$when][] = $handler;
+			set_time_limit(30); //update with settings default???
+			$o = $tmp->Initiate($obj, $options, $event);
+			set_time_limit(30); //update with settings default???
+			if (!$o) {
+				return false;
+			}
+		}
+		
 		return true;
 	}
 
