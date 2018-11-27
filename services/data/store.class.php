@@ -10,6 +10,7 @@ class store {
 	private $data;
 	private $new = [];
 	private $updates = [];
+	private $deletes = [];
 
 	public function __construct($model) {
 		$this->setModel($model);
@@ -23,7 +24,23 @@ class store {
 
 	public function load($id=null) {
 		if($id) {
-			$this->data[$id] = $this->reader->read($id);
+			$data = $this->reader->read($id);
+
+			
+			if($this->model::$type == $data['type']) {
+				$this->data[$id] = $data;
+			} else {
+				
+				$frontController = \settings\registry::Load()->get('FrontController');
+				$frontController->response->respond(["HTTP/1,1 404 Not Found"]);
+				
+				if(!$data) {
+					throw new \Exception('Resource not found');
+				} else {
+					throw new \Exception('Resoure ID and Type Mis Match. Resource should be of type '.$this->model::$type.', identifer returns type of '.$data['type']);
+				}
+
+			}
 		} else {
 			if(!$this->data) {
 				//if no data, get all, no looping
@@ -51,8 +68,18 @@ class store {
 	}
 	
 	public function updateItem($item) {
-		$this->data[$item[$this->model->idParam]] = $this->integrate($item);
+		$this->data[$item[$this->model->idParam]] = $this->integrate($item,$this->data[$item[$this->model->idParam]]);
+		
 		$this->updates[] = $item[$this->model->idParam];
+
+		return $this;
+	}
+	
+	public function destroyItem($item) {
+		$id = $item[$this->model->idParam];
+		unset($this->data[$item[$this->model->idParam]]);
+		$this->deletes[] = $id;
+		return $this;
 	}
 
 	public function getAll($generate=false) {
@@ -71,21 +98,52 @@ class store {
 	public function saveAll() {
 		$this->saveNew();
 		$this->saveUpdates();
+		$this->commitDeletes();
 	}
 	
 	public function saveNew() {	
-		foreach ($this->new as $id) {
-			
-			$this->writer->create($this->data[$id],$id);
+		
+		$errors = 0;
+		try {
+			foreach ($this->new as $id) {
+				$this->writer->create($this->data[$id],$id);
+				unset($this->new[$id]);
+			}
+		} catch (\Exception $e) {
+			$errors++;
+		} finally {
+			return !$errors;
 		}
 	}
 	
 	public function saveUpdates() {
-		foreach ($this->updates as $id) {
-			$this->writer->update($id,$this->data[$id]);
-		}		
+		$errors = 0;
+		try {
+			foreach ($this->updates as $id) {				
+				$this->writer->update($this->data[$id],$id);
+				unset($this->updates[$id]);
+			}
+		} catch (\Exception $e) {
+			$errors++;
+		} finally {
+			return !$errors;
+		}
 	}
 	
+	public function commitDeletes() {
+		$errors = 0;
+		try {
+			foreach ($this->deletes as $id) {				
+				$this->writer->delete($id,true);
+				unset($this->deletes[$id]);
+			}
+		} catch (\Exception $e) {
+			$errors++;
+		} finally {
+			return !$errors;
+		}
+	}
+
 	public function sync() {
 		$this->saveAll();
 		$this->load();
@@ -126,28 +184,30 @@ class store {
 		return $this->reader;
 	}
 
-	public function integrate($data) {
-		
+	public function integrate($src,$dest=[]) {
+
 		$structure = $this->model->getStructure();
-		
-		$item = [];
-		
+				
 		foreach($structure as $field => $properties) {
-			if(!$data[$field] && $properties[2]) {
-				$data[$field] = \call_user_func_array($properties[2],[$data]);
+			if(!$src[$field] && $properties[2]) {
+				$dest[$field] = \call_user_func_array($properties[2],[$src]);
 			}
-			
-			$item[$field] = $data[$field];
-			unset($data[$field]);
+			if(isset($src[$field])) {
+				$dest[$field] = $src[$field];
+			} else {
+				if(!$dest[$field]) {
+					$dest[$field] = $properties[3] ? $properties[3] : null;
+				}
+			}
+			unset($src[$field]);
 		}
 		
-		foreach($data as $key => $val) {
-			$item['additional'][$key] = $val;
-		}
-		
+		foreach($src as $key => $val) {
+			$dest['additional'][$key] = $val;
+		}		
 		//recurse through data, put matching keys from model structire into item data and any other values in an attributes array??
 		
-		return $item;
+		return $dest;
 	}
 	
 }
