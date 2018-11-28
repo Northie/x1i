@@ -56,12 +56,18 @@ class store {
 	}
 
 	public function addItem($item) {
-
+	
 		$item = $this->integrate($item);
 		
+		if(is_a($this->data,'generator')) {
+			$this->data = [];
+			foreach ($this->reader->readType($this->model::$type) as $id => $row) {
+				$this->data[$id] = $row;
+			}
+		}
+		
 		$this->data[$item[$this->model->idParam]] = $item;
-		
-		
+
 		$this->new[] = $item[$this->model->idParam];
 		
 		return $this;
