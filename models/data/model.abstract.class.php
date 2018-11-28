@@ -4,15 +4,17 @@ namespace models\data;
 abstract class model {
 
     public $id = '';
-    public static $type = '';
+    //public static $type = '';
     public $structure = [];
 	public $idParam = 'id';
 	protected $store;
 
     public function __construct() {
 
-        $r = new \ReflectionObject($this);
 		
+        $r = new \ReflectionObject($this);
+		$this->getExtensions($r);
+		/*
 		$type = trim(str_replace($r->getNamespaceName(), "", $r->getName()), "\\/");
 		
 		if(strpos($r->getNamespaceName(),'modules') > -1) {
@@ -22,10 +24,25 @@ abstract class model {
 		}
 
 		self::$type = $type;
+		//*/
 		
 		$this->getExtensions($r);
     }
 	
+	public function getType() {
+		$cls = get_called_class();
+		$parts = explode("\\",$cls);
+		
+		$type = array_pop($parts);
+		
+		if($parts[1] == 'modules') {
+			$type = $parts[2]."_".$type;
+		}
+		
+		return $type;
+	}
+
+
 	/**
 	 * 
 	 * @param \services\data\store $store

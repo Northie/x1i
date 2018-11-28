@@ -27,7 +27,7 @@ class store {
 			$data = $this->reader->read($id);
 
 			
-			if($this->model::$type == $data['type']) {
+			if($this->model->getType() == $data['type']) {
 				$this->data[$id] = $data;
 			} else {
 				
@@ -37,17 +37,17 @@ class store {
 				if(!$data) {
 					throw new \Exception('Resource not found');
 				} else {
-					throw new \Exception('Resoure ID and Type Mis Match. Resource should be of type '.$this->model::$type.', identifer returns type of '.$data['type']);
+					throw new \Exception('Resoure ID and Type Mis Match. Resource should be of type '.$this->model->getType().', identifer returns type of '.$data['type']);
 				}
 
 			}
 		} else {
 			if(!$this->data) {
 				//if no data, get all, no looping
-				$this->data = $this->reader->readType($this->model::$type);
+				$this->data = $this->reader->readType($this->model->getType());
 			} else {
 				//if data, loop to append
-				foreach ($this->reader->readType($this->model::$type) as $id => $row) {
+				foreach ($this->reader->readType($this->model->getType()) as $id => $row) {
 					$this->data[$id] = $row;
 				}
 			}
@@ -55,13 +55,13 @@ class store {
 		return $this;
 	}
 
-	public function addItem($item) {
-	
+	public function addItem($item) {		
+		
 		$item = $this->integrate($item);
 		
 		if(is_a($this->data,'generator')) {
 			$this->data = [];
-			foreach ($this->reader->readType($this->model::$type) as $id => $row) {
+			foreach ($this->reader->readType($this->model->getType()) as $id => $row) {
 				$this->data[$id] = $row;
 			}
 		}
@@ -193,7 +193,9 @@ class store {
 	public function integrate($src,$dest=[]) {
 
 		$structure = $this->model->getStructure();
-				
+		
+		$src['type'] = $src['type'] ? $src['type'] : $this->model->getType();
+		
 		foreach($structure as $field => $properties) {
 			if(!$src[$field] && $properties[2]) {
 				$dest[$field] = \call_user_func_array($properties[2],[$src]);
