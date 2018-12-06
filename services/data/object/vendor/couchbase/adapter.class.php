@@ -53,7 +53,7 @@ class adapter extends \services\data\adapter {
 	}
 
 	public function readType($type) {
-		$items = $this->query('SELECT * from '.$this->bucket.' where type = $type',['type'=>$type]);
+		$items = $this->query('SELECT * from '.$this->bucket.' where `type` = $type',['type'=>$type]);
 		foreach($items->rows as $row) {
 			yield \utils\Tools::object2array($row->{$this->bucket});
 		}
