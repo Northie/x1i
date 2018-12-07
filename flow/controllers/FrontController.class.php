@@ -126,8 +126,7 @@ class FrontController {
 				
 	}
 
-	public function Execute() {
-		
+	public function makeEndpoint() {
 		$request = $this->request->getNormalisedRequest();
 		
 		if($this->moduleExists($request['module'])) {
@@ -143,6 +142,11 @@ class FrontController {
 		} else {
 			$this->createEndpoint($request['context'],$request['endpoint']);
 		}
+	}
+	
+	public function Execute() {
+		
+		$this->makeEndpoint();
 		
 		if($this->endpoint) {
 		

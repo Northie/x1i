@@ -446,5 +446,29 @@ class Tools {
 		}
 		return $arr;
 	}
+	
+	public static function API($method,$endpoint) {
+		
+		$fc = \settings\registry::Load()->get('FrontController');
+		
+		$req = $fc->request;
+		
+		$newController = clone $fc;
+		$newRequest = clone($req);
+		
+		$newRequest->REQUEST_METHOD = $method;
+		$newRequest->REQUEST_URI = $endpoint;
+		
+		$newController->request = $newRequest;
+		
+		$newController->init();
+		$newController->makeEndpoint();
+		if($newController->endpoint) {
+			$newController->endpoint->Execute();
+			return $newController->endpoint->getData();
+		}
+		
+		return [];
+	}
 
 }
