@@ -26,8 +26,8 @@ class store {
 		if($id) {
 			$data = $this->reader->read($id);
 
-			
 			if($this->model->getType() == $data['type']) {
+				$this->id = $id;
 				$this->data[$id] = $data;
 			} else {
 				
@@ -155,10 +155,12 @@ class store {
 		$this->load();
 	}
 	
-	public function getOne($id) {
-		$model = \modelFactory::Build(\get_class($this->model));
-		$model->setData($this->data[$id]);
-		return $model;
+	public function getOne($id=false) {
+		$id = $id ? $id : $this->id;
+		if(!$id) {
+			throw new \Exception('No resource ID supplied');
+		}
+		return $this->data[$id];
 	}
 
 	public function getModel() {
@@ -198,7 +200,7 @@ class store {
 		
 		foreach($structure as $field => $properties) {
 			if(!$src[$field] && $properties[2]) {
-				$dest[$field] = \call_user_func_array($properties[2],[$src]);
+				$dest[$field] = isset($dest[$field]) ? $dest[$field] : \call_user_func_array($properties[2],[$src]);
 			}
 			if(isset($src[$field])) {
 				$dest[$field] = $src[$field];

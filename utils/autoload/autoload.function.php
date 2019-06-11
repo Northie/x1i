@@ -40,7 +40,7 @@ function xeneco_autoloader($cls) {
 			\settings\fileList::Load()->includeFileList();
 
 			$file = \settings\fileList::Load()->getFileForClass($cls);
-
+			
 			if ($file != '') {
 				//include the file
 				require_once($file);

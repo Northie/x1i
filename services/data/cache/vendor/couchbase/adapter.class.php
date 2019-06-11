@@ -17,11 +17,15 @@ class adapter extends \services\data\adapter {
 			$password   = $settings['pass'];
 			$bucket	 	= $settings['name'];
 			
-			//$this->couchbase = new \Couchbase($host.":".$port,$user,$password,$bucket);
+			$authenticator = new \Couchbase\PasswordAuthenticator();
+			$authenticator->username($user)->password($password);
+
+			$cluster = new \Couchbase\Cluster('couchbase://'.$host);
+			$cluster->authenticate($authenticator);
 			
-			$cluster = new \CouchbaseCluster("couchbase://".$host);
-			$this->couchbase = $cluster->openBucket($bucket,$password);
-						
+			//$cluster = new \CouchbaseCluster("couchbase://".$host."/".$user);
+			$this->couchbase = $cluster->openBucket($bucket);
+			
 		} else {
 			throw new \services\data\cacheException('Couchbase not enabled');
 		}

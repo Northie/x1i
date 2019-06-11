@@ -22,7 +22,7 @@ class adapter extends \services\data\adapter {
 			
 			$values = [];
 			foreach($args as $key => $val) {
-				$values[] = "$key = :$key";
+				$values[] = ":$key";
 			}
 			
 			$fields = '`'.implode("`, `",array_keys($args)).'`';
@@ -36,7 +36,7 @@ class adapter extends \services\data\adapter {
 					)
 				;
 			";
-
+                        
 			$this->query($sql,$args);
 	}
 

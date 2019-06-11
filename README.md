@@ -10,9 +10,9 @@
 
 The paradigm for xeneco is not not to be all things to all people, nor does the framework insist that you work in a certain way, nor does it assume that is the only framework in play.
 
-Instead, Xenco allows for a light weight way to route a request to an endpoint and respond; "Route-Endpoint-Respond"
+Instead, Xeneco allows for a light weight way to route a request to an endpoint and respond; "Route-Endpoint-Respond"
 
-If you apprach Xenco from an MVC background or point of view then the "Endpoints" with Xeneco map nicely to the controllers in MVC. In Xeneco Views and Models are optional, treated almost like libraries you would implement yourself.
+If you apprach Xeneco from an MVC background or point of view then the "Endpoints" with Xeneco map nicely to the controllers in MVC. In Xeneco Views and Models are optional, treated almost like libraries you would implement yourself.
 
 ### No Models? No Views?
 

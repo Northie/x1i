@@ -3,9 +3,10 @@ namespace state;
 
 class manager {
 	
+	const INIT = 0;
 	const START = 1;
 	const IN_PROGRESS = 2;
-	const COMPLETE = 2;
+	const COMPLETE = 4;
 	
 	private static $instance;
 

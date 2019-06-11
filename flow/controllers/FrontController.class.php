@@ -14,8 +14,10 @@ class FrontController {
 	public $request;
 	public $response;
 	public $filterList;
+	public $endpoint = false;
 
 	public function __construct($settings) {
+		
 		$this->setContextType($settings['contexts']['type']);
 		
 		$this->setContexts($settings['contexts']['names']);
@@ -32,7 +34,7 @@ class FrontController {
 	}
 
 	public function setContexts($contexts = false, $default = false, $active = false) {
-
+		
 		$this->before('FrontControllerSetContexts', $this);
 		
 		$contexts = $contexts ? $contexts : ['default'];
@@ -83,6 +85,7 @@ class FrontController {
 			}
 		}
 		
+		
 		switch($this->contextType) {
 			case (self::CONTEXT_TYPE_FOLDER):
 				if ($this->contexts[$cmds[0]]) {
@@ -126,8 +129,10 @@ class FrontController {
 				
 	}
 
-	public function makeEndpoint() {
-		$request = $this->request->getNormalisedRequest();
+	public function makeEndpoint($request = false) {
+		if(!$request) {
+			$request = $this->request->getNormalisedRequest();
+		}
 		
 		if($this->moduleExists($request['module'])) {
 			

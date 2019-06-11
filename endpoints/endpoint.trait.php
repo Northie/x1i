@@ -90,5 +90,15 @@ trait endpointHelper {
 	public function addData($key,$value) {
 		$this->data[$key] = $value;
 	}
+	
+	public function isModule() {
+		$r = new \ReflectionObject($this);
+		var_dump($r->getNamespaceName());
+	}
+	
+	public function getModule() {
+		$r = new \ReflectionObject($this);
+		var_dump($r->getNamespaceName());
+	}
 
 }

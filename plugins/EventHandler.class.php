@@ -21,6 +21,9 @@ class EventManager {
 		$modulePath = realpath(\X1_APP_PATH . "/modules");
 
 		$modules = scandir($modulePath);
+                
+                $plugins = [];
+                
 		foreach ($modules as $module) {
 			$path = realpath($modulePath . "/" . $module . "/plugins");
 			if (file_exists($path)) {

@@ -130,6 +130,8 @@ class fileFinder {
 
 		$a = token_get_all($c);
 
+                $namespaces = $classes = $interfaces = $traits = $plugins = [];
+                
 		for ($i = 0; $i < count($a); $i++) {
 			
 			//echo "==<pre>\n".$a[$i][0]."\n".$a[$i][1]."\n</pre>==<br />\n";
