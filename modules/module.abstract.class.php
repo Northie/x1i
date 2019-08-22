@@ -17,7 +17,7 @@ abstract class module
 		
 		$class = get_called_class();
 		$moduleFile = \settings\fileList::Load()->getFileForClass($class);
-	   
+
 		$cacheKey = "context-module-endpoint--".str_replace('\\','-',$class);
 		
 		$cache = \settings\registry::Load()->get('APP_CACHE');
@@ -25,10 +25,15 @@ abstract class module
 		$contexts = $cache->read($cacheKey);
 		
 		$this->contextDir = realpath(dirname($moduleFile) . DIRECTORY_SEPARATOR . 'contexts');
+		
+		if(!$this->contextDir) {
+			return;
+		}
 
 		if ($contexts) {
 			$this->contexts = $contexts;
 		} else {
+
 			$files = \utils\Tools::scanDirRecursive($this->contextDir);
 			
 			foreach ($files as $file) {
