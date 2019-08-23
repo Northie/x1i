@@ -471,4 +471,26 @@ class Tools {
 		return [];
 	}
 
+	/**
+	 * @desc build up an array from a string path (eg url)
+	 * [], store/widgets/blue, '1' becomes ['store'=>['widgets'=>['blue'=>1]]]
+	 * @param $target array passed by reference. This array will get the value inserted at the key path from $path
+	 * @param $path array|string the path in the $target array to make/modify with $value
+	 * @param $value mixed the value to upsert in $target at $path
+	 * @param $delimiter string default / delimiter to split $path on when $path is a string
+	 */
+
+	public static function setArrayPathValue(&$target,$path,$value,$delimter='/') {
+		if(!\is_array($path)) {
+			$path = explode($delimter,$path);
+		}
+
+		$ref = &$target;
+
+		foreach($path as $step) {
+			$ref = &$ref[$step];
+		}
+		$ref = $value;
+	}
+
 }
