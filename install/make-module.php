@@ -22,7 +22,7 @@ $dirs = [
 	"$name/settings",
 ];
 
-\define('X1_APP_PATH', getcwd()."/server");
+\define('X1_APP_PATH', getcwd()."/app");
 
 foreach($dirs as $dir) {
 	$fullPaths[] = X1_APP_PATH."/modules/".$dir;
