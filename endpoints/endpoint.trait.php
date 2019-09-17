@@ -4,21 +4,24 @@ namespace endpoints;
 trait endpointHelper {
 	protected $data = [];
 	protected $appliedFilters = [];
+	protected $executable = [];
 	
 	public function Init($request,$response,$filters) {
 		$this->request = $request;
 		$this->response = $response;
 		$this->filters = $filters;
-				
-				$nr = $request->getNormalisedRequest();
-				
-				$this->modelName = '';
-				
-				if($nr['module']) {
-					$this->modelName.=$nr['module']."_";
-				}
-				
-				$this->modelName.=$nr['endpoint'];
+		
+		$this->setExecutable($this,'Execute');
+
+		$nr = $request->getNormalisedRequest();
+		
+		$this->modelName = '';
+		
+		if($nr['module']) {
+			$this->modelName.=$nr['module']."_";
+		}
+		
+		$this->modelName.=$nr['endpoint'];
 				
 	}
 		
@@ -99,6 +102,14 @@ trait endpointHelper {
 	public function getModule() {
 		$r = new \ReflectionObject($this);
 		var_dump($r->getNamespaceName());
+	}
+
+	public function getExecutable() {
+		return $this->executable;
+	}
+
+	public function setExecutable($object,$method) {
+		$this->executable = [$object,$method];
 	}
 
 }

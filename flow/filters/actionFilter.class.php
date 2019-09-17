@@ -7,7 +7,14 @@ class actionFilter {
 
 	public function in() {
 
-		$this->request->getEndpoint()->Execute();
+		///*
+		
+		list($object,$method) = $this->request->getEndpoint()->getExecutable(); //usually defined as [$this,'Execute']
+		$object->{$method}();
+
+		//*/
+
+		//$this->request->getEndpoint()->Execute();
 
 		$this->FFW();
 	}

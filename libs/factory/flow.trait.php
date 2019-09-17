@@ -4,6 +4,8 @@ namespace libs\factory;
 
 trait flow {
 
+	use \Plugins\helper;
+
 	private $currentNode;
 	private $list;
 	private $parent;
@@ -38,13 +40,18 @@ trait flow {
 	public function FFW() {
 
 		if (connection_aborted()) {
+			$this->before('factoryStepUnBuild',$this);
 			$step = $this->unbuild();
+			$this->after('factoryStepUnBuild',$step);
 		} else {
 
 			$step = $this->getNext();
 
 			if ($step) {
+				$this->before('factoryStepBuild',$step);
 				$step->build();
+				$this->after('factoryStepBuild',$step);
+
 			}
 		}
 	}
