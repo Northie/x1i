@@ -133,7 +133,7 @@ class FrontController {
 		if(!$request) {
 			$request = $this->request->getNormalisedRequest();
 		}
-		
+
 		if($this->moduleExists($request['module'])) {
 			
 			$module = \modules\factory::Build($request['module']);
@@ -208,7 +208,7 @@ class FrontController {
 		} else {
 			$this->notify('routeNotMatched');
 		}
-		
+
 		return $endPointClass;
 		
 	}

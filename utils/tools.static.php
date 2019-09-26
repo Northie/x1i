@@ -376,6 +376,29 @@ class Tools {
 			return $return;
 		}
 		
+		public static function coalesceFalsy() {
+			//get a list of values to test on
+			$args = func_get_args();
+			
+			//if an array of values has been sent instead
+			if(count($args) == 1 && is_array($args[0])) {
+				$args = $args[0];
+			}
+			
+			$return = null;
+			
+			foreach($args as $arg) {
+				if(!$arg) {
+					continue;
+				}
+				if(!is_null($arg) && trim($arg) != '') {
+					$return = $arg;
+					break;
+				}
+			}
+			
+			return $return;
+		}
 
 		/**
 		 * @desc take a 2D assoc array containing IDs (specified by key, $idKey) and parent Ids (specified by $parentKey) and return a nested structure

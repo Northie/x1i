@@ -72,7 +72,8 @@ class EventManager {
 
 	public function ObserveEvent($event, $obj, $options = false) {
 
-		$this->events[$event] ++;
+		//$this->events[$event] ++;
+		@$this->events[(microtime(true) * 1000000)] = [$event,get_class($obj),$options];
 
 		if (!self::$use_plugins || !\is_array($this->handlers[$event])) {
 			return true;
@@ -93,7 +94,7 @@ class EventManager {
 		//*/
 		foreach($this->handlers[$event] as $handler) {
 			$tmp = new $handler;
-			$this->triggered[$when][] = $handler;
+			$this->triggered[$event][] = $handler;
 			set_time_limit(30); //update with settings default???
 			$o = $tmp->Initiate($obj, $options, $event);
 			set_time_limit(30); //update with settings default???
