@@ -7,7 +7,7 @@ class fileList {
 	use _settings;
 	
 	private $classList = [];
-	 
+	
 	private function __construct() {
 		$this->includeFileList();
 		//$this->parseJsonFileList();
@@ -32,6 +32,10 @@ class fileList {
 	
 	public function getClassForFile($file) {
 		return array_search($file, $this->classList);
+	}
+
+	public function getClassList() {
+		return $this->classList;
 	}
 	
 	 

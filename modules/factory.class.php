@@ -4,7 +4,7 @@ namespace modules;
 
 class factory {
 	public static function Build($sModule) {
-		
+
 		if(($module = \OS\App::Load()->getModule($sModule))) {
 			return $module;
 		}
