@@ -77,7 +77,7 @@ class Tools {
 	}
 
 	public static function camel_to_title($str) {
-		return
+		$basic = 
 			trim(
 			ucwords(
 				strtolower(
@@ -87,6 +87,16 @@ class Tools {
 				)
 			)
 		);
+
+		/**
+		preserve long strings of uppercase
+		eg
+		abcDEF     =>   Abc D E F      =>  Abc DEF
+		abcDEFGhi  =>   Abc D E F Ghi  =>  Abc DEF Ghi
+		//*/
+		return preg_replace_callback("/(([A-Z])\s)(?![A-Z][a-z])/",function($m){return $m[2];},$basic);
+		
+
 	}
 		
 	public static function camel_to_field($str) {		
