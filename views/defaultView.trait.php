@@ -57,20 +57,21 @@ trait view {
 			$path = implode(\DIRECTORY_SEPARATOR, [X1_APP_PATH, 'contexts', $req['context'], 'templates']);
 		}
 
+		$file = $path . \DIRECTORY_SEPARATOR . $partial . ".phtml";
+
 		$eventOptions = [
 			'partial' => $partial,
 			'data' => $data,
 			'default' => $default,
-			'path' => $path
+			'path' => $path,
+			'file' => $file
 		];
 
-		$file = $path . \DIRECTORY_SEPARATOR . $partial . ".phtml";
-
-		\Plugins\EventManager::Load()->ObserveEvent('oneBeforeRenderPartialInclude', $this, $eventOptions);
+		\Plugins\EventManager::Load()->ObserveEvent('onBeforeRenderPartialInclude', $this, $eventOptions);
 
 		$this->includeFile($file,$data);
 
-		\Plugins\EventManager::Load()->ObserveEvent('oneAfterRenderPartialInclude', $this, $eventOptions);
+		\Plugins\EventManager::Load()->ObserveEvent('onAfterRenderPartialInclude', $this, $eventOptions);
 	}
 
 }
