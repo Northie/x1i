@@ -22,6 +22,7 @@ class factory {
 				$a = new adapter($accessor);
 				\settings\registry::Load()->set($id,$a);
 			}
+			\Plugins\EventManager::Load()->ObserveEvent("on".ucfirst(__METHOD__), $a);
 			return $a;
 	}
 

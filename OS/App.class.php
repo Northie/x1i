@@ -42,6 +42,17 @@ class App {
 		\Plugins\EventManager::RegisterHandlers();
 	}
 
+	private function initBridges() {
+		$bridgePath = realpath(\X1_APP_PATH . "/bridges");
+		$bridges = scandir($bridgePath);
+		foreach($bridges as $bridge) {
+			if (strpos($bridge, ".bridge.class.php") > -1) {
+				$bridgeClass = "\\bridges\\".str_replace(".bridge.class.php","",$bridge);
+				$bridgeObject = new $bridgeClass;
+			}
+		}
+	}
+
 	public function addModule($module) {
 		
 		list($a,$b,$c) = explode("\\",get_class($module));

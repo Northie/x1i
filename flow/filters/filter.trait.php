@@ -43,19 +43,23 @@ trait filter {
 
         if ($filter) {
             $r = new \ReflectionObject($filter);
-            $filterName = $r->getName();
-            if (\Plugins\EventManager::Load()->ObserveEvent("onBefore" . $filterName . "In", $filter)) {
-                \settings\registry::Load()->set('ActiveFilter', $filter);
-                $filter->in();
-                \Plugins\EventManager::Load()->ObserveEvent("onAfter" . $filterName . "In", $filter);
+            $filterName = ucfirst($r->getName());
+            if (\Plugins\EventManager::Load()->ObserveEvent("onAround" . $filterName . "In", $filter)) {
+                if (\Plugins\EventManager::Load()->ObserveEvent("onBefore" . $filterName . "In", $filter)) {
+                    \settings\registry::Load()->set('ActiveFilter', $filter);
+                    $filter->in();
+                    \Plugins\EventManager::Load()->ObserveEvent("onAfter" . $filterName . "In", $filter);
+                }
             }
         } else {
             $r = new \ReflectionObject($this);
-            $filterName = $r->getName();
-            if (\Plugins\EventManager::Load()->ObserveEvent("onBefore" . $filterName . "Out", $filter)) {
-                \settings\registry::Load()->set('ActiveFilter', $this);
-                $this->out();
-                \Plugins\EventManager::Load()->ObserveEvent("onAfter" . $filterName . "Out", $filter);
+            $filterName = ucfirst($r->getName());
+            if (\Plugins\EventManager::Load()->ObserveEvent("onAround" . $filterName . "Out", $this)) {
+                if (\Plugins\EventManager::Load()->ObserveEvent("onBefore" . $filterName . "Out", $this)) {
+                    \settings\registry::Load()->set('ActiveFilter', $this);
+                    $this->out();
+                    \Plugins\EventManager::Load()->ObserveEvent("onAfter" . $filterName . "Out", $this);
+                }
             }
         }
     }
@@ -64,11 +68,13 @@ trait filter {
         $filter = $this->getPrev();
         if ($filter) {
             $r = new \ReflectionObject($filter);
-            $filterName = $r->getName();
-            if (\Plugins\EventManager::Load()->ObserveEvent("onBefore" . $filterName . "Out", $filter)) {
-                \settings\registry::Load()->set('ActiveFilter', $filter);
-                $filter->out();
-                \Plugins\EventManager::Load()->ObserveEvent("onAfter" . $filterName . "Out", $filter);
+            $filterName = ucfirst($r->getName());
+            if (\Plugins\EventManager::Load()->ObserveEvent("onAround" . $filterName . "Out", $filter)) {
+                if (\Plugins\EventManager::Load()->ObserveEvent("onBefore" . $filterName . "Out", $filter)) {
+                    \settings\registry::Load()->set('ActiveFilter', $filter);
+                    $filter->out();
+                    \Plugins\EventManager::Load()->ObserveEvent("onAfter" . $filterName . "Out", $filter);
+                }
             }
         }
     }

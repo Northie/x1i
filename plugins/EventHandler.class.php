@@ -22,7 +22,7 @@ class EventManager {
 
 		$modules = scandir($modulePath);
                 
-                $plugins = [];
+		$plugins = [];
                 
 		foreach ($modules as $module) {
 			$path = realpath($modulePath . "/" . $module . "/plugins");
@@ -52,6 +52,7 @@ class EventManager {
 		self::$use_plugins = true;
 	}
 
+
 	/**
 	 * 
 	 * @return \Plugins\EventManager
@@ -72,37 +73,18 @@ class EventManager {
 
 	public function ObserveEvent($event, $obj, $options = false) {
 
-		//$this->events[$event] ++;
-		@$this->events[(microtime(true) * 1000000)] = [$event,get_class($obj),$options];
+		$this->events[] = [(microtime(true) * 1000000) => [$event,get_class($obj),$options]];
 
 		if (!self::$use_plugins || !\is_array($this->handlers[$event])) {
 			return true;
 		}
-		/*
-		$ch = count($this->handlers[$event]);
-		
-		for ($i = 0; $i < $ch; $i++) {
-			$tmp = new $this->handlers[$event][$i];
-			$this->triggered[$when][] = $this->handlers[$event][$i];
-			set_time_limit(30); //update with settings default???
-			$o = $tmp->Initiate($obj, $options, $event);
-			set_time_limit(30); //update with settings default???
-			if (!$o) {
-				return false;
-			}
-		}
-		//*/
+
 		foreach($this->handlers[$event] as $handler) {
-			$tmp = new $handler;
 			$this->triggered[$event][] = $handler;
-			set_time_limit(30); //update with settings default???
-			$o = $tmp->Initiate($obj, $options, $event);
-			set_time_limit(30); //update with settings default???
-			if (!$o) {
+			if(!EventFactory::Build($handler,$obj, $options, $event)) {
 				return false;
 			}
 		}
-		
 		return true;
 	}
 

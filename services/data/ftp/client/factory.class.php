@@ -12,6 +12,8 @@ class factory {
 
 		$o = new adapter($settings);
 
+		\Plugins\EventManager::Load()->ObserveEvent("on".ucfirst(__METHOD__), $o);
+
 		return $o;
 	}
 

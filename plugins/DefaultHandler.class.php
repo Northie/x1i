@@ -7,6 +7,7 @@ abstract class DefaultHandler implements iDefaultHandler {
 	private $admin = false;
 	protected $db = false;
 	protected $setings = array();
+	protected $persist = false;
 
 	public $parent;
 	public $options;
@@ -28,5 +29,9 @@ abstract class DefaultHandler implements iDefaultHandler {
 	public function SetSettings(Settings $s) {
 		$this->settings = $s;
 	}
-}
 
+	public function getPersistence() {
+		return $this->persist;
+	}
+
+}

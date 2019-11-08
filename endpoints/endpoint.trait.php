@@ -96,13 +96,34 @@ trait endpointHelper {
 	
 	public function isModule() {
 		$r = new \ReflectionObject($this);
-		var_dump($r->getNamespaceName());
+		$test = explode("\\",trim($r->getNamespaceName(),"\\"));
+		if($test[1] == 'modules') {
+			$this->moduleName = $test[2];
+			$this->moduleContext = $test[3];
+			$this->module = \settings\registry::Load()->get('modules',$this->moduleName);
+			return true;
+		}
+		return false;
 	}
 	
 	public function getModule() {
-		$r = new \ReflectionObject($this);
-		var_dump($r->getNamespaceName());
+		if($this->isModule()) {
+			return $this->module;
+		}
 	}
+
+	public function getModuleName() {
+		if($this->isModule()) {
+			return $this->moduleName;
+		}
+	}
+
+	public function getModuleSettings() {
+		if($this->isModule()) {
+			return $this->module->settings;
+		}
+		return [];
+	}	
 
 	public function getExecutable() {
 		return $this->executable;

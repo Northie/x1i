@@ -69,13 +69,17 @@ class adapter extends \services\data\adapter {
 			$data = \utils\Tools::object2array($rs->value);
 
 			if(isset($data['meta']['expires']) && $data['meta']['expires'] < time()) {
+				\Plugins\EventManager::Load()->ObserveEvent("onCacheStaleHit", $this,['cache_key'=>$key]);
 				//cleanup
 				$this->delete($key,true);
 				return [];
 			}
-
-			return isset($data['data']) ? $data['data'] : $data;
+			if(isset($data['data'])) {
+				\Plugins\EventManager::Load()->ObserveEvent("onCacheHit", $this,['cache_key'=>$key]);
+				return $data['data'];
+			}
 		} catch (\Exception $e) {
+			\Plugins\EventManager::Load()->ObserveEvent("onCacheMiss", $this,['cache_key'=>$key]);
 			return [];
 		}
 	}
