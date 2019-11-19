@@ -7,8 +7,8 @@ class adapter extends \services\data\adapter {
 	public function __construct($settings = '') {
 		$this->path = rtrim($settings['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
 		if ($settings['namespace']) {
-			$namespace = \utils\Tools::filePathProtect($namespace);
-			$this->path .= '../namespaces/' . $namespace;
+			$namespace = \utils\Tools::filePathProtect($settings['namespace']);
+			$this->path .= DIRECTORY_SEPARATOR.'namespaces' .DIRECTORY_SEPARATOR . $namespace;
 		}
 	}
 
@@ -19,7 +19,7 @@ class adapter extends \services\data\adapter {
 		//	throw new \Exception("Could not create " . __NAMESPACE__ . ": Key exists");
 		//}
 
-		$path = $this->path . $key;
+		$path = $this->path . \DIRECTORY_SEPARATOR . $key;
 
 		return ($this->write($path, $data) ? $key : false);
 	}
@@ -41,7 +41,7 @@ class adapter extends \services\data\adapter {
 		$key = $conditions;
 		if ($this->exists($key)) {
 
-			$path = \utils\Tools::filePathProtect($this->path . $key);
+			$path = \utils\Tools::filePathProtect($this->path . \DIRECTORY_SEPARATOR . $key);
 
 			return ($this->write($path, $data) ? $key : false);
 		} else {
@@ -67,11 +67,41 @@ class adapter extends \services\data\adapter {
 	}
 
 	private function write($path,$data) {
-		return file_put_contents($path, $data);
+
+		if($this->makeDirForFile($path)) {
+			return file_put_contents($path, $data);
+		}
+		return false;
 	}
 
 	public function query($query, $parameters = false) {
 		return false;
+	}
+
+	private function makeDirForFile($path) {
+		$path = \utils\Tools::filePathProtect($path);
+
+		if(is_dir($path)) {
+			if(is_writable($path)){
+				return true;
+			}
+		}
+
+		$path = \explode(\DIRECTORY_SEPARATOR,$path);
+
+		array_pop($path);
+
+		$path = implode(\DIRECTORY_SEPARATOR,$path);
+
+		if(!is_dir($path)) {
+			if(!\mkdir($path, 0777, true)) {
+				throw new \Exception("Failed to make dir ".$path);
+			}
+			return true;
+		} else {
+			return chmod($path, 0777);
+		}
+
 	}
 
 }
