@@ -24,7 +24,7 @@ class CliController {
 		
 		$this->request = new \flow\Request;
 		$this->response = new \flow\Response;
-		
+
 		\settings\registry::Load()->set('FrontController',$this);
 		\settings\registry::Load()->set('ControllerType','CLI');
 	}
