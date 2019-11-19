@@ -526,4 +526,28 @@ class Tools {
 		$ref = $value;
 	}
 
+	/**
+	 * @desc convert a sting or array to nested array, any depth. eg a/b/c becomes $arr['a']['b']['c'] = true;
+	 * @param $path string|array 
+	 */
+
+	public static function arrayFromPath($path,$delimiter='/',$value=true) {
+
+		if(!is_array($path)) {
+			$path = explode($delimiter,$path);
+		}
+
+		$paved = [];
+		$track   = &$paved;
+		foreach ($path as $step) {
+		  if (empty($track[$step])) {
+			$track[$step] = [];
+			$track = &$track[$step];
+		  }
+		}
+		$track = $value;
+		unset($track); 
+		return $paved;
+	}
+
 }
