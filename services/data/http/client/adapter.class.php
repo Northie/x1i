@@ -211,6 +211,14 @@ class adapter extends \services\data\adapter
 		return $this->client;
 	}
 
+	public function getHttpCode() {
+		return curl_getinfo($this->client,CURLINFO_RESPONSE_CODE);
+	}
+
+	public function getIfo(int $curlInfoOpt) {
+		return curl_getinfo($this->client,$curlInfoOpt);
+	}
+
 	public function __destruct()
 	{
 		curl_close($this->client);

@@ -32,7 +32,6 @@ class Request {
 		if (!$server) {
 			//if no $_SERVER then throw exception? should come from cli.php?
 			$server = $_SERVER;
-			$server['REQUEST_URI'] = $_SERVER['argv'][1];
 		}
 
 		foreach ($server as $key=> $val) {

@@ -3,6 +3,7 @@
 namespace modules;
 
 trait helper {
+	/*
 	public function getModuleSettings($moduleName=false) {
 		
 		if(!$moduleName) {
@@ -14,7 +15,8 @@ trait helper {
 
 		$oModule = \settings\registry::Load()->get('modules',$moduleName);
 		
-		return $oModule->settings ?$oModule->settings : [];
+		return $oModule->settings ? $oModule->settings : [];
 		
 	}
+	//*/
 }

@@ -120,7 +120,7 @@ class FrontController {
 		
 		//$this->request->normalise(['endpoint' => $cmds[0]]);
 		$this->request->normalise(['endpoint' => array_shift($cmds)]);
-		  
+
 		$this->request->normaliseQuery($cmds);
 		
 		$this->notify('requestNormalised');
@@ -227,7 +227,7 @@ class FrontController {
 		
 		$this->endpoint = \endpoints\factory::Build($endPointClass, $this->request, $this->response, $this->filters);
 		$this->request->setEndpoint($this->endpoint);
-		
+
 		$this->after('FrontControllerCreateModuleEndpoint', $this);
 		
 	}

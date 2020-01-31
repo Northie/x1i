@@ -21,6 +21,8 @@ class CliController {
 		$this->setDefaultContext($settings['contexts']['default']);
 		
 		$this->basePath = $settings['contexts']['base'];
+
+		$_SERVER['REQUEST_URI'] = $_SERVER['argv'][1];
 		
 		$this->request = new \flow\Request;
 		$this->response = new \flow\Response;
