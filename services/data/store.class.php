@@ -4,13 +4,12 @@ namespace services\data;
 
 class store {
 
-	private $reader;
-	private $writer;
-	private $model;
+        private $proxy;
+        private $model;
 	private $data;
-	private $new = [];
-	private $updates = [];
-	private $deletes = [];
+        private $new = [];
+        private $updates = [];
+        private $deletes = [];
 
 	public function __construct($model) {
 		$this->setModel($model);
@@ -22,14 +21,15 @@ class store {
 		return $this;
 	}
 
-	public function load($id=null) {
-		if($id) {
-			$data = $this->reader->read($id);
+        public function load($id=null, $options = []) {
+                \Plugins\EventManager::Load()->ObserveEvent('onBeforeLoad', $this, ['id'=>$id]);
+                if($id) {
+                        $data = $this->proxy->read($id);
 
-			if($this->model->getType() == $data['type']) {
-				$this->id = $id;
-				$this->data[$id] = $data;
-			} else {
+                        if($this->model->getType() == $data['type']) {
+                                $this->id = $id;
+                                $this->data[$id] = $this->instantiate($data);
+                        } else {
 				
 				$frontController = \settings\registry::Load()->get('FrontController');
 				$frontController->response->respond(["HTTP/1,1 404 Not Found"]);
@@ -42,44 +42,48 @@ class store {
 
 			}
 		} else {
-			if(!$this->data) {
-				//if no data, get all, no looping
-				$this->data = $this->reader->readType($this->model->getType());
-			} else {
-				//if data, loop to append
-				foreach ($this->reader->readType($this->model->getType()) as $id => $row) {
-					$this->data[$id] = $row;
-				}
-			}
-		}
-		return $this;
-	}
+                        if(!$this->data) {
+                                //if no data, get all, no looping
+                                $rows = $this->proxy->readType($this->model->getType(), $options);
+                                foreach($rows as $id => $row) {
+                                        $this->data[$id] = $this->instantiate($row);
+                                }
+                        } else {
+                                //if data, loop to append
+                                foreach ($this->proxy->readType($this->model->getType(), $options) as $id => $row) {
+                                        $this->data[$id] = $this->instantiate($row);
+                                }
+                        }
+                }
+                \Plugins\EventManager::Load()->ObserveEvent('onLoad', $this, ['id'=>$id]);
+                return $this;
+        }
 
 	public function addItem($item) {		
 		
 		$item = $this->integrate($item);
 		
-		if(is_a($this->data,'generator')) {
-			$this->data = [];
-			foreach ($this->reader->readType($this->model->getType()) as $id => $row) {
-				$this->data[$id] = $row;
-			}
-		}
-		
-		$this->data[$item[$this->model->idParam]] = $item;
+                if(is_a($this->data,'generator')) {
+                        $this->data = [];
+                        foreach ($this->proxy->readType($this->model->getType()) as $id => $row) {
+                                $this->data[$id] = $this->instantiate($row);
+                        }
+                }
+
+                $this->data[$item[$this->model->idParam]] = $this->instantiate($item);
 
 		$this->new[] = $item[$this->model->idParam];
 		
 		return $this;
 	}
 	
-	public function updateItem($item) {
-		$this->data[$item[$this->model->idParam]] = $this->integrate($item,$this->data[$item[$this->model->idParam]]);
-		
-		$this->updates[] = $item[$this->model->idParam];
+        public function updateItem($item) {
+                $this->data[$item[$this->model->idParam]] = $this->instantiate($this->integrate($item,$this->data[$item[$this->model->idParam]]));
 
-		return $this;
-	}
+                $this->updates[] = $item[$this->model->idParam];
+
+                return $this;
+        }
 	
 	public function destroyItem($item) {
 		$id = $item[$this->model->idParam];
@@ -112,7 +116,7 @@ class store {
 		$errors = 0;
 		try {
 			foreach ($this->new as $id) {
-				$this->writer->create($this->data[$id],$id);
+                                $this->proxy->create($this->data[$id],$id);
 				unset($this->new[$id]);
 			}
 		} catch (\Exception $e) {
@@ -126,7 +130,7 @@ class store {
 		$errors = 0;
 		try {
 			foreach ($this->updates as $id) {				
-				$this->writer->update($this->data[$id],$id);
+                                $this->proxy->update($this->data[$id],$id);
 				unset($this->updates[$id]);
 			}
 		} catch (\Exception $e) {
@@ -140,7 +144,7 @@ class store {
 		$errors = 0;
 		try {
 			foreach ($this->deletes as $id) {				
-				$this->writer->delete($id,true);
+                                $this->proxy->delete($id,true);
 				unset($this->deletes[$id]);
 			}
 		} catch (\Exception $e) {
@@ -150,10 +154,12 @@ class store {
 		}
 	}
 
-	public function sync() {
-		$this->saveAll();
-		$this->load();
-	}
+        public function sync() {
+                \Plugins\EventManager::Load()->ObserveEvent('onBeforeSync', $this);
+                $this->saveAll();
+                $this->load();
+                \Plugins\EventManager::Load()->ObserveEvent('onSync', $this);
+        }
 	
 	public function getOne($id=false) {
 		$id = $id ? $id : $this->id;
@@ -167,32 +173,17 @@ class store {
 		return $this->model;
 	}
 
-	public function setWriter(\services\data\iAdapter $writer) {
-		$this->writer = $writer;
-		return $this;
-	}
+        public function setProxy(\services\data\proxy $proxy) {
+                $this->proxy = $proxy;
+                $this->model->setProxy($proxy);
+                return $this;
+        }
 
-	public function setReader(\services\data\iAdapter $reader) {
-		$this->reader = $reader;
-		return $this;
-	}
-	
-	/**
-	 * @return dataservice
-	 */
-	
-	public function getWriter() {
-		return $this->writer;
-	}
-	
-	/**
-	 * @return dataservice
-	 */
-	public function getReader() {
-		return $this->reader;
-	}
+        public function getProxy() {
+                return $this->proxy;
+        }
 
-	public function integrate($src,$dest=[]) {
+        public function integrate($src,$dest=[]) {
 
 		$structure = $this->model->getStructure();
 		
@@ -217,7 +208,20 @@ class store {
 		}		
 		//recurse through data, put matching keys from model structire into item data and any other values in an attributes array??
 		
-		return $dest;
-	}
-	
+                return $dest;
+        }
+
+        private function instantiate($data) {
+                $cls = get_class($this->model);
+                $model = new $cls();
+                foreach ($data as $k => $v) {
+                        $model->$k = $v;
+                }
+                $model->setStore($this);
+                if($this->proxy) {
+                        $model->setProxy($this->proxy);
+                }
+                return $model;
+        }
+
 }
