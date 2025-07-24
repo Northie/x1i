@@ -22,9 +22,9 @@ A simple dispatch loop (more on that later) provides events to which a view laye
 
 ## Autoloading
 
-The xeneco autoloader works by scanning all files in the xeneco framework folder and the application folder implemeting xeneco. From these PHP source files a manifest is created mapping fully qualified class names to full filepaths.
+The xeneco autoloader works by scanning all files in the xeneco framework folder and the application folder implementing xeneco. From these PHP source files a manifest is created mapping fully qualified class names to full filepaths.
 
-If running in "DEV" mode the autoloader will generate this manifest whenever a class is requested but does not yet exist in the manifest. If the mode is not "DEV" then this manifest generation does not execute; assuming that the minifest already exists.
+If running in "DEV" mode the autoloader will generate this manifest whenever a class is requested but does not yet exist in the manifest. If the mode is not "DEV" then this manifest generation does not execute; assuming that the manifest already exists.
 
 A build script could trigger this manifest generation
 
