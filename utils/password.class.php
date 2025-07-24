@@ -100,10 +100,13 @@ class password {
 		return $hashed;
 	}
 
-	public function checkPassword($plain, $hashed) {
-		$v_len = strlen($hashed) - (2 * strlen($this->hash_method(''))); //get iteraction offset
+        public function checkPassword($plain, $hashed) {
+                $v_len = strlen($hashed) - (2 * strlen($this->hash_method(''))); //get iteraction offset
 
-		$v = substr($hashed, 0, $v_len); //get iteration value
+                $v = substr($hashed, 0, $v_len); //get iteration value
+
+                $hash = '';
+                $salt = '';
 
 		for ($i = $v_len; $i < strlen($hashed); $i+=2) { //untangle hash and salt
 			$hash.=$hashed[$i];

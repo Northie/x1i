@@ -109,3 +109,10 @@ To use plugins, write a plugin class in the plugins folder of the application, o
 Modules can be used to separate concerns. The directory and class structure inside a module follows the same structure as the main application with contexts, endpoints, plugins etc.
 
 # Setup
+## Running Tests
+
+To run the password tests, execute:
+
+```
+phpunit tests/PasswordTest.php
+```
