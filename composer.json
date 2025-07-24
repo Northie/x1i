@@ -1,0 +1,13 @@
+{
+    "name": "xeneco/x1i",
+    "description": "Xeneco PHP framework",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "files": ["utils/autoload/autoload.function.php"]
+    },
+    "minimum-stability": "dev",
+    "require-dev": {
+        "phpunit/phpunit": "^9"
+    }
+}

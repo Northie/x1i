@@ -1,7 +1,7 @@
 # ReadMe
 
 * Xeneco is a PHP application Framework
-* Xeneco does not use composer
+* Xeneco does not require composer
 * Xeneco is light-wight
 * Xeneco is platform and location agnostic
 * Xeneco is NOT MVC
@@ -27,6 +27,15 @@ The xeneco autoloader works by scanning all files in the xeneco framework folder
 If running in "DEV" mode the autoloader will generate this manifest whenever a class is requested but does not yet exist in the manifest. If the mode is not "DEV" then this manifest generation does not execute; assuming that the manifest already exists.
 
 A build script could trigger this manifest generation
+
+### Using Composer
+
+Although Xeneco does not require composer, a `composer.json` file is now
+provided so the framework can be installed as a dependency. The autoload
+definition includes `utils/autoload/autoload.function.php`, which registers the
+`xeneco_autoloader` function with PHP's SPL autoload stack. When you include
+Composer's generated autoloader, Xeneco's classes will be loaded automatically
+using this function.
 
 ## Modes
 
