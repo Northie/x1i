@@ -9,6 +9,7 @@ abstract class model {
     public $structure = [];
     public $idParam = 'id';
     protected $store;
+    protected $proxy;
 
     public function __construct() {
 
@@ -51,6 +52,15 @@ abstract class model {
     public function setStore(\services\data\store $store) {
         $this->store = $store;
         return $this;
+    }
+
+    public function setProxy(\services\data\proxy $proxy) {
+        $this->proxy = $proxy;
+        return $this;
+    }
+
+    public function getProxy() {
+        return $this->proxy;
     }
 
     /**
