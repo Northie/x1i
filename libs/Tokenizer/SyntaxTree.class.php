@@ -23,7 +23,7 @@ class syntaxTree {
 
 	/**
 	 * 
-	 * @param int $idx the origian stream array key
+         * @param int $idx the original stream array key
 	 * @param array $token parent (opening) token
 	 * @return array
 	 * @throws \Exception
