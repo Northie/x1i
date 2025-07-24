@@ -137,9 +137,9 @@ class Tools {
 		return htmlspecialchars($raw_input, ENT_QUOTES | ENT_HTML401, 'UTF-8');
 	}
 
-	public static function array2object($array) {
-		return json_decode(json_encode($arr));
-	}
+        public static function array2object($array) {
+                return json_decode(json_encode($array));
+        }
 
 	public static function object2array($object) {
 		return json_decode(json_encode($object), 1);
