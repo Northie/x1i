@@ -8,9 +8,9 @@ class genericDataService {
 	private $ready = false;
 	private $valid = false;
 	
-	public function isReady() {
-		return (bool) $data;
-	}
+        public function isReady() {
+                return (bool) $this->data;
+        }
 	public function isValid() {
 		return $this->valid;
 	}
